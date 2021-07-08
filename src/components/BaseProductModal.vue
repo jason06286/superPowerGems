@@ -119,15 +119,17 @@ export default {
                   <label for="imageUrl">輸入圖片網址</label>
                   <input
                     type="text"
+                    id="imageUrl"
                     class="form-control"
                     placeholder="請輸入圖片連結"
                     v-model="tempProduct.obj.imageUrl"
                   />
                 </div>
                 <div class="form-group my-2">
-                  <label for="imageUrl">或上傳圖片</label>
+                  <label for="fileInput">或上傳圖片</label>
                   <input
                     type="file"
+                    id="fileInput"
                     class="form-control"
                     ref="fileInput"
                     @change="uploadFile"
@@ -171,7 +173,7 @@ export default {
             </div>
             <div class="col-sm-8">
               <div class="form-group">
-                <label for="title">標題</label>
+                <label for="title">標題<span class="text-danger">*</span></label>
                 <input
                   id="title"
                   type="text"
@@ -183,7 +185,7 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="category">分類</label>
+                  <label for="category">分類<span class="text-danger">*</span></label>
                   <input
                     id="category"
                     type="text"
@@ -193,7 +195,7 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="price">單位</label>
+                  <label for="unit">單位<span class="text-danger">*</span></label>
                   <input
                     id="unit"
                     type="text"
@@ -206,7 +208,7 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="origin_price">原價</label>
+                  <label for="origin_price">原價<span class="text-danger">*</span></label>
                   <input
                     id="origin_price"
                     type="number"
@@ -217,7 +219,7 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="price">售價</label>
+                  <label for="price">售價<span class="text-danger">*</span></label>
                   <input
                     id="price"
                     type="number"
@@ -244,7 +246,7 @@ export default {
               <div class="form-group">
                 <label for="content">說明內容</label>
                 <textarea
-                  id="description"
+                  id="content"
                   type="text"
                   class="form-control"
                   placeholder="請輸入說明內容"

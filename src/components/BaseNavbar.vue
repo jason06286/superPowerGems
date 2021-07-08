@@ -60,7 +60,7 @@ export default {
                             購物車
                     </router-link>
                     </li>
-                    <li class="mx-md-3 nav-item  w-lg-100">
+                    <li class="mx-md-3 nav-item  w-lg-100" >
                     <router-link class="nav-link"
                     :class="{ active: route.fullPath === '/login' }"
                      to="/login">

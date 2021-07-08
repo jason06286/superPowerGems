@@ -3,6 +3,7 @@
 import BaseDelteButton from '@/components/BaseDelteButton.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import BaseProductModal from '@/components/BaseProductModal.vue';
+import BaseDeleteModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 // kit
 import axios from 'axios';
@@ -17,12 +18,14 @@ export default {
     BaseDelteButton,
     BasePagination,
     BaseProductModal,
+    BaseDeleteModal,
     BaseLoading,
   },
   setup() {
     const products = reactive({ arr: [] });
     const pagination = reactive({ obj: {} });
     const productModal = ref(null);
+    const productDeleteModal = ref(null);
     const newProduct = ref(false);
     const tempProduct = reactive({ obj: { imagesUrl: [] } });
     const $swal = useVueSweetAlert2();
@@ -78,11 +81,16 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      productDeleteModal.value.hideDelModal();
     }
     function openProductModal(item, isNew) {
       tempProduct.obj = JSON.parse(JSON.stringify(item));
       newProduct.value = isNew;
       productModal.value.showProductModal();
+    }
+    function openDeleteModal(item) {
+      tempProduct.obj = JSON.parse(JSON.stringify(item));
+      productDeleteModal.value.showDelModal();
     }
     function productStatus(item) {
       tempProduct.obj = item;
@@ -119,6 +127,7 @@ export default {
       products,
       pagination,
       productModal,
+      productDeleteModal,
       newProduct,
       tempProduct,
       isLoading,
@@ -126,6 +135,7 @@ export default {
       delProduct,
       getProducts,
       openProductModal,
+      openDeleteModal,
       productStatus,
       currency,
     };
@@ -182,7 +192,7 @@ export default {
               </button>
             </td>
             <td>
-              <BaseDelteButton :btnSmall="true" @click="delProduct(item.id)" />
+              <BaseDelteButton :btnSmall="true" @click="openDeleteModal(item)" />
             </td>
           </tr>
         </tbody>
@@ -198,6 +208,13 @@ export default {
     :newProduct="newProduct"
     @product-status="productStatus"
   />
+  <base-delete-modal
+    ref="productDeleteModal"
+    :deleteItem="tempProduct.obj"
+    @delete-item="delProduct"
+  >
+    產品
+  </base-delete-modal>
 </template>
 
 <style lang="scss" scoped>

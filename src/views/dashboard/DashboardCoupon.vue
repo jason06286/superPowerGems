@@ -3,6 +3,7 @@
 import BaseDelteButton from '@/components/BaseDelteButton.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import BaseCouponModal from '@/components/BaseCouponModal.vue';
+import BaseDeleteCouponModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 // kit
 import axios from 'axios';
@@ -17,6 +18,7 @@ export default {
     BaseDelteButton,
     BasePagination,
     BaseCouponModal,
+    BaseDeleteCouponModal,
     BaseLoading,
   },
   setup() {
@@ -24,6 +26,7 @@ export default {
     const tempCoupon = reactive({ obj: {} });
     const pagination = reactive({ obj: {} });
     const couponModal = ref(null);
+    const couponDeleteModal = ref(null);
     const newCoupon = ref(false);
     const $swal = useVueSweetAlert2();
     const isLoading = ref(false);
@@ -76,10 +79,15 @@ export default {
             swalError('Oops...', res.data.message);
           }
           console.log('delete', res);
+          couponDeleteModal.value.hideDelModal();
         })
         .catch((err) => {
           console.log(err);
         });
+    }
+    function openDeleteModal(item) {
+      tempCoupon.obj = JSON.parse(JSON.stringify(item));
+      couponDeleteModal.value.showDelModal();
     }
     function openCouponModal(item, isNew) {
       tempCoupon.obj = JSON.parse(JSON.stringify(item));
@@ -111,8 +119,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log('couponModal.value :>> ', couponModal.value);
-          console.log('coupon', res);
           couponModal.value.hideCouponModal();
         })
         .catch((err) => {
@@ -127,6 +133,7 @@ export default {
       coupons,
       pagination,
       couponModal,
+      couponDeleteModal,
       tempCoupon,
       isLoading,
       newCoupon,
@@ -136,6 +143,7 @@ export default {
       formatDate,
       couponStatus,
       openCouponModal,
+      openDeleteModal,
     };
   },
 };
@@ -190,7 +198,7 @@ export default {
               </button>
             </td>
             <td>
-              <BaseDelteButton :btnSmall="true" @click="delCoupon(item.id)" />
+              <BaseDelteButton :btnSmall="true" @click=" openDeleteModal(item)" />
             </td>
           </tr>
         </tbody>
@@ -206,6 +214,13 @@ export default {
     :newCoupon="newCoupon"
     @coupon-status="couponStatus"
   />
+  <base-delete-coupon-modal
+    ref="couponDeleteModal"
+    :deleteItem="tempCoupon.obj"
+    @delete-item="delCoupon"
+  >
+      優惠券
+  </base-delete-coupon-modal>
 </template>
 
 <style lang="">

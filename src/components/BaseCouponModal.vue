@@ -85,7 +85,7 @@ export default {
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
-                <label for="title">標題</label>
+                <label for="title">標題 <span class="text-danger">*</span></label>
                 <input
                   id="title"
                   type="text"
@@ -97,10 +97,11 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="percent ">優惠</label>
+                  <label for="percent ">優惠<span class="text-danger">*</span></label>
                   <input
                     id="percent "
                     type="number"
+                    min="0"
                     max="100"
                     class="form-control"
                     placeholder="請輸入優惠(0-100)"
@@ -108,7 +109,7 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="due_date">到期時間</label>
+                  <label for="due_date">到期時間<span class="text-danger">*</span></label>
                   <input
                     id="due_date"
                     type="date"
@@ -121,7 +122,7 @@ export default {
               </div>
               <div class="col-12">
                   <div class="form-group col-12">
-                  <label for="code">折扣碼</label>
+                  <label for="code">折扣碼<span class="text-danger">*</span></label>
                   <input
                     id="code"
                     type="text"
