@@ -1,4 +1,6 @@
 <script>
+// components
+import BaseNavbar from '@/components/BaseNavbar.vue';
 // kit
 import axios from 'axios';
 import useVueSweetAlert2 from '@/methods/useSwal';
@@ -9,6 +11,9 @@ import {
 import { useRouter } from 'vue-router';
 
 export default {
+  components: {
+    BaseNavbar,
+  },
   setup() {
     const gridBackground = ref(null);
     const user = reactive({});
@@ -72,6 +77,7 @@ export default {
 </script>
 
 <template >
+<BaseNavbar />
   <div
     class="
       position-relative

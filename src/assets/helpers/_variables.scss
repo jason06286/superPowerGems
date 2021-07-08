@@ -87,8 +87,9 @@ $theme-colors: (
   "danger":     $danger,
   "light":      $light,
   "dark":       $dark,
-  "orange":$orange,
-  // "orange":    #D97706,
+  "orange":     $orange,
+  "black":      #000,
+
 ) !default;
 // scss-docs-end theme-colors-map
 

@@ -8,9 +8,26 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue'),
+    path: '/frontDesk',
+    name: 'frontDesk',
+    component: () => import('@/views/frontDesk/FrontDesk.vue'),
+    children: [{
+      path: 'products',
+      component: () => import('@/views/frontDesk/FrontDeskProducts.vue'),
+    },
+    {
+      path: 'quiz',
+      component: () => import('@/views/frontDesk/FrontDeskQuiz.vue'),
+    },
+    {
+      path: 'coupon',
+      component: () => import('@/views/frontDesk/FrontDeskCoupon.vue'),
+    },
+    {
+      path: 'carts',
+      component: () => import('@/views/frontDesk/FrontDeskCarts.vue'),
+    },
+    ],
   },
   {
     path: '/login',
