@@ -1,21 +1,22 @@
 <script>
 import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
+import BaseCartModal from '@/components/BaseCartModal.vue';
 
 export default {
   components: {
     BaseNavbar,
     BaseFooter,
+    BaseCartModal,
   },
 };
 </script>
 <template >
   <div>
     <BaseNavbar />
-    <div class="py-5">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
     <BaseFooter />
+    <BaseCartModal />
   </div>
 </template>
 <style lang="">

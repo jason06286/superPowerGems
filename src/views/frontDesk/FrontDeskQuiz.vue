@@ -1,10 +1,17 @@
 <script>
-export default {};
+import BaseScrollTop from '@/components/BaseScrollTop.vue';
+import BaseCartModal from '@/components/BaseCartModal.vue';
+
+export default {
+  components: {
+    BaseScrollTop,
+    BaseCartModal,
+  },
+};
 </script>
 <template lang="">
-    <div>
-        <h2>front quiz</h2>
-    </div>
+    <BaseScrollTop />
+    <BaseCartModal />
 </template>
 <style lang="">
 </style>

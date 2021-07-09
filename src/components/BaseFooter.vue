@@ -1,7 +1,5 @@
 <script>
-export default {
-
-};
+export default {};
 </script>
 <template lang="">
     <footer >
@@ -29,8 +27,7 @@ export default {
     </footer>
 </template>
 <style lang="scss" scoped>
-li:hover a{
-   transform: scale(1.5) ;
-
+li:hover a {
+  transform: scale(1.5);
 }
 </style>

@@ -1,13 +1,17 @@
 <script>
+// componets
 import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
+import BaseScrollTop from '@/components/BaseScrollTop.vue';
+// kit
 import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
 import '../assets/helpers/swiper.css';
 import axios from 'axios';
+// vue
 import { onMounted, reactive } from 'vue';
 
 SwiperCore.use([Pagination, Autoplay]);
@@ -17,6 +21,7 @@ export default {
     BaseNavbar,
     BaseFooter,
     HomeHeader,
+    BaseScrollTop,
     Swiper,
     SwiperSlide,
   },
@@ -57,9 +62,11 @@ export default {
           console.log(err);
         });
     }
+
     onMounted(() => {
       getAllProducts();
     });
+
     return {
       products,
       swiperBreakpoints,
@@ -67,14 +74,18 @@ export default {
   },
 };
 </script>
+
 <template >
   <div>
     <BaseNavbar />
     <HomeHeader />
+    <BaseScrollTop style="position: fixed;
+    bottom: 2%;
+    right: 2%;"/>
     <section>
       <div class="container">
         <div
-          class="py-5  d-flex align-items-center justify-content-center flex-column"
+          class="py-5 d-flex align-items-center justify-content-center flex-column"
         >
           <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
             ABOUT US
@@ -124,7 +135,7 @@ export default {
     <section>
       <div class="container">
         <div
-          class="py-5  d-flex align-items-center justify-content-center flex-column"
+          class="py-5 d-flex align-items-center justify-content-center flex-column"
         >
           <div>
             <img
@@ -136,7 +147,9 @@ export default {
           <div class="my-3 typewriter">
             <p>還不知道適合什麼能量石嗎?</p>
           </div>
-          <router-link to="/frontDesk/products" class="btn btn-orange btn-lg"
+          <router-link
+            to="/frontDesk/products"
+            class="text-white btn btn-orange btn-lg"
             >進行測驗</router-link
           >
         </div>
@@ -145,6 +158,7 @@ export default {
     <BaseFooter />
   </div>
 </template>
+
 <style lang="scss" scoped>
 .products {
   position: relative;
@@ -199,7 +213,7 @@ export default {
 }
 .typewriter p {
   color: black;
-  font-size: 1.5rem;
+  font-size: 1rem;
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 0.15em solid orange; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
@@ -207,6 +221,7 @@ export default {
   letter-spacing: 0.15em; /* Adjust as needed */
   animation: typing 5s steps(30, start) infinite,
     blink-caret 0.5s step-end infinite;
+    @media (min-width: 576px) { font-size: 1.5rem; }
 }
 
 /* The typing effect */

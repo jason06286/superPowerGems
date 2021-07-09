@@ -59,7 +59,7 @@ export default {
             <div class="col-lg-5 col-12">
               <button
             v-if="!typingContentShow"
-            class="mb-3 text-white btn btn-orange d-inline-block "
+            class="mb-3  btn btn-orange d-inline-block "
             type="button"
             @click.prevent="stopShine"
             >Click</button>
@@ -73,7 +73,7 @@ export default {
 <style lang="scss" scoped>
 .star {
   position: relative;
-  height: calc(100vh - 40px) ;
+  height: calc(100vh - 40px);
   overflow: hidden;
 }
 
@@ -109,7 +109,7 @@ export default {
     transform: translate3d(1000px, 0px, 0px);
   }
 }
-.pepole{
+.pepole {
   height: 100%;
   display: flex;
   justify-content: center;
@@ -118,10 +118,12 @@ export default {
 .pepole img {
   display: block;
   animation: people-shine 3s linear infinite;
-  transition: all .5s;
+  transition: all 0.5s;
   height: 400px;
   z-index: 2;
-  @media (min-width: 576px) { height: 100%; }
+  @media (min-width: 576px) {
+    height: 100%;
+  }
 }
 @keyframes people-shine {
   0% {
@@ -137,40 +139,41 @@ export default {
     filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7));
   }
 }
-.active img{
+.active img {
   animation: people-shine 3s linear infinite;
-  animation-play-state:paused;
-  animation-fill-mode:none;
+  animation-play-state: paused;
+  animation-fill-mode: none;
   filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7)) !important;
 }
-.typingContent{
+.typingContent {
   background-image: url('../assets/img/typing-background.svg');
   background-size: cover;
   background-position: center center;
   padding: 1rem;
   width: 280px;
   @media (min-width: 576px) {
-      width: 400px;
-      padding: 2rem;
-    }
-  p{
+    width: 400px;
+    padding: 2rem;
+  }
+  p {
     letter-spacing: 0.1rem;
   }
 }
-.typingBtn{
+.typingBtn {
   animation: typingBtn 1s linear infinite;
 }
-@keyframes  typingBtn{
-  0%, 100% {
+@keyframes typingBtn {
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 1;
-}
-50% {
+  }
+  50% {
     transform: translateY(-10%);
-    opacity: .5;
+    opacity: 0.5;
+  }
 }
-}
-.bg-wave{
+.bg-wave {
   background-image: url('../assets/img/wave-orange.svg');
   background-size: cover;
   position: absolute;

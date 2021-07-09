@@ -16,7 +16,8 @@ export default {
         .post(url)
         .then((res) => {
           if (res.data.success) {
-            document.cookie = encodeURIComponent('hexToken');
+            // document.cookie = encodeURIComponent('hexToken');
+            document.cookie = 'hexToken=; expires=; path=/superPowerGems/dist';
             // document.cookie = 'hexToken=; expires=; path=/';
             router.push('/login');
           }

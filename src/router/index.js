@@ -16,6 +16,10 @@ const routes = [
       component: () => import('@/views/frontDesk/FrontDeskProducts.vue'),
     },
     {
+      path: 'product/:id',
+      component: () => import('@/views/frontDesk/FrontDeskProduct.vue'),
+    },
+    {
       path: 'quiz',
       component: () => import('@/views/frontDesk/FrontDeskQuiz.vue'),
     },
@@ -50,6 +54,13 @@ const routes = [
       component: () => import('@/views/dashboard/DashboardCoupon.vue'),
     },
     ],
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: {
+      name: 'Home',
+    },
+
   },
 ];
 

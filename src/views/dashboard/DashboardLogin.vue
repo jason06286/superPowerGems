@@ -5,9 +5,7 @@ import BaseNavbar from '@/components/BaseNavbar.vue';
 import axios from 'axios';
 import useVueSweetAlert2 from '@/methods/useSwal';
 // vue
-import {
-  onMounted, reactive, ref,
-} from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -50,7 +48,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const { token, expired } = res.data;
-            document.cookie = `hexToken=${token};expires=${new Date(expired)}`;
+            document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
             router.push('/dashboard/products');
           } else {
             swalError('Oops...', res.data.message);
@@ -77,7 +75,7 @@ export default {
 </script>
 
 <template >
-<BaseNavbar />
+  <BaseNavbar />
   <div
     class="
       position-relative
@@ -167,6 +165,7 @@ export default {
 .grid {
   min-height: 100vh;
   background-color: rgba(17, 24, 39, 1);
+  // background-color: #3d352e;
 }
 .grid-container {
   top: 0px;
@@ -180,6 +179,7 @@ export default {
 }
 .grid-item {
   background-color: rgba(31, 41, 55, 1);
+  // background-color: #b2734d;
   border-radius: 0.25rem;
 }
 @keyframes pulse {

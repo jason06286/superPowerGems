@@ -62,9 +62,9 @@ export default {
                     </li>
                     <li class="mx-md-3 nav-item  w-lg-100" >
                     <router-link class="nav-link"
-                    :class="{ active: route.fullPath === '/login' }"
-                     to="/login">
-                    登入
+                    :class="{ active: route.fullPath === '/dashboard/products' }"
+                     to="/dashboard/products">
+                    進入後台
                     </router-link>
                     </li>
                 </ul>
@@ -77,16 +77,18 @@ export default {
 .font-Tourney {
   font-family: 'Tourney', cursive;
 }
-.w-lg-100{
-    width: auto;
-    @media (min-width: 992px) { width: 100%;}
+.w-lg-100 {
+  width: auto;
+  @media (min-width: 992px) {
+    width: 100%;
+  }
 }
-.nav-item .active{
-    background: #fd7e14;
+.nav-item .active {
+  background: #f59157;
 }
 .nav-item:hover a {
   color: white !important;
-  background: #fd7e14;
+  background: #f59157;
   transform: scale(1.2);
 }
 </style>
