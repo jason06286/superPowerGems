@@ -3,7 +3,7 @@
 import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
-import BaseScrollTop from '@/components/BaseScrollTop.vue';
+import BaseCartModal from '@/components/BaseCartModal.vue';
 // kit
 import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -11,8 +11,11 @@ import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
 import '../assets/helpers/swiper.css';
 import axios from 'axios';
+// methods
+import emitter from '@/methods/emitter';
 // vue
 import { onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 SwiperCore.use([Pagination, Autoplay]);
 
@@ -21,11 +24,12 @@ export default {
     BaseNavbar,
     BaseFooter,
     HomeHeader,
-    BaseScrollTop,
+    BaseCartModal,
     Swiper,
     SwiperSlide,
   },
   setup() {
+    const router = useRouter();
     const products = reactive({ arr: [] });
     const swiperBreakpoints = reactive({
       breakpoints: {
@@ -62,7 +66,29 @@ export default {
           console.log(err);
         });
     }
-
+    function addCart(item) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+      axios
+        .post(url, {
+          data: {
+            product_id: item.id,
+            qty: 1,
+          },
+        })
+        .then((res) => {
+          console.log('addcart', res);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            console.log('addcart sucess');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    function forwardingProduct(id) {
+      router.push(`/frontDesk/product/${id}`);
+    }
     onMounted(() => {
       getAllProducts();
     });
@@ -70,6 +96,8 @@ export default {
     return {
       products,
       swiperBreakpoints,
+      addCart,
+      forwardingProduct,
     };
   },
 };
@@ -79,9 +107,7 @@ export default {
   <div>
     <BaseNavbar />
     <HomeHeader />
-    <BaseScrollTop style="position: fixed;
-    bottom: 2%;
-    right: 2%;"/>
+    <BaseCartModal />
     <section>
       <div class="container">
         <div
@@ -115,10 +141,12 @@ export default {
                   <div
                     class=" d-flex justify-content-center align-items-center w-100"
                   >
-                    <button type="button" class="btn btn-secondary me-3">
+                    <button type="button" class="btn btn-secondary me-3"
+                     @click="forwardingProduct(item.id)">
                       查看更多
                     </button>
-                    <button type="button" class="btn btn-orange">
+                    <button type="button" class="btn btn-orange"
+                     @click="addCart(item)">
                       加入購物車
                     </button>
                   </div>
@@ -128,7 +156,7 @@ export default {
           </swiper>
         </div>
         <div class="bg-wave">
-          <img src="../assets/img/wave-black.png" alt="" />
+          <img src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625923944671.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=lR8K4LmkXfyKHLEaWMTDaWRrm%2BudqL67S4Xzz72aRR6FeX5RhWEoBOkI8OwxpStQWaHfUzPrZI0OU0MTmM34K9WgF%2BPwHcmcw74I1uOhUmpw3ooOxgTTc8f0uLYpdTUMMR1G07otsz07nepddnP88rcQlQJtfl9MpCaGnAqYIraKVjszGpE%2BwomH8xUlxie3mMNwYjL8WWwXgkbH6ldDWiH3%2BIOR2IahyDskkiSIIbt2kO%2FbTXSwn%2B1YiOX6lltPYPRkLMkOWMiN%2F3MWtLOyX5QePFB4G7MaHgtCOKrV5W77o6OpvXCAR6fJl1QAsWivcJ2MnMuPFB7QF6S430Qgiw%3D%3D" alt="" />
         </div>
       </div>
     </section>
@@ -148,7 +176,7 @@ export default {
             <p>還不知道適合什麼能量石嗎?</p>
           </div>
           <router-link
-            to="/frontDesk/products"
+            to="/frontDesk/quiz"
             class="text-white btn btn-orange btn-lg"
             >進行測驗</router-link
           >

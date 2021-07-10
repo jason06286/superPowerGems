@@ -115,8 +115,10 @@ export default {
     <div class="bg-universe">
       <p class="fs-3">想要更多優惠嗎?</p>
       <p class="fs-1">
-        玩遊戲領取
-        <router-link to="/frontDesk/coupon" class="text-orange"
+        玩小遊戲領取
+        <router-link
+          to="/frontDesk/coupon"
+          class="text-orange d-inline-block animate-bounce"
           >優惠券</router-link
         >
       </p>
@@ -305,7 +307,7 @@ export default {
 
 <style lang="scss" scoped>
 .bg-universe {
-  background-image: url('../../assets/img/universe2.jpg');
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625923689840.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=BrQZdUT9C%2FPA95XP8w8MLUcuAsDhIB8nVkrkhtjkbD4iFGo4wXLdplQOrSNgxHajXnLdbma%2FegJ4gWae8QO61o4g8H5I0bnWCSPAXtbI0YXuj1brVkig%2F%2FYZZYPAUAehRPTBU%2FhTbNfVjIP5KRlGVq6uVobOO7csWWINcO244d%2FSJf1tmKu5XNcNzODaFkwYCbVTgNrwWrrG5EbYSeMkODwaWduzjbkW2c%2BRLOIOlVxbECW3HbnDRV2EaCcIqwyy3U%2BM1g0QuO3clvqIV91XrUUXPG6hqfuiNfYTNwHejUDFdEOLMQ5Z4BYNJ709SnKC0IfmglrysclWD8aL4SMpXQ%3D%3D');
   background-size: cover;
   height: 300px;
   display: flex;
@@ -327,5 +329,19 @@ export default {
 .active {
   border: 2px solid #f59157 !important;
   box-shadow: 3px 3px 6px rgba($color: #000000, $alpha: 0.5);
+}
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-15%);
+    animationtimingfunction: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animationtimingfunction: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 </style>

@@ -78,7 +78,7 @@ export default {
 }
 
 .stars {
-  background: black url('../assets/img/stars.png') repeat;
+  background: black url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924061162.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=QUQ3j12Xf773TV%2FlRxJldJjI%2BlIuBnj1XkpciscKx7no2yRTqN3eJztesYPU3FIf5Nm038Zsy%2B0emcUdw%2BDQHsuiEDYOpSyffzlSuxnLglBYp5sSNegxXe5Mec1PM%2FUWANSfwFT1nIh%2FjeIEfbkVZiJPlIH5Jdp%2F3oIWtFE%2FkcMFysJP%2FDaCnfOpnufSZbKfRQL66ioIYWqjE0NSMfzOSxqjR7T3JMERfsl9BMWtnPyj84IaFTkT%2BMDgZbsYMVRTZn9TjXJ0V%2F0oZQkU3w4jy4ecytYO1%2BYrFiX8MM2akXEYYV06c85RD12ZoFkRt51oWldugY6bXwy0yO8BYqKu6A%3D%3D') repeat;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -91,7 +91,7 @@ export default {
 .twinkling {
   width: 10000px;
   height: 100%;
-  background: transparent url('../assets/img/twinkling.png') repeat;
+  background: transparent url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924089645.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=kjs7DyqvRPpF1Lz9dQSwncjaXAmXQcR6zmvWdYNSxi17qtYTevW6OOcJfdfMw7NnBMyNkV6ZnWkh2WYGDvoh5xjsN540qi0hmfLLRWDGXhgCWPW%2BcS5Kah3eQcZ0T0LWU13Jxhyu%2FkmydrtmnBMQsskatfJKPBTygQJ4n8GZ4GyIqW2wLY8HAB1Kl5mnQ8yfp19I30okVJRygK3sE8sE3yF31o7RW6OdnQvmJ1M%2F1qTq2K%2Fob9reXHk%2FwkJcGSu8cXIVNvkmyedShzWlZlt2q4%2FRc%2BiuA2Xfg8WDugv2z8fvgayPW95OnmBZFB4HMvqx3GKhHtyFSGvYOguhoSKn6A%3D%3D') repeat;
   background-size: 1000px 1000px;
   position: absolute;
   right: 0;

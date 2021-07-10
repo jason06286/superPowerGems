@@ -12,12 +12,10 @@ export default {
 };
 </script>
 <template >
-  <div>
-    <BaseNavbar />
-    <router-view></router-view>
-    <BaseFooter />
-    <BaseCartModal />
-  </div>
+  <BaseNavbar />
+  <router-view></router-view>
+  <BaseFooter />
+  <BaseCartModal />
 </template>
 <style lang="">
 </style>

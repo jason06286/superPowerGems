@@ -115,7 +115,7 @@ export default {
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">購物車</h5>
           <button
             type="button"
             class="btn-close"
@@ -124,13 +124,22 @@ export default {
           ></button>
         </div>
         <div class="modal-body">
-          <table class="table text-center">
+          <div class="cart-content" v-if="carts.arr?.carts?.length === 0">
+            <p class="mb-0 fs-5">購物車內無東西</p>
+            <router-link
+              to="/frontDesk/products"
+              class="d-block text-orange fs-4"
+              @click="hideModal"
+              >選購商品</router-link
+            >
+          </div>
+          <table class="table text-center table-responsive-lg" v-else>
             <thead>
               <tr class="table-dark">
                 <th scope="col"></th>
                 <th scope="col">商品名稱</th>
                 <th scope="col">數量</th>
-                <th scope="col">小計</th>
+                <th scope="col" class="text-end">小計</th>
               </tr>
             </thead>
             <tbody>
@@ -146,19 +155,30 @@ export default {
                 </td>
                 <td class="align-middle">{{ item.product.title }}</td>
                 <td class="align-middle">{{ item.qty }}</td>
-                <td class="align-middle">NT $ {{ currency(item.total) }}</td>
+                <td class="align-middle text-end">
+                  $ {{ currency(item.total) }}
+                </td>
               </tr>
             </tbody>
             <tfoot>
+              <tr
+                v-show="carts.arr.total > carts.arr.final_total"
+                class="text-danger"
+              >
+                <td colspan="3" class="text-end">折扣優惠</td>
+                <td class="line-through text-end">
+                  $ {{ currency(carts.arr.total - carts.arr.final_total) }}
+                </td>
+              </tr>
               <tr>
                 <td colspan="3" class="text-end">總金額</td>
-                <td class="text-center">
-                  NT $ {{ currency(carts.arr.final_total) }}
+                <td class="text-end">
+                  $ {{ currency(carts.arr.final_total) }}
                 </td>
               </tr>
             </tfoot>
           </table>
-          <div class="input-group mb-3">
+          <div class="mb-3 input-group" v-if="carts.arr?.carts?.length != 0">
             <input
               type="text"
               class="form-control"
@@ -196,11 +216,18 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.line-through {
+  text-decoration: line-through;
+}
 .cart-btn-position {
   position: fixed;
   bottom: 6%;
   right: 3%;
   z-index: 999;
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+  }
 }
 .cart-btn {
   width: 50px;

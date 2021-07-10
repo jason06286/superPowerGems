@@ -31,6 +31,10 @@ const routes = [
       path: 'carts',
       component: () => import('@/views/frontDesk/FrontDeskCarts.vue'),
     },
+    {
+      path: 'pay/:id',
+      component: () => import('@/views/frontDesk/FrontDeskPay.vue'),
+    },
     ],
   },
   {

@@ -75,7 +75,7 @@ export default {
   <div class="py-5">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-12 mb-3">
+        <div class="mb-3 col-lg-6 col-12">
           <div class="product-card">
             <img :src="product.arr.imageUrl" alt="" class="img-base" />
             <h3 class="pt-3 text-orange border-top">【商品介紹】</h3>
@@ -102,18 +102,18 @@ export default {
             </ul>
           </div>
         </div>
-        <div class="col-lg-6 col-12 mb-3">
+        <div class="mb-3 col-lg-6 col-12">
           <div class="product-card">
             <div class="pb-2 mb-3 border-bottom position-relative">
               <span class="fs-3">{{ product.arr.title }}</span>
-              <span class="badge bg-orange position-absolute top-0">{{
+              <span class="top-0 badge bg-orange position-absolute">{{
                 product.arr.category
               }}</span>
             </div>
             <p class="mb-0 text-secondary">
-              原價 NT $ {{ currency(product.arr.origin_price) }}
+              原價 $ {{ currency(product.arr.origin_price) }}
             </p>
-            <p class="text-orange fs-4">特價 NT $ {{ currency(product.arr.price) }}</p>
+            <p class="text-orange fs-4">特價 $ {{ currency(product.arr.price) }}</p>
             <select
               class="mb-3 form-select"
               aria-label="Default select example"
@@ -124,7 +124,7 @@ export default {
                 {{ item }}{{ product.arr.unit }}
               </option>
             </select>
-            <p>小計 NT $ {{ currency(total) }} 元</p>
+            <p>小計 $ {{ currency(total) }} 元</p>
             <div class="mb-3 d-grid w-100">
               <button type="button" class="text-white btn btn-orange"
               :class="{'disabled':productNum <= 0}"
