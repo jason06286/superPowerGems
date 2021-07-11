@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 
 export default {
   setup() {
@@ -10,12 +10,13 @@ export default {
     let i = 0;
     const txt = '宇宙能源匱乏，外星人肆意掠奪，地球生存危在旦息...';
     const speed = 200;
+    let type = null;
 
     function typeWriter() {
       if (i < txt.length) {
         typingContentDom.value.children[0].innerHTML += txt.charAt(i);
         i += 1;
-        setTimeout(typeWriter, speed);
+        type = setTimeout(typeWriter, speed);
         return;
       }
       typingDone.value = true;
@@ -33,6 +34,10 @@ export default {
         behavior: 'smooth',
       });
     }
+
+    onUnmounted(() => {
+      clearTimeout(type);
+    });
 
     return {
       // variable
