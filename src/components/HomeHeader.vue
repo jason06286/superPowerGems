@@ -1,5 +1,5 @@
 <script>
-import { onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 export default {
   setup() {
@@ -20,6 +20,7 @@ export default {
         return;
       }
       typingDone.value = true;
+      console.dir(typingContentDom.value.children[0]);
     }
     function stopShine() {
       typingContentShow.value = true;
@@ -34,6 +35,10 @@ export default {
         behavior: 'smooth',
       });
     }
+
+    onMounted(() => {
+      typingContentDom.value.children[0].innerHTML = '';
+    });
 
     onUnmounted(() => {
       clearTimeout(type);
