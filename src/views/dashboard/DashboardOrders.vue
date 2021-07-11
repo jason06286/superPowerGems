@@ -47,7 +47,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             orders.arr = res.data.orders;
             pagination.obj = res.data.pagination;
@@ -69,7 +68,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log('delete', res);
         })
         .catch((err) => {
           console.log(err);
@@ -86,7 +84,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log('delete', res);
         })
         .catch((err) => {
           console.log(err);
@@ -108,7 +105,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log('edit', res);
         })
         .catch((err) => {
           console.log(err);
@@ -143,7 +139,7 @@ export default {
 <template >
 <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="fw-bold border-bottom border-3 border-orange pb-3 mb-3">
+    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
       訂單列表
     </h2>
     <div class="accordion" id="accordionExample">
@@ -187,11 +183,11 @@ export default {
             <div class="row">
               <div class="col-lg-6 col-12">
                 <div class="p-4">
-                  <h5 class="border-bottom border-2 border-orange pb-2 ">
+                  <h5 class="pb-2 border-2 border-bottom border-orange ">
                     訂單內容
                   </h5>
                   <p
-                    class="mb-2  border-bottom border-gray pb-2 "
+                    class="pb-2 mb-2 border-bottom border-gray "
                     v-for="(product) in tempOrder.obj.products"
                     :key="product.id"
                   >
@@ -208,7 +204,7 @@ export default {
               </div>
               <div class="col-lg-6 col-12">
                 <Form v-slot="{ errors }">
-                  <div class="form-group mb-3">
+                  <div class="mb-3 form-group">
                     <label for="name" class="mb-2">Name *</label>
                     <Field
                       id="name"
@@ -225,7 +221,7 @@ export default {
                       class="invalid-feedback"
                     ></ErrorMessage>
                   </div>
-                  <div class="form-group mb-3">
+                  <div class="mb-3 form-group">
                     <label for="email" class="mb-2">Email *</label>
                     <Field
                       id="email"
@@ -242,7 +238,7 @@ export default {
                       class="invalid-feedback"
                     ></ErrorMessage>
                   </div>
-                  <div class="form-group mb-3">
+                  <div class="mb-3 form-group">
                     <label for="tel" class="mb-2">Phone *</label>
                     <Field
                       id="tel"
@@ -259,7 +255,7 @@ export default {
                       class="invalid-feedback"
                     ></ErrorMessage>
                   </div>
-                  <div class="form-group mb-3">
+                  <div class="mb-3 form-group">
                     <label for="address" class="mb-2">Address *</label>
                     <Field
                       id="address"
@@ -299,7 +295,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center mt-5">
+    <div class="mt-5 d-flex justify-content-center">
       <BasePagination :pagination="pagination" @get-nowpage="getOrders" />
     </div>
   </div>

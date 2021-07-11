@@ -4,6 +4,7 @@ import axios from 'axios';
 // methods
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
+import pushMessageState from '@/methods/pushMessageState';
 // vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -23,7 +24,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log('carts', res);
           if (res.data.success) {
             carts.arr = res.data.data;
           }
@@ -33,15 +33,17 @@ export default {
         });
     }
     function delProduct(item) {
+      isLoading.value = item.id;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
       axios
         .delete(url)
         .then((res) => {
-          console.log('carts', res);
           if (res.data.success) {
             emitter.emit('update-cart');
             getCarts();
+            isLoading.value = '';
           }
+          pushMessageState(res, '刪除商品');
         })
         .catch((err) => {
           console.log(err);
@@ -58,12 +60,12 @@ export default {
           },
         })
         .then((res) => {
-          console.log('edit', res);
           if (res.data.success) {
             isChageQty.value = false;
             emitter.emit('update-cart');
             getCarts();
           }
+          pushMessageState(res, '修改商品');
         })
         .catch((err) => {
           console.log(err);
@@ -82,11 +84,11 @@ export default {
       axios
         .post(url, { data: { code: coupon.value } })
         .then((res) => {
-          console.log('coupon', res);
           if (res.data.success) {
             emitter.emit('update-cart');
             getCarts();
           }
+          pushMessageState(res, '套用優惠券');
         })
         .catch((err) => {
           console.log(err);
@@ -108,11 +110,9 @@ export default {
         })
         .then((res) => {
           isLoading.value = '';
-          console.log('submit', res);
           if (res.data.success) {
             router.push(`/frontDesk/pay/${res.data.orderId}`);
             emitter.emit('update-cart');
-            console.log('訂單成功 :>> ', '訂單成功');
           }
         })
         .catch((err) => {
@@ -167,10 +167,17 @@ export default {
         <tbody>
           <tr v-for="item in carts.arr.carts" :key="item.id">
             <td>
+              <button class="btn btn-outline-danger btn-sm" type="button" disabled
+              v-if="isLoading===item.id">
+                <span class="spinner-border spinner-border-sm"
+                 role="status" aria-hidden="true"></span>
+                <span class="visually-hidden">Loading...</span>
+              </button>
               <button
                 type="button"
                 class="btn btn-outline-danger btn-sm"
                 @click="delProduct(item)"
+                v-else
               >
                 <i class="bi bi-trash-fill"></i>
               </button>

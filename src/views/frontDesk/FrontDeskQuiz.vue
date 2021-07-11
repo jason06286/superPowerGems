@@ -3,6 +3,7 @@
 import axios from 'axios';
 // methods
 import emitter from '@/methods/emitter';
+import pushMessageState from '@/methods/pushMessageState';
 // vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -47,13 +48,13 @@ export default {
     const totalScore = ref(0);
     const index = ref(0);
     const quizResult = ref('');
+    const isLoading = ref('');
 
     function getAllProducts() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             products.arr = res.data.products;
           }
@@ -64,9 +65,9 @@ export default {
     }
     function filterProduct(condition = '') {
       filterProducts.obj = products.arr.filter((item) => item.category.match(condition));
-      console.log(filterProducts.obj);
     }
     function addCart(item) {
+      isLoading.value = item.id;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       axios
         .post(url, {
@@ -76,11 +77,11 @@ export default {
           },
         })
         .then((res) => {
-          console.log('addcart', res);
           if (res.data.success) {
             emitter.emit('update-cart');
-            console.log('addcart sucess');
+            isLoading.value = '';
           }
+          pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
           console.log(err);
@@ -92,7 +93,6 @@ export default {
     function answerd(e) {
       selectAnswer.value = e.target.value;
       totalScore.value += Number(e.target.value);
-      console.log(selectAnswer.value, totalScore.value);
     }
     function nextQuestion() {
       index.value += 1;
@@ -100,7 +100,6 @@ export default {
     }
     function showResults() {
       index.value += 1;
-      console.log('finish');
       if (totalScore.value < 4) {
         filterProduct('精鋼');
         quizResult.value = '你是非常樂觀和開朗的人，當你人生遇到任何困難或問題，你不會想太多而樂觀面段，使得人生沒有什麼阻礙。';
@@ -134,6 +133,7 @@ export default {
       answerd,
       index,
       quizResult,
+      isLoading,
       // methods
       forwardingProduct,
       selectAnswer,
@@ -215,7 +215,12 @@ export default {
                         查看更多
                       </button>
                       <button type="button" class="btn btn-orange"
+                       :class="{'disabled':isLoading === item.id}"
                       @click="addCart(item)">
+                       <div class="spinner-border spinner-border-sm" role="status"
+                        v-if="isLoading === item.id">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
                         加入購物車
                       </button>
                     </div>

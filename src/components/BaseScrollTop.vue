@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 export default {
   setup() {
     const showScrollTop = ref(false);
+
     function scrollTop() {
       window.scrollTo({
         top: 0,
@@ -11,6 +12,7 @@ export default {
         behavior: 'smooth',
       });
     }
+
     onMounted(() => {
       window.addEventListener('scroll', () => {
         if (window.scrollY > window.screenY) {
@@ -20,6 +22,7 @@ export default {
         }
       });
     });
+
     return {
       showScrollTop,
       scrollTop,
@@ -35,6 +38,7 @@ export default {
         ↑
     </button>
 </template>
+
 <style lang="scss" scoped>
 .scroll-btn {
   width: 50px;

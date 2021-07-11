@@ -1,3 +1,18 @@
+<script>
+import AOS from 'aos';
+import { onMounted } from 'vue';
+
+export default {
+  setup() {
+    onMounted(() => {
+      AOS.init();
+    });
+
+    return {};
+  },
+};
+</script>
+
 <template>
   <router-view/>
 </template>

@@ -4,23 +4,22 @@ import axios from 'axios';
 // methods
 import { currency } from '@/methods/filter';
 // vue
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {
   setup() {
     const route = useRoute();
     const order = reactive({ arr: [] });
+    const isLoading = ref('');
 
     function getOrder() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${route.params.id}`;
       axios
         .get(url)
         .then((res) => {
-          console.log('order', res);
           if (res.data.success) {
             order.arr = res.data.order;
-            console.log(order.arr.user);
           }
         })
         .catch((err) => {
@@ -28,19 +27,21 @@ export default {
         });
     }
     function confirmPay() {
+      isLoading.value = 'pay';
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${route.params.id}`;
       axios
         .post(url)
         .then((res) => {
-          console.log('order', res);
           if (res.data.success) {
             getOrder();
           }
+          isLoading.value = '';
         })
         .catch((err) => {
           console.log(err);
         });
     }
+
     onMounted(() => {
       getOrder();
     });
@@ -48,6 +49,7 @@ export default {
     return {
       // variable
       order,
+      isLoading,
       // methods
       currency,
       confirmPay,
@@ -127,7 +129,12 @@ export default {
           >
 
           <button class="btn btn-orange" type="button"
+          :class="{'disabled':isLoading === 'pay'}"
           @click="confirmPay">
+          <div class="spinner-grow text-dark spinner-grow-sm"
+          role="status" v-if="isLoading === 'pay'">
+            <span class="visually-hidden">Loading...</span>
+          </div>
             確認付款
           </button>
         </div>

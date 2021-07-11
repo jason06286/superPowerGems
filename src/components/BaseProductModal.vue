@@ -55,7 +55,6 @@ export default {
       axios
         .post(url, formData)
         .then((res) => {
-          console.log(res);
           if (res.data.success) {
             tempProduct.obj.imageUrl = res.data.imageUrl;
           }
@@ -67,7 +66,6 @@ export default {
 
     onMounted(() => {
       modal = new Modal(productModal.value);
-      console.log(productModal);
     });
 
     return {
@@ -98,8 +96,8 @@ export default {
     aria-hidden="true"
   >
     <div class="modal-dialog modal-xl">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-orange-600 text-white">
+      <div class="border-0 modal-content">
+        <div class="text-white bg-orange-600 modal-header">
           <h5 id="productModalLabel" class="modal-title">
             <span v-if="newProduct">新增產品</span>
             <span v-else>修改產品</span>
@@ -115,7 +113,7 @@ export default {
           <div class="row">
             <div class="col-sm-4">
               <div class="mb-1">
-                <div class="form-group my-2">
+                <div class="my-2 form-group">
                   <label for="imageUrl">輸入圖片網址</label>
                   <input
                     type="text"
@@ -125,7 +123,7 @@ export default {
                     v-model="tempProduct.obj.imageUrl"
                   />
                 </div>
-                <div class="form-group my-2">
+                <div class="my-2 form-group">
                   <label for="fileInput">或上傳圖片</label>
                   <input
                     type="file"
@@ -163,7 +161,7 @@ export default {
               </div>
               <div v-if="Array.isArray(tempProduct.obj.imagesUrl)">
                 <img
-                  class="img-fluid my-2"
+                  class="my-2 img-fluid"
                   v-for="item in tempProduct.obj.imagesUrl"
                   :key="item"
                   :src="item"

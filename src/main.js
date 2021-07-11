@@ -3,6 +3,7 @@ import 'bootstrap';
 import VueSweetalert2 from 'vue-sweetalert2';
 import Loading from 'vue3-loading-overlay';
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
+import 'aos/dist/aos.css';
 import {
   Field, Form, ErrorMessage, defineRule, configure,
 } from 'vee-validate';

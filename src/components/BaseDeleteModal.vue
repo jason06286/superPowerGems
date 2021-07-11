@@ -12,15 +12,16 @@ export default {
   setup(props, { emit }) {
     const delModal = ref(null);
     let modal = [];
+
     function showDelModal() {
       modal.show();
     }
     function hideDelModal() {
       modal.hide();
     }
+
     onMounted(() => {
       modal = new Modal(delModal.value);
-      console.log(props.deleteItem);
     });
     return {
       props,
@@ -32,6 +33,7 @@ export default {
   },
 };
 </script>
+
 <template lang="">
   <div
     id="delModal"
@@ -42,8 +44,8 @@ export default {
     aria-hidden="true"
   >
     <div class="modal-dialog">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-danger text-white">
+      <div class="border-0 modal-content">
+        <div class="text-white modal-header bg-danger">
           <h5 id="delModalLabel" class="modal-title">
             <span >刪除<slot></slot></span>
           </h5>

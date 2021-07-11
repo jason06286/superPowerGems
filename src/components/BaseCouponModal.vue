@@ -41,7 +41,6 @@ export default {
 
     onMounted(() => {
       modal = new Modal(couponModal.value);
-      console.log(couponModal);
     });
 
     return {
@@ -68,8 +67,8 @@ export default {
     aria-hidden="true"
   >
     <div class="modal-dialog ">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-orange-600 text-white">
+      <div class="border-0 modal-content">
+        <div class="text-white bg-orange-600 modal-header">
           <h5 id="couponModalLabel" class="modal-title">
             <span v-if="newCoupon">新增優惠券</span>
             <span v-else>修改優惠券</span>

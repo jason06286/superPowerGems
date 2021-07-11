@@ -56,7 +56,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             products.arr = res.data.products;
             pagination.obj = res.data.pagination;
@@ -76,7 +75,6 @@ export default {
             getProducts();
             swalSuccess('刪除', '刪除商品成功!');
           }
-          console.log('delete', res);
         })
         .catch((err) => {
           console.log(err);
@@ -112,7 +110,6 @@ export default {
             swalError('Oops...', res.data.message);
           }
           productModal.value.hideProductModal();
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -146,12 +143,12 @@ export default {
 <template>
   <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="fw-bold border-bottom border-3 border-orange pb-3 mb-3">
+    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
       產品列表
     </h2>
     <div class="text-end">
       <button
-        class="btn btn-orange text-white"
+        class="text-white btn btn-orange"
         type="button"
         @click="openProductModal({}, true)"
       >
@@ -199,7 +196,7 @@ export default {
       </table>
     </div>
   </div>
-  <div class="d-flex justify-content-center mt-5">
+  <div class="mt-5 d-flex justify-content-center">
     <BasePagination :pagination="pagination" @get-nowpage="getProducts" />
   </div>
   <BaseProductModal

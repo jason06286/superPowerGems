@@ -1,6 +1,4 @@
 <script>
-import { onMounted } from 'vue';
-
 export default {
   props: {
     pagination: {
@@ -13,14 +11,11 @@ export default {
     },
   },
   setup(props, { emit }) {
-    onMounted(() => {
-      console.log(props.pagination);
-      console.log(props.getProducts);
-    });
     return { props, emit };
   },
 };
 </script>
+
 <template>
   <nav aria-label="Page navigation example">
     <ul class="pagination">

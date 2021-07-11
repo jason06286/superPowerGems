@@ -1,11 +1,13 @@
 <script>
 // componets
 import BasePagination from '@/components/BasePagination.vue';
+import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
 // kit
 import axios from 'axios';
 // methods
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
+import pushMessageState from '@/methods/pushMessageState';
 // vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -13,6 +15,7 @@ import { useRouter } from 'vue-router';
 export default {
   components: {
     BasePagination,
+    BaseFrontendLoading,
   },
   setup() {
     const router = useRouter();
@@ -22,19 +25,19 @@ export default {
     const filterProducts = reactive({ obj: {} });
     const showAllProducts = ref(true);
     const tempCategory = ref('全部');
+    const isLoading = ref('');
+    const showLoadinng = ref(false);
 
     function filterProduct(condition = '') {
       showAllProducts.value = false;
       tempCategory.value = condition;
       filterProducts.obj = Allproducts.arr.filter((item) => item.category.match(condition));
-      console.log(filterProducts.obj);
     }
     function getAllProducts() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             Allproducts.arr = res.data.products;
           }
@@ -44,14 +47,15 @@ export default {
         });
     }
     function getProducts(page = 1) {
+      showLoadinng.value = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`;
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             products.arr = res.data.products;
             pagination.obj = res.data.pagination;
+            showLoadinng.value = false;
           }
         })
         .catch((err) => {
@@ -66,6 +70,7 @@ export default {
       router.push(`/frontDesk/product/${id}`);
     }
     function addCart(item) {
+      isLoading.value = item.id;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       axios
         .post(url, {
@@ -75,11 +80,11 @@ export default {
           },
         })
         .then((res) => {
-          console.log('addcart', res);
           if (res.data.success) {
             emitter.emit('update-cart');
-            console.log('addcart sucess');
+            isLoading.value = '';
           }
+          pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
           console.log(err);
@@ -97,6 +102,8 @@ export default {
       pagination,
       filterProducts,
       tempCategory,
+      isLoading,
+      showLoadinng,
       // methods
       filterProduct,
       currency,
@@ -111,10 +118,11 @@ export default {
 </script>
 
 <template >
+<BaseFrontendLoading :isLoading="showLoadinng" />
   <header>
     <div class="bg-universe">
-      <p class="fs-3">想要更多優惠嗎?</p>
-      <p class="fs-1">
+      <p class="fs-3" >想要更多優惠嗎?</p>
+      <p class="fs-1" >
         玩小遊戲領取
         <router-link
           to="/frontDesk/coupon"
@@ -132,60 +140,28 @@ export default {
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '全部' }"
                 @click="showAll"
               >
                 全部
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精礦' }"
                 @click="filterProduct('精礦')"
               >
                 精礦
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精鋼' }"
                 @click="filterProduct('精鋼')"
               >
                 精鋼
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精石' }"
                 @click="filterProduct('精石')"
               >
@@ -208,12 +184,7 @@ export default {
                       {{ item.description }}
                     </p>
                     <div
-                      class="
-                        mb-3
-                        d-flex
-                        justify-content-center
-                        align-items-center
-                      "
+                      class="mb-3 d-flex justify-content-center align-items-center"
                     >
                       <span class="line-through text-secondary me-3"
                         >${{ currency(item.origin_price) }}</span
@@ -233,8 +204,13 @@ export default {
                       <button
                         type="button"
                         class="btn btn-outline-orange"
+                        :class="{'disabled':isLoading === item.id}"
                         @click="addCart(item)"
                       >
+                      <div class="spinner-border spinner-border-sm" role="status"
+                        v-if="isLoading === item.id">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
                         加入購物車
                       </button>
                     </div>
@@ -264,12 +240,7 @@ export default {
                       {{ item.description }}
                     </p>
                     <div
-                      class="
-                        mb-3
-                        d-flex
-                        justify-content-center
-                        align-items-center
-                      "
+                      class="mb-3 d-flex justify-content-center align-items-center"
                     >
                       <span class="line-through text-secondary me-3"
                         >${{ currency(item.origin_price) }}</span
@@ -289,8 +260,13 @@ export default {
                       <button
                         type="button"
                         class="btn btn-outline-orange"
+                        :class="{'disabled':isLoading === item.id}"
                         @click="addCart(item)"
                       >
+                        <div class="spinner-border spinner-border-sm" role="status"
+                        v-if="isLoading === item.id">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
                         加入購物車
                       </button>
                     </div>

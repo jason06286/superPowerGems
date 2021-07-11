@@ -21,7 +21,6 @@ export default {
             // document.cookie = 'hexToken=; expires=; path=/';
             router.push('/login');
           }
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -38,7 +37,6 @@ export default {
       axios
         .post(url)
         .then((res) => {
-          console.log(res);
           if (!res.data.success) {
             router.push('/login');
           }
@@ -66,11 +64,8 @@ export default {
     <div class="col-12 col-lg-4">
 <div class="flex-shrink-0 p-3 mb-3 text-white bg-gray-900 rounded d-flex flex-column" >
                 <a href="/"
-                class="mb-3
-                text-white d-flex
-                align-items-center
-                mb-md-0 me-md-auto
-                text-decoration-none">
+                class="mb-3 text-white d-flex align-items-center
+                mb-md-0 me-md-auto text-decoration-none">
                   <span class="fs-4 font-Tourney"> Superpower Gems</span>
                 </a>
                 <hr>

@@ -55,7 +55,7 @@ export default {
     const donePuzzle = reactive({ puzzle: [] });
     const winIdx = ref(0);
     const isWin = ref(false);
-    const coupon = ref('cat');
+    const coupon = ref('superPower');
 
     watch(
       () => donePuzzle.puzzle,

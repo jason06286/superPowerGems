@@ -64,7 +64,6 @@ const routes = [
     redirect: {
       name: 'Home',
     },
-
   },
 ];
 

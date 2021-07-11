@@ -16,7 +16,7 @@ export default {};
                     </li>
                     <li class="mx-3">
                         <a href="mailto:dj4871114@gmail.com"
-                         target="_blank" class="text-white d-block">
+                            target="_blank" class="text-white d-block">
                         <i class="bi bi-envelope-fill"></i>
                         </a>
                     </li>

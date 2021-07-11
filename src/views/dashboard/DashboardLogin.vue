@@ -53,7 +53,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -77,14 +76,7 @@ export default {
 <template >
   <BaseNavbar />
   <div
-    class="
-      position-relative
-      grid
-      overflow-hidden
-      d-flex
-      justify-content-center
-      align-items-center
-    "
+    class="grid overflow-hidden  position-relative d-flex justify-content-center align-items-center"
   >
     <div class="position-absolute grid-container" ref="gridBackground">
       <div class="col-span-2 grid-item animate-pulse"></div>
@@ -117,7 +109,7 @@ export default {
       <div class="col-span-7 grid-item animate-pulse"></div>
       <div class="col-span-1 grid-item animate-pulse"></div>
     </div>
-    <div class="position-relative login mx-3">
+    <div class="mx-3 position-relative login">
       <h2 class="title font-Tourney">Login</h2>
       <Form v-slot="{ errors }" @submit="signIn">
         <div class="mb-3">
@@ -151,7 +143,7 @@ export default {
           <ErrorMessage name="password" class="invalid-feedback"></ErrorMessage>
         </div>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-lg btn-orange text-white">
+          <button type="submit" class="text-white btn btn-lg btn-orange">
             登入
           </button>
         </div>

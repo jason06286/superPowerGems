@@ -1,9 +1,12 @@
 <script>
+// component
+import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
 // kit
 import axios from 'axios';
 // methods
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
+import pushMessageState from '@/methods/pushMessageState';
 // vue
 import {
   onMounted, reactive, ref, computed,
@@ -11,20 +14,25 @@ import {
 import { useRoute } from 'vue-router';
 
 export default {
+  components: {
+    BaseFrontendLoading,
+  },
   setup() {
     const route = useRoute();
     const product = reactive({ arr: [] });
     const productNum = ref(0);
     const total = computed(() => product.arr.price * productNum.value);
+    const isLoading = ref(false);
 
     function getProduct() {
+      isLoading.value = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${route.params.id}`;
       axios
         .get(url)
         .then((res) => {
-          console.log('produt', res);
           if (res.data.success) {
             product.arr = res.data.product;
+            isLoading.value = false;
           }
         })
         .catch((err) => {
@@ -41,11 +49,10 @@ export default {
           },
         })
         .then((res) => {
-          console.log('addcart', res);
           if (res.data.success) {
             emitter.emit('update-cart');
-            console.log('addcart sucess');
           }
+          pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
           console.log(err);
@@ -54,8 +61,6 @@ export default {
 
     onMounted(() => {
       getProduct();
-      console.log(route);
-      console.log(route.params.id);
     });
 
     return {
@@ -63,6 +68,7 @@ export default {
       product,
       productNum,
       total,
+      isLoading,
       // methods
       currency,
       addCart,
@@ -72,6 +78,7 @@ export default {
 </script>
 
 <template >
+<BaseFrontendLoading :isLoading="isLoading"/>
   <div class="py-5">
     <div class="container">
       <div class="row">

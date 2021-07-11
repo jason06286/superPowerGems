@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 export default {
   setup() {
@@ -10,6 +10,7 @@ export default {
     let i = 0;
     const txt = '宇宙能源匱乏，外星人肆意掠奪，地球生存危在旦息...';
     const speed = 200;
+
     function typeWriter() {
       if (i < txt.length) {
         typingContentDom.value.children[0].innerHTML += txt.charAt(i);
@@ -24,42 +25,50 @@ export default {
       peopleDom.value.classList.add('active');
       typeWriter();
     }
+    function scrollDown() {
+      const modalHeight = window.innerHeight;
+      window.scrollTo({
+        top: modalHeight + 20,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
 
-    onMounted(() => {
-      console.dir(peopleDom);
-      console.log(peopleDom.value.children[0].children);
-      console.dir(typingContentDom);
-    });
     return {
+      // variable
       peopleDom,
-      stopShine,
       typingContentDom,
-      typeWriter,
       typingContentShow,
       typingDone,
+      // methods
+      stopShine,
+      typeWriter,
+      scrollDown,
     };
   },
 };
 </script>
+
 <template lang="">
     <div class="star">
         <div class="stars"></div>
         <div class="twinkling"></div>
-        <div class="container pepole" ref="peopleDom">
+        <div class="container pepole" ref="peopleDom" data-aos="fade-down">
           <div class="row">
               <div class="mb-3 col-lg-7 col-12" v-show="typingContentShow">
               <div class="typingContent" ref="typingContentDom">
                 <p>
                 </p>
-                <div class="text-end" v-show="typingDone">
-                  <a  class="btn btn-outline-secondary btn-sm typingBtn" href = "#shop">Click</a>
+                <div class="text-end " v-show="typingDone" >
+                  <a  class="btn btn-outline-secondary btn-sm typingBtn "
+                  href = "#shop" @click.prevent="scrollDown">Click</a>
                 </div>
               </div>
             </div>
             <div class="col-lg-5 col-12">
               <button
             v-if="!typingContentShow"
-            class="mb-3  btn btn-orange d-inline-block "
+            class="mb-3 text-white btn btn-orange d-inline-block bounce"
             type="button"
             @click.prevent="stopShine"
             >Click</button>
@@ -67,9 +76,10 @@ export default {
             </div>
           </div>
         </div>
-        <div class="bg-wave"></div>
+        <div class="bg-wave" data-aos="fade-right"></div>
     </div>
 </template>
+
 <style lang="scss" scoped>
 .star {
   position: relative;
@@ -137,6 +147,30 @@ export default {
   }
   100% {
     filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7));
+  }
+}
+.bounce{
+  animation: bounce 2s infinite 2s;
+}
+@keyframes bounce {
+  0%,
+  100%,
+  20%,
+  50%,
+  80% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  60% {
+    -webkit-transform: translateY(-5px);
+    -ms-transform: translateY(-5px);
+    transform: translateY(-5px);
   }
 }
 .active img {

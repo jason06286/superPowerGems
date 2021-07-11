@@ -56,7 +56,6 @@ export default {
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             coupons.arr = res.data.coupons;
             pagination.obj = res.data.pagination;
@@ -78,7 +77,6 @@ export default {
           } else {
             swalError('Oops...', res.data.message);
           }
-          console.log('delete', res);
           couponDeleteModal.value.hideDelModal();
         })
         .catch((err) => {
@@ -100,8 +98,6 @@ export default {
         due_date: new Date(item.due_date).getTime() / 1000,
         is_enabled: item.is_enabled ?? 0,
       };
-      console.log('item :>> ', item);
-      console.log(tempCoupon.obj);
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
       let method = 'post';
       if (!newCoupon.value) {
@@ -152,12 +148,12 @@ export default {
 <template >
 <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="fw-bold border-bottom border-3 border-orange pb-3 mb-3">
+    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
       優惠券
     </h2>
     <div class="text-end">
       <button
-        class="btn btn-orange text-white"
+        class="text-white btn btn-orange"
         type="button"
         @click="openCouponModal({}, true)"
       >
@@ -205,7 +201,7 @@ export default {
       </table>
     </div>
   </div>
-  <div class="d-flex justify-content-center mt-5">
+  <div class="mt-5 d-flex justify-content-center">
     <BasePagination :pagination="pagination" @get-nowpage="getCoupons" />
   </div>
   <BaseCouponModal

@@ -4,6 +4,8 @@ import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
 import BaseCartModal from '@/components/BaseCartModal.vue';
+import ToastMessages from '@/components/ToastMessages.vue';
+
 // kit
 import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -13,8 +15,9 @@ import '../assets/helpers/swiper.css';
 import axios from 'axios';
 // methods
 import emitter from '@/methods/emitter';
+import pushMessageState from '@/methods/pushMessageState';
 // vue
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 SwiperCore.use([Pagination, Autoplay]);
@@ -27,6 +30,7 @@ export default {
     BaseCartModal,
     Swiper,
     SwiperSlide,
+    ToastMessages,
   },
   setup() {
     const router = useRouter();
@@ -51,13 +55,13 @@ export default {
         },
       },
     });
+    const isLoading = ref('');
 
     function getAllProducts() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
       axios
         .get(url)
         .then((res) => {
-          console.log('produts', res);
           if (res.data.success) {
             products.arr = res.data.products;
           }
@@ -67,6 +71,7 @@ export default {
         });
     }
     function addCart(item) {
+      isLoading.value = item.id;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       axios
         .post(url, {
@@ -76,11 +81,11 @@ export default {
           },
         })
         .then((res) => {
-          console.log('addcart', res);
           if (res.data.success) {
             emitter.emit('update-cart');
-            console.log('addcart sucess');
+            isLoading.value = '';
           }
+          pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
           console.log(err);
@@ -89,13 +94,17 @@ export default {
     function forwardingProduct(id) {
       router.push(`/frontDesk/product/${id}`);
     }
+
     onMounted(() => {
       getAllProducts();
     });
 
     return {
+      // variable
       products,
       swiperBreakpoints,
+      isLoading,
+      // methods
       addCart,
       forwardingProduct,
     };
@@ -105,16 +114,17 @@ export default {
 
 <template >
   <div>
+    <ToastMessages />
     <BaseNavbar />
     <HomeHeader />
     <BaseCartModal />
-    <section>
+    <section >
       <div class="container">
         <div
           class="py-5 d-flex align-items-center justify-content-center flex-column"
         >
-          <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
-            ABOUT US
+          <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange" >
+            關於我們
           </h2>
           <p class="text-center">
             由各國頂尖科學家集結研發，透過能量轉換原則， <br />
@@ -146,7 +156,12 @@ export default {
                       查看更多
                     </button>
                     <button type="button" class="btn btn-orange"
+                    :class="{'disabled':isLoading===item.id}"
                      @click="addCart(item)">
+                        <div class="spinner-border spinner-border-sm" role="status"
+                         v-if="isLoading===item.id">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
                       加入購物車
                     </button>
                   </div>
@@ -160,7 +175,46 @@ export default {
         </div>
       </div>
     </section>
-    <section>
+    <section class="mt-5" >
+      <div class="mb-3 d-flex justify-content-center w-100">
+          <h2 class="pb-3 fw-bold border-bottom border-3 border-orange d-inline-block">
+            使用方法
+        </h2>
+      </div>
+      <div class=" row g-0">
+        <div class="col-12 col-lg-6 ">
+           <div class="bg-steup bg-steup1">
+             <div class="bg-content">
+               <p>拿到貨物時，內容物會有能量石和一組密碼</p>
+             </div>
+           </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="bg-steup bg-steup2">
+             <div class="bg-content">
+               <p>手握能量石，心中默想著密碼</p>
+             </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 ">
+          <div class="bg-steup bg-steup3">
+             <div class="bg-content">
+               <p>此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異</p>
+             </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="bg-steup bg-steup4">
+             <div class="bg-content">
+               <p>吸收完能量石會消失，轉換為能量充斥身體，<br>
+                 可以心中默想能量石名稱、形狀，腦中就會浮現該能量石能力
+                </p>
+             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section >
       <div class="container">
         <div
           class="py-5 d-flex align-items-center justify-content-center flex-column"
@@ -173,7 +227,7 @@ export default {
             />
           </div>
           <div class="my-3 typewriter">
-            <p>還不知道適合什麼能量石嗎?</p>
+            <p>還不知道適合哪種能量石?</p>
           </div>
           <router-link
             to="/frontDesk/quiz"
@@ -272,4 +326,47 @@ export default {
     border-color: orange;
   }
 }
+.bg-steup{
+background-size: cover;
+  height: 300px;
+  width: 100%;
+  border: 2px solid #fff;
+  position: relative;
+  @media (min-width: 576px) { height: 500px;}
+}
+.bg-steup1{
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006793382.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=a2H9NwR9%2FmUCW48tv85rvPZY5%2BSZ4pSHFtip02H6ULGzwuFbGc4TBKnLV7YF5M3JcKWIPVgayW2cjfnVqDLcmpnjzOmjaugufbJq%2BdiWb6Lzb7eus3slkhhdVx1xQpuhWVdBKkjPj%2FbwTHJXxhNH0IWVEaBOEYN%2B1nYFQQbJumoQ3bRquesSFQqcKrkISECpDTtUb2XwSUNZgsLphnBSmfoBkMAl7CPeytj%2BalIJI4M9WxpVa%2BPprDkR%2B1WbPiT0luqjsV4Gm6P1tnfbhSUN97Ko68ybMWY1KAzLd53iv6lpy1Cb1oiHErBnVLKVS3wrRPAYYXz%2BpkVGQHDfq%2F%2FGIw%3D%3D');
+}
+.bg-steup2{
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006821239.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=PAvFXFNYIm3%2FRVrA0nQ6tXlqkRiweULMFgo1HobADmDHQnm45hV9zcLR%2Fb3T0Hkq33FmjaJVnc7RVAJX4bgo9vBznu9pKORGB4m65zU0BjRslOtZ%2BB0ZfQVc8QJYBTH6lRY56W%2FOBN2dL6As7s1FjHNh6mz5Ua5icZ%2Feu83%2BSWJzLbqjC3bxCgzqpXYvMUvZIOXihTtJOBUV2bdYP7uj59bScTo6s3uiFdA8ZWMPKg7BZZZoyybhlEZ0tZnhY65FR7wBRzZvuQrHCS%2F8gFW6vROoi9QavjMlPF0NWPH8ufO3wZ0Ijnol7bBRIKIrY3MRQ97WEfjkWTLfFvc3co6JWw%3D%3D');
+}
+.bg-steup3{
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006845301.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=oImrBaBJctJbzu7hPhEl%2B53INTrFt6LIkiSNSjeiKSKMyKfeTbCl1RtxHmPt%2Bx4e3zFWEkYL2Srz37tt%2B4ioUaUMU6jIaw0syt9jxRgGCf3NwHe%2B5Ou6SUkO0NBB5RbYv%2BIp%2BRqGwBNfVA4wLmG7fN4qYL4WbTIrxScfU5psQavP10OZdm2Yihyo76BJl5zarW3jisMxqxjcIM05jr2MncacONZYACrhPWya3w5vGJ5Mam7gZPyH3eRQWAogu5yF64KUThUCIdLHK%2BCbfPTW8gVNqc6pzWMS6JTTMVZnnA9K4%2BQkolUjOia7L93FdDxAMNhtgOxsZxypJLoKwipZaw%3D%3D');
+}
+.bg-steup4{
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006870474.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ofVZI%2Ffz8%2BxxmTi2QJTuuLhxsIkJL94l0Vc%2FgOYxeSJs4vYGkJrsTH%2F6%2FvfuJkAw6I%2BdlXdv88edDZqYWW3Qr6lftdzqLNsq36xI45UacARYDprKJKUiLC9%2Bhn1uatMykmjzpR6SkdW1kHmfDFGZqcXVK%2B62mvrrgJV3Lkat1o6lBEpX9MWyGspQ4PfbIOw6c7MbEtvdO2vWN1qIYarQLD3ZfVrYhhFJkzn6fL45ayvydVmObgrwMzw92dp0PDcRogzF42jXM8dHDyQ%2FsUGtip633hSbFml5sffITfX5LcondiEQ36oNw%2F0Irlkse89mUfemZed2S8HqELJgqebkxg%3D%3D');
+}
+.bg-steup .bg-content{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 1rem;
+  background-color: rgba(0,0,0,.6);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  p{
+    margin-bottom: 0;
+    font-size: 1rem;
+    @media (min-width: 576px) { font-size: 1.5rem;}
+  }
+}
+.bg-steup:hover .bg-content{
+  background-color: rgba(0,0,0,.3);
+}
+
 </style>
