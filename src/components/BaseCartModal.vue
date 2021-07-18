@@ -12,100 +12,119 @@ import pushMessageState from '@/methods/pushMessageState';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+function modalDetail() {
+  const router = useRouter();
+  const cartModal = ref(null);
+  let modal = null;
+
+  const showModal = () => {
+    modal.show();
+  };
+  const hideModal = () => {
+    modal.hide();
+  };
+  const payment = () => {
+    hideModal();
+    router.push('/frontDesk/carts');
+  };
+
+  onMounted(() => {
+    modal = new Modal(cartModal.value);
+  });
+
+  return {
+    cartModal,
+    showModal,
+    hideModal,
+    payment,
+  };
+}
+function cartDetail() {
+  const carts = reactive({ arr: [] });
+  const coupon = ref('');
+  const isLoading = ref('');
+
+  const getCarts = () => {
+    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+    axios
+      .get(url)
+      .then((res) => {
+        if (res.data.success) {
+          carts.arr = res.data.data;
+        } else {
+          console.error(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const delProduct = (item) => {
+    isLoading.value = item.id;
+    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
+    axios
+      .delete(url)
+      .then((res) => {
+        if (res.data.success) {
+          getCarts();
+        } else {
+          console.error(res.data.message);
+        }
+        isLoading.value = '';
+        pushMessageState(res, '刪除商品');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const useCoupon = () => {
+    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
+    axios
+      .post(url, { data: { code: coupon.value } })
+      .then((res) => {
+        if (res.data.success) {
+          getCarts();
+        } else {
+          console.error(res.data.message);
+        }
+        pushMessageState(res, '套用優惠券');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  onMounted(() => {
+    getCarts();
+    emitter.on('update-cart', () => {
+      getCarts();
+    });
+  });
+
+  return {
+    carts,
+    coupon,
+    isLoading,
+    delProduct,
+    useCoupon,
+  };
+}
+
 export default {
   components: {
     BaseScrollTop,
   },
   setup() {
-    const router = useRouter();
-    const carts = reactive({ arr: [] });
-    const cartModal = ref(null);
-    const coupon = ref('');
-    let modal = [];
-    const isLoading = ref('');
-
-    function showModal() {
-      modal.show();
-    }
-    function hideModal() {
-      modal.hide();
-    }
-    function getCarts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            carts.arr = res.data.data;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function delProduct(item) {
-      isLoading.value = item.id;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-      axios
-        .delete(url)
-        .then((res) => {
-          if (res.data.success) {
-            getCarts();
-          }
-          isLoading.value = '';
-          pushMessageState(res, '刪除商品');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function useCoupon() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-      axios
-        .post(url, { data: { code: coupon.value } })
-        .then((res) => {
-          if (res.data.success) {
-            getCarts();
-          }
-          pushMessageState(res, '套用優惠券');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function payment() {
-      modal.hide();
-      router.push('/frontDesk/carts');
-    }
-
-    onMounted(() => {
-      getCarts();
-      modal = new Modal(cartModal.value);
-      emitter.on('update-cart', () => {
-        getCarts();
-      });
-    });
-
     return {
-      // variable
-      carts,
-      coupon,
-      router,
-      cartModal,
-      isLoading,
-      // methods
+      ...modalDetail(),
+      ...cartDetail(),
       currency,
-      delProduct,
-      useCoupon,
-      payment,
-      showModal,
-      hideModal,
     };
   },
 };
 </script>
 
-<template >
+<template>
   <div class="cart-btn-position">
     <BaseScrollTop />
     <button type="button" class="cart-btn" @click="showModal">
@@ -149,14 +168,21 @@ export default {
             <tbody>
               <tr v-for="item in carts.arr.carts" :key="item.id">
                 <td>
-                  <button class="btn btn-outline-danger btn-sm" type="button" disabled
-                  v-if="isLoading===item.id">
-                    <span class="spinner-border spinner-border-sm"
-                    role="status" aria-hidden="true"></span>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    type="button"
+                    disabled
+                    v-if="isLoading === item.id"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
                     <span class="visually-hidden">Loading...</span>
                   </button>
                   <button
-                  v-else
+                    v-else
                     type="button"
                     class="btn btn-outline-danger btn-sm"
                     @click="delProduct(item)"
@@ -215,9 +241,14 @@ export default {
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            在逛逛
+            再逛逛
           </button>
-          <button type="button" class="btn btn-orange" @click="payment">
+          <button
+            type="button"
+            class="btn btn-primary"
+            :class="{ disabled: carts.arr?.carts?.length === 0 }"
+            @click="payment"
+          >
             結帳去
           </button>
         </div>
@@ -245,7 +276,7 @@ export default {
   height: 50px;
   border-radius: 50%;
   color: #fff;
-  background: #f59157;
+  background: #dd5c33;
   border: none;
   position: relative;
   span {

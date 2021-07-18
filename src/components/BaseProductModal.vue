@@ -5,6 +5,79 @@ import {
   onMounted, reactive, ref, watch,
 } from 'vue';
 
+function modalDetail() {
+  const productModal = ref(null);
+  let modal = null;
+
+  const showProductModal = () => {
+    modal.show();
+  };
+  const hideProductModal = () => {
+    modal.hide();
+  };
+
+  onMounted(() => {
+    modal = new Modal(productModal.value);
+  });
+
+  return {
+    productModal,
+    showProductModal,
+    hideProductModal,
+  };
+}
+function imageDetail(props) {
+  const fileInput = ref(null);
+  const tempProduct = reactive({ obj: {} });
+
+  watch(
+    () => props.product.obj,
+    () => {
+      tempProduct.obj = props.product.obj;
+    },
+  );
+
+  const newPicture = () => {
+    tempProduct.obj.imagesUrl = [];
+    tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
+    tempProduct.obj.imageUrl = '';
+  };
+  const addPicture = () => {
+    tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
+    tempProduct.obj.imageUrl = '';
+  };
+  const delPicture = () => {
+    tempProduct.obj.imagesUrl.pop();
+  };
+  const uploadFile = () => {
+    const uploaderFile = fileInput.value.files[0];
+    const formData = new FormData();
+    formData.append('file-to-upload', uploaderFile);
+    const url = `   ${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
+    axios
+      .post(url, formData)
+      .then((res) => {
+        if (res.data.success) {
+          tempProduct.obj.imageUrl = res.data.imageUrl;
+        } else {
+          console.error(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  return {
+    tempProduct,
+    fileInput,
+    newPicture,
+    addPicture,
+    delPicture,
+    uploadFile,
+  };
+}
+
 export default {
   props: {
     product: {
@@ -16,71 +89,12 @@ export default {
       default: () => true,
     },
   },
+  emits: ['productStatus'],
   setup(props, { emit }) {
-    const tempProduct = reactive({ obj: {} });
-    const productModal = ref(null);
-    const fileInput = ref(null);
-    let modal = [];
-
-    watch(
-      () => props.product.obj,
-      () => {
-        tempProduct.obj = props.product.obj;
-      },
-    );
-
-    function showProductModal() {
-      modal.show();
-    }
-    function hideProductModal() {
-      modal.hide();
-    }
-    function newPicture() {
-      tempProduct.obj.imagesUrl = [];
-      tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
-      tempProduct.obj.imageUrl = '';
-    }
-    function addPicture() {
-      tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
-      tempProduct.obj.imageUrl = '';
-    }
-    function delPicture() {
-      tempProduct.obj.imagesUrl.pop();
-    }
-    function uploadFile() {
-      const uploaderFile = fileInput.value.files[0];
-      const formData = new FormData();
-      formData.append('file-to-upload', uploaderFile);
-      const url = `   ${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
-      axios
-        .post(url, formData)
-        .then((res) => {
-          if (res.data.success) {
-            tempProduct.obj.imageUrl = res.data.imageUrl;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    onMounted(() => {
-      modal = new Modal(productModal.value);
-    });
-
     return {
-      // variable
-      productModal,
-      fileInput,
-      tempProduct,
       emit,
-      // methods
-      newPicture,
-      showProductModal,
-      hideProductModal,
-      addPicture,
-      delPicture,
-      uploadFile,
+      ...modalDetail(),
+      ...imageDetail(props),
     };
   },
 };
@@ -133,7 +147,11 @@ export default {
                     @change="uploadFile"
                   />
                 </div>
-                <img class="img-fluid" :src="tempProduct.obj.imageUrl" alt="" />
+                <img
+                  class="img-fluid"
+                  :src="tempProduct.obj.imageUrl"
+                  alt="上傳的圖片"
+                />
               </div>
               <div v-if="Array.isArray(tempProduct.obj.imagesUrl)">
                 <button
@@ -165,13 +183,15 @@ export default {
                   v-for="item in tempProduct.obj.imagesUrl"
                   :key="item"
                   :src="item"
-                  alt=""
+                  alt="商品的圖片"
                 />
               </div>
             </div>
             <div class="col-sm-8">
               <div class="form-group">
-                <label for="title">標題<span class="text-danger">*</span></label>
+                <label for="title"
+                  >標題<span class="text-danger">*</span></label
+                >
                 <input
                   id="title"
                   type="text"
@@ -183,7 +203,9 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="category">分類<span class="text-danger">*</span></label>
+                  <label for="category"
+                    >分類<span class="text-danger">*</span></label
+                  >
                   <input
                     id="category"
                     type="text"
@@ -193,7 +215,9 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="unit">單位<span class="text-danger">*</span></label>
+                  <label for="unit"
+                    >單位<span class="text-danger">*</span></label
+                  >
                   <input
                     id="unit"
                     type="text"
@@ -206,7 +230,9 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="origin_price">原價<span class="text-danger">*</span></label>
+                  <label for="origin_price"
+                    >原價<span class="text-danger">*</span></label
+                  >
                   <input
                     id="origin_price"
                     type="number"
@@ -217,7 +243,9 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="price">售價<span class="text-danger">*</span></label>
+                  <label for="price"
+                    >售價<span class="text-danger">*</span></label
+                  >
                   <input
                     id="price"
                     type="number"
@@ -292,7 +320,7 @@ export default {
 </template>
 
 <style scoped>
-.bg-orange-600{
-  background-color: #CA6510;
+.bg-orange-600 {
+  background-color: #ca6510;
 }
 </style>

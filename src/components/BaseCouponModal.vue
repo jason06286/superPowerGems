@@ -5,6 +5,28 @@ import {
   onMounted, reactive, ref, watch,
 } from 'vue';
 
+function modalDetail() {
+  const couponModal = ref(null);
+  let modal = null;
+
+  const showCouponModal = () => {
+    modal.show();
+  };
+  const hideCouponModal = () => {
+    modal.hide();
+  };
+
+  onMounted(() => {
+    modal = new Modal(couponModal.value);
+  });
+
+  return {
+    couponModal,
+    showCouponModal,
+    hideCouponModal,
+  };
+}
+
 export default {
   props: {
     coupon: {
@@ -16,11 +38,10 @@ export default {
       default: () => true,
     },
   },
+  emits: ['couponStatus'],
   setup(props, { emit }) {
     const tempCoupon = reactive({ obj: {} });
-    const couponModal = ref(null);
     const today = formatDate(Date.now() / 1000);
-    let modal = [];
 
     watch(
       () => props.coupon.obj,
@@ -32,31 +53,17 @@ export default {
       },
     );
 
-    function showCouponModal() {
-      modal.show();
-    }
-    function hideCouponModal() {
-      modal.hide();
-    }
-
-    onMounted(() => {
-      modal = new Modal(couponModal.value);
-    });
-
     return {
-      // variable
-      couponModal,
       tempCoupon,
       today,
       emit,
       props,
-      //  methods
-      showCouponModal,
-      hideCouponModal,
+      ...modalDetail(),
     };
   },
 };
 </script>
+
 <template>
   <div
     id="couponModal"
@@ -66,7 +73,7 @@ export default {
     aria-labelledby="couponModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog ">
+    <div class="modal-dialog">
       <div class="border-0 modal-content">
         <div class="text-white bg-orange-600 modal-header">
           <h5 id="couponModalLabel" class="modal-title">
@@ -84,7 +91,9 @@ export default {
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
-                <label for="title">標題 <span class="text-danger">*</span></label>
+                <label for="title"
+                  >標題 <span class="text-danger">*</span></label
+                >
                 <input
                   id="title"
                   type="text"
@@ -96,7 +105,9 @@ export default {
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="percent ">優惠<span class="text-danger">*</span></label>
+                  <label for="percent "
+                    >優惠<span class="text-danger">*</span></label
+                  >
                   <input
                     id="percent "
                     type="number"
@@ -108,7 +119,9 @@ export default {
                   />
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="due_date">到期時間<span class="text-danger">*</span></label>
+                  <label for="due_date"
+                    >到期時間<span class="text-danger">*</span></label
+                  >
                   <input
                     id="due_date"
                     type="date"
@@ -120,8 +133,10 @@ export default {
                 </div>
               </div>
               <div class="col-12">
-                  <div class="form-group col-12">
-                  <label for="code">折扣碼<span class="text-danger">*</span></label>
+                <div class="form-group col-12">
+                  <label for="code"
+                    >折扣碼<span class="text-danger">*</span></label
+                  >
                   <input
                     id="code"
                     type="text"
@@ -170,6 +185,7 @@ export default {
     </div>
   </div>
 </template>
+
 <style scoped>
 .bg-orange-600 {
   background-color: #ca6510;

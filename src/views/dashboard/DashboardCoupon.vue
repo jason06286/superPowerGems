@@ -7,9 +7,9 @@ import BaseDeleteCouponModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 // kit
 import axios from 'axios';
-import useVueSweetAlert2 from '@/methods/useSwal';
 // methods
 import { formatDate } from '@/methods/filter';
+import useVueSweetAlert2 from '@/methods/useSwal';
 // vue
 import { onMounted, reactive, ref } from 'vue';
 
@@ -22,131 +22,148 @@ export default {
     BaseLoading,
   },
   setup() {
-    const coupons = reactive({ arr: [] });
-    const tempCoupon = reactive({ obj: {} });
-    const pagination = reactive({ obj: {} });
-    const couponModal = ref(null);
     const couponDeleteModal = ref(null);
-    const newCoupon = ref(false);
     const $swal = useVueSweetAlert2();
-    const isLoading = ref(false);
-
-    function swalSuccess(title, text) {
+    const coupons = reactive({ arr: [] });
+    const swalSuccess = (title, text) => {
       $swal.fire({
         icon: 'success',
         title,
         text,
       });
-    }
-    function swalError(title, text) {
+    };
+    const swalError = (title, text) => {
       $swal.fire({
         icon: 'error',
         title,
         text,
       });
-    }
-    function getCoupons(page = 1) {
-      isLoading.value = true;
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-        '$1',
-      );
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
-      axios.defaults.headers.common.Authorization = `${token}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            coupons.arr = res.data.coupons;
-            pagination.obj = res.data.pagination;
-            isLoading.value = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function delCoupon(id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${id}`;
-      axios
-        .delete(url)
-        .then((res) => {
-          if (res.data.success) {
-            getCoupons();
-            swalSuccess('刪除優惠券', '刪除優惠券成功!');
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-          couponDeleteModal.value.hideDelModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function openDeleteModal(item) {
-      tempCoupon.obj = JSON.parse(JSON.stringify(item));
-      couponDeleteModal.value.showDelModal();
-    }
-    function openCouponModal(item, isNew) {
-      tempCoupon.obj = JSON.parse(JSON.stringify(item));
-      newCoupon.value = isNew;
-      couponModal.value.showCouponModal();
-    }
-    function couponStatus(item) {
-      tempCoupon.obj = {
-        ...item,
-        due_date: new Date(item.due_date).getTime() / 1000,
-        is_enabled: item.is_enabled ?? 0,
+    };
+
+    function couponDetail() {
+      const pagination = reactive({ obj: {} });
+      const isLoading = ref(false);
+
+      const getCoupons = (page = 1) => {
+        isLoading.value = true;
+        const token = document.cookie.replace(
+          /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+          '$1',
+        );
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
+        axios.defaults.headers.common.Authorization = `${token}`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              coupons.arr = res.data.coupons;
+              pagination.obj = res.data.pagination;
+              isLoading.value = false;
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       };
-      let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
-      let method = 'post';
-      if (!newCoupon.value) {
-        url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
-        method = 'put';
-      }
-      axios[method](url, { data: tempCoupon.obj })
-        .then((res) => {
-          if (res.data.success) {
-            getCoupons();
-            swalSuccess(
-              newCoupon.value ? '新增' : '修改',
-              newCoupon.value ? '新增優惠券成功!' : '修改優惠券成功!',
-            );
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-          couponModal.value.hideCouponModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const delCoupon = (id) => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${id}`;
+        axios
+          .delete(url)
+          .then((res) => {
+            if (res.data.success) {
+              getCoupons();
+              swalSuccess('刪除優惠券', '刪除優惠券成功!');
+            } else {
+              swalError('Oops...', res.data.message);
+            }
+            couponDeleteModal.value.hideDelModal();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+
+      onMounted(() => {
+        getCoupons();
+      });
+
+      return {
+        pagination,
+        isLoading,
+        getCoupons,
+        delCoupon,
+      };
     }
-    onMounted(() => {
-      getCoupons();
-    });
+    function modalDetail() {
+      const couponModal = ref(null);
+      const tempCoupon = reactive({ obj: {} });
+      const newCoupon = ref(false);
+      const { getCoupons } = couponDetail();
+
+      const openDeleteModal = (item) => {
+        tempCoupon.obj = JSON.parse(JSON.stringify(item));
+        couponDeleteModal.value.showDelModal();
+      };
+      const openCouponModal = (item, isNew) => {
+        tempCoupon.obj = JSON.parse(JSON.stringify(item));
+        newCoupon.value = isNew;
+        couponModal.value.showCouponModal();
+      };
+      const couponStatus = (item) => {
+        tempCoupon.obj = {
+          ...item,
+          due_date: new Date(item.due_date).getTime() / 1000,
+          is_enabled: item.is_enabled ?? 0,
+        };
+        let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
+        let method = 'post';
+        if (!newCoupon.value) {
+          url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
+          method = 'put';
+        }
+        axios[method](url, { data: tempCoupon.obj })
+          .then((res) => {
+            if (res.data.success) {
+              getCoupons();
+              swalSuccess(
+                newCoupon.value ? '新增' : '修改',
+                newCoupon.value ? '新增優惠券成功!' : '修改優惠券成功!',
+              );
+            } else {
+              swalError('Oops...', res.data.message);
+            }
+            couponModal.value.hideCouponModal();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+
+      return {
+        couponModal,
+        tempCoupon,
+        newCoupon,
+        openDeleteModal,
+        openCouponModal,
+        couponStatus,
+      };
+    }
+
     return {
-    // variable
-      coupons,
-      pagination,
-      couponModal,
-      couponDeleteModal,
-      tempCoupon,
-      isLoading,
-      newCoupon,
-      // methods
-      getCoupons,
-      delCoupon,
+      ...modalDetail(),
+      ...couponDetail(),
       formatDate,
-      couponStatus,
-      openCouponModal,
-      openDeleteModal,
+      couponDeleteModal,
+      coupons,
     };
   },
 };
 </script>
 
-<template >
-<BaseLoading :isLoading="isLoading" />
+<template>
+  <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
     <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
       優惠券
@@ -164,13 +181,13 @@ export default {
       <table class="table mt-4 table-hover">
         <thead>
           <tr>
-            <th col="">優惠券名稱</th>
-            <th col="">優惠</th>
-            <th col="">到期時間</th>
-            <th col="">折扣碼</th>
+            <th>優惠券名稱</th>
+            <th>優惠</th>
+            <th>到期時間</th>
+            <th>折扣碼</th>
             <th>是否啟用</th>
-            <th col="">編輯</th>
-            <th col="">刪除</th>
+            <th>編輯</th>
+            <th>刪除</th>
           </tr>
         </thead>
         <tbody>
@@ -194,7 +211,10 @@ export default {
               </button>
             </td>
             <td>
-              <BaseDelteButton :btnSmall="true" @click=" openDeleteModal(item)" />
+              <BaseDelteButton
+                :btnSmall="true"
+                @click="openDeleteModal(item)"
+              />
             </td>
           </tr>
         </tbody>
@@ -210,13 +230,13 @@ export default {
     :newCoupon="newCoupon"
     @coupon-status="couponStatus"
   />
-  <base-delete-coupon-modal
+  <BaseDeleteCouponModal
     ref="couponDeleteModal"
     :deleteItem="tempCoupon.obj"
     @delete-item="delCoupon"
   >
-      優惠券
-  </base-delete-coupon-modal>
+    優惠券
+  </BaseDeleteCouponModal>
 </template>
 
 <style lang="">

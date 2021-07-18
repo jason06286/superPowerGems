@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <Loading :active="attrs.isLoading" >
+  <Loading :active="attrs.isLoading">
     <div class="loadingio-spinner-blocks-hghzlg9l8i">
       <div class="ldio-cmlvaqhdbw">
         <div style="left: 21px; top: 21px; animation-delay: 0s"></div>

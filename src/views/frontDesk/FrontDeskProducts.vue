@@ -24,105 +24,124 @@ export default {
     const pagination = reactive({ obj: {} });
     const filterProducts = reactive({ obj: {} });
     const showAllProducts = ref(true);
-    const tempCategory = ref('全部');
     const isLoading = ref('');
     const showLoadinng = ref(false);
 
-    function filterProduct(condition = '') {
-      showAllProducts.value = false;
-      tempCategory.value = condition;
-      filterProducts.obj = Allproducts.arr.filter((item) => item.category.match(condition));
-    }
-    function getAllProducts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            Allproducts.arr = res.data.products;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function getProducts(page = 1) {
-      showLoadinng.value = true;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-            pagination.obj = res.data.pagination;
-            showLoadinng.value = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function showAll() {
-      tempCategory.value = '全部';
-      showAllProducts.value = true;
-    }
-    function forwardingProduct(id) {
-      router.push(`/frontDesk/product/${id}`);
-    }
-    function addCart(item) {
-      isLoading.value = item.id;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .post(url, {
-          data: {
-            product_id: item.id,
-            qty: 1,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart');
-            isLoading.value = '';
-          }
-          pushMessageState(res, '購物車新增');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    function productDetail() {
+      const getAllProducts = () => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              Allproducts.arr = res.data.products;
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const getProducts = (page = 1) => {
+        showLoadinng.value = true;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              products.arr = res.data.products;
+              pagination.obj = res.data.pagination;
+              showLoadinng.value = false;
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const addCart = (item) => {
+        isLoading.value = item.id;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        axios
+          .post(url, {
+            data: {
+              product_id: item.id,
+              qty: 1,
+            },
+          })
+          .then((res) => {
+            if (res.data.success) {
+              emitter.emit('update-cart');
+              isLoading.value = '';
+            } else {
+              console.error(res.data.message);
+            }
+            pushMessageState(res, '購物車新增');
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const forwardingProduct = (id) => {
+        router.push(`/frontDesk/product/${id}`);
+      };
 
-    onMounted(() => {
-      getProducts();
-      getAllProducts();
-    });
+      onMounted(() => {
+        getProducts();
+        getAllProducts();
+      });
+
+      return {
+        getAllProducts,
+        getProducts,
+        addCart,
+        forwardingProduct,
+      };
+    }
+    function filterDetail() {
+      const tempCategory = ref('全部');
+
+      const filterProduct = (condition = '') => {
+        showAllProducts.value = false;
+        tempCategory.value = condition;
+        filterProducts.obj = Allproducts.arr.filter((item) => item.category.match(condition));
+      };
+
+      const showAll = () => {
+        tempCategory.value = '全部';
+        showAllProducts.value = true;
+      };
+
+      return {
+        tempCategory,
+        filterProduct,
+        showAll,
+      };
+    }
 
     return {
-      // variable
       products,
       pagination,
       filterProducts,
-      tempCategory,
       isLoading,
       showLoadinng,
-      // methods
-      filterProduct,
       currency,
       showAllProducts,
-      getProducts,
-      showAll,
-      forwardingProduct,
-      addCart,
+      ...productDetail(),
+      ...filterDetail(),
     };
   },
 };
 </script>
 
-<template >
-<BaseFrontendLoading :isLoading="showLoadinng" />
+<template>
+  <BaseFrontendLoading :isLoading="showLoadinng" />
   <header>
     <div class="bg-universe">
-      <p class="fs-3" >想要更多優惠嗎?</p>
-      <p class="fs-1" >
+      <p class="fs-3">想要更多優惠嗎?</p>
+      <p class="fs-1">
         玩小遊戲領取
         <router-link
           to="/frontDesk/coupon"
@@ -134,8 +153,10 @@ export default {
   </header>
   <section>
     <div class="py-5">
-      <div class="container">
-        <h4 class="pb-2 mb-3 border-bottom border-orange">能量石分類</h4>
+      <div class="container" style="min-height: calc(100vh - 412px)">
+        <h4 class="pb-2 mb-3 text-white border-bottom border-orange">
+          能量石分類
+        </h4>
         <div class="row">
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
@@ -177,7 +198,11 @@ export default {
                 :key="item.id"
               >
                 <div class="border-2 card w-100">
-                  <img :src="item.imageUrl" class="card-img-top" alt="..." />
+                  <img
+                    :src="item.imageUrl"
+                    class="card-img-top"
+                    :alt="item.description"
+                  />
                   <div class="card-body">
                     <h5 class="text-center card-title">{{ item.title }}</h5>
                     <p class="card-text">
@@ -203,12 +228,15 @@ export default {
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-orange"
-                        :class="{'disabled':isLoading === item.id}"
+                        class="btn btn-outline-primary"
+                        :class="{ disabled: isLoading === item.id }"
                         @click="addCart(item)"
                       >
-                      <div class="spinner-border spinner-border-sm" role="status"
-                        v-if="isLoading === item.id">
+                        <div
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          v-if="isLoading === item.id"
+                        >
                           <span class="visually-hidden">Loading...</span>
                         </div>
                         加入購物車
@@ -233,7 +261,11 @@ export default {
                 :key="item.id"
               >
                 <div class="border-2 card w-100">
-                  <img :src="item.imageUrl" class="card-img-top" alt="..." />
+                  <img
+                    :src="item.imageUrl"
+                    class="card-img-top"
+                    :alt="item.description"
+                  />
                   <div class="card-body">
                     <h5 class="text-center card-title">{{ item.title }}</h5>
                     <p class="card-text">
@@ -259,12 +291,15 @@ export default {
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-orange"
-                        :class="{'disabled':isLoading === item.id}"
+                        class="btn btn-outline-primary"
+                        :class="{ disabled: isLoading === item.id }"
                         @click="addCart(item)"
                       >
-                        <div class="spinner-border spinner-border-sm" role="status"
-                        v-if="isLoading === item.id">
+                        <div
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          v-if="isLoading === item.id"
+                        >
                           <span class="visually-hidden">Loading...</span>
                         </div>
                         加入購物車
@@ -283,8 +318,9 @@ export default {
 
 <style lang="scss" scoped>
 .bg-universe {
-  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625923689840.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=BrQZdUT9C%2FPA95XP8w8MLUcuAsDhIB8nVkrkhtjkbD4iFGo4wXLdplQOrSNgxHajXnLdbma%2FegJ4gWae8QO61o4g8H5I0bnWCSPAXtbI0YXuj1brVkig%2F%2FYZZYPAUAehRPTBU%2FhTbNfVjIP5KRlGVq6uVobOO7csWWINcO244d%2FSJf1tmKu5XNcNzODaFkwYCbVTgNrwWrrG5EbYSeMkODwaWduzjbkW2c%2BRLOIOlVxbECW3HbnDRV2EaCcIqwyy3U%2BM1g0QuO3clvqIV91XrUUXPG6hqfuiNfYTNwHejUDFdEOLMQ5Z4BYNJ709SnKC0IfmglrysclWD8aL4SMpXQ%3D%3D');
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626503091865.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=B9ZlBe%2BEcAh3pqtgb3Ud6i%2Fpa0YCS%2BpznWGHqCz2R2EM5whzsxTMOGCjsvESELy7mYJoXOH5Z10mQayTVn1FFd72d61Veg%2Bky26U0zEzcoeyroGHuYH0G6B%2BA0eC8JnFm1I2V1%2B02nq%2BwYBJTZ8gTUW0ooI4fo88yjJYymp4OBcbdf190Fl4XwSUQ9vRiEUUss8WdHsvGv3TJeR8jYGalCbZqgzhBobnmd2aScYjrrCMiseInXU8cnli%2FZBguT94KFwwVfVDccEnV44aLSVT70S3Su1VN%2BpZOTwCHKev38jnGxx1cqpM64aDtdToxq0W7LboWCgimyRojzRtYm9SPQ%3D%3D');
   background-size: cover;
+  background-position-x: right;
   height: 300px;
   display: flex;
   justify-content: center;
@@ -295,16 +331,23 @@ export default {
 .line-through {
   text-decoration: line-through;
 }
+.card {
+  cursor: pointer;
+  transition: all 0.3s;
+}
 .card:hover {
-  box-shadow: 3px 3px 6px rgba($color: #000000, $alpha: 0.5);
+  transform: translateY(-0.5rem);
+}
+.list {
+  color: wheat;
 }
 .list:hover {
   border: 2px solid #f59157 !important;
-  box-shadow: 3px 3px 6px rgba($color: #000000, $alpha: 0.5);
+  box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
 }
 .active {
   border: 2px solid #f59157 !important;
-  box-shadow: 3px 3px 6px rgba($color: #000000, $alpha: 0.5);
+  box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
 }
 .animate-bounce {
   animation: bounce 1s infinite;

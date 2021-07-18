@@ -28,13 +28,13 @@ export default {
 </script>
 
 <template>
-  <div class=" toast-container toast-position">
+  <div class="toast-container toast-position">
     <Toast v-for="(msg, key) in messages.arr" :key="key" :msg="msg"></Toast>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.toast-position{
+.toast-position {
   position: fixed;
   top: 5%;
   right: 1%;

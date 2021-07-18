@@ -89,49 +89,47 @@ export default {
     }
 
     return {
-      // variable
       waitPuzzle,
       donePuzzle,
       isWin,
       coupon,
-      // methods
       goDone,
       goWait,
     };
   },
 };
 </script>
-<template >
 
-  <div class="bg-darkblue">
+<template>
+  <div>
     <div
       class="container d-flex justify-content-center align-items-center"
       style="min-height: calc(100vh - 112px)"
     >
       <div class="py-5">
         <div class="row">
-          <div class="col-lg-6 col-12 mb-3">
-            <div class="bg-unfinish mb-3">
-              <ul class="list-unstyled d-flex mb-0">
+          <div class="mb-3 col-lg-6 col-12">
+            <div class="mb-3 bg-unfinish">
+              <ul class="mb-0 list-unstyled d-flex">
                 <li
                   v-for="(item, index) in waitPuzzle.puzzle"
                   :key="item.imageUrl"
                   @click="goDone(item, index)"
                 >
-                  <img :src="item.imageUrl" alt="" />
+                  <img :src="item.imageUrl" alt="還未拼湊的拼圖" />
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-lg-6 col-12">
             <div class="bg-finish">
-              <ul class="list-unstyled d-flex mb-0">
+              <ul class="mb-0 list-unstyled d-flex">
                 <li
-                  v-for="(item,index) in donePuzzle.puzzle"
+                  v-for="(item, index) in donePuzzle.puzzle"
                   :key="item.imageUrl"
                   @click="goWait(item, index)"
                 >
-                  <img :src="item.imageUrl" alt="" />
+                  <img :src="item.imageUrl" alt="已拼湊的拼圖" />
                 </li>
               </ul>
             </div>
@@ -139,25 +137,35 @@ export default {
         </div>
       </div>
     </div>
-    <div class="win-page" :class="{'open':isWin}" @click.self="isWin=!isWin">
-      <h3 class="text-white p-5 bg-dark rounded">恭喜過關!! <br> 優惠券代碼: {{coupon}}</h3>
+    <div class="win-page" :class="{ open: isWin }" @click.self="isWin = !isWin">
+      <h3 class="p-5 text-white rounded bg-dark">
+        恭喜過關!! <br />
+        優惠券代碼: {{ coupon }}
+      </h3>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.bg-darkblue {
-  background-color: #182030;
-}
 .bg-unfinish {
   width: 100%;
   height: 293.05px;
   background: #fff;
-  @media (min-width: 374px) { height: 348px;}
-  @media (min-width: 424px) { height: 397px;}
-  @media (min-width: 767px) { height: 689.02px;}
-  @media (min-width: 1023px) {height: 451.5px;}
-  @media (min-width: 1439px) {height: 629.63px;}
+  @media (min-width: 374px) {
+    height: 348px;
+  }
+  @media (min-width: 424px) {
+    height: 397px;
+  }
+  @media (min-width: 767px) {
+    height: 689.02px;
+  }
+  @media (min-width: 1023px) {
+    height: 451.5px;
+  }
+  @media (min-width: 1439px) {
+    height: 629.63px;
+  }
 }
 .bg-finish {
   background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625923589742.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=nS3k402vFFcRtesuDVsoF%2F47SDFDkOYkfJzBP9jrYN89xo%2BycsmxnKmL08KXJv2rQ%2FQNaXYUhudYeOwTTT6uGADbzOnzLAxpCq%2BIlB%2FDX2YG5uXSYTfqCUUXXx1oxCWOO1sg1ObMaUvjXLcK86%2FoWIschQ%2FdEJJmXJ0pyiHNPGeJxMsLBM5Cj9npyK%2B6kqJDfsMJkE0rT87cptKFeSFndu1hUeSFJUVv7zp5sKU9Cn7S%2BDr6tRrluq92iydPzYoSRzZvUUA80HpDStjDQVaoqDp%2Fil5jQVXaRqETbHo21CbxtAHM%2F73tpxly6yCrrCxvQZjrgridnnAVGXbBL%2BapfQ%3D%3D');
@@ -165,11 +173,21 @@ export default {
   height: 293.05px;
   background-size: cover;
   background-repeat: no-repeat;
-  @media (min-width: 374px) { height: 348px;}
-  @media (min-width: 424px) { height: 397px;}
-  @media (min-width: 767px) { height: 689.02px;}
-  @media (min-width: 1023px) {height: 451.5px;}
-  @media (min-width: 1439px) {height: 629.63px;}
+  @media (min-width: 374px) {
+    height: 348px;
+  }
+  @media (min-width: 424px) {
+    height: 397px;
+  }
+  @media (min-width: 767px) {
+    height: 689.02px;
+  }
+  @media (min-width: 1023px) {
+    height: 451.5px;
+  }
+  @media (min-width: 1439px) {
+    height: 629.63px;
+  }
 }
 ul {
   flex-wrap: wrap;
@@ -184,13 +202,13 @@ li {
     object-fit: contain;
   }
 }
-.win-page{
+.win-page {
   position: fixed;
   width: 100%;
   height: 100%;
   top: -100%;
   left: 0;
-  background: rgba(255, 255, 255, .5);
+  background: rgba(255, 255, 255, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

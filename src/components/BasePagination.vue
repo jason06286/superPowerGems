@@ -10,6 +10,7 @@ export default {
       default: () => {},
     },
   },
+  emits: ['getNowpage'],
   setup(props, { emit }) {
     return { props, emit };
   },
@@ -67,13 +68,13 @@ export default {
 </template>
 
 <style scoped>
-nav a.active{
-  background-color: #520DC2 !important;
+nav a.active {
+  background-color: #dd5c33 !important;
 }
 .page-item.active .page-link {
-    z-index: 3;
-    color: #fff;
-    background-color:#3D8BFD;
-    border-color:#3D8BFD;
+  z-index: 3;
+  color: #fff;
+  background-color: #dd5c33;
+  border-color: #dd5c33;
 }
 </style>

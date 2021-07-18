@@ -1,6 +1,7 @@
 <script>
 // component
 import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
+import BaseSwiper from '@/components/BaseSwiper.vue';
 // kit
 import axios from 'axios';
 // methods
@@ -9,18 +10,20 @@ import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
 // vue
 import {
-  onMounted, reactive, ref, computed,
+  onMounted, reactive, ref, computed, watch,
 } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {
   components: {
     BaseFrontendLoading,
+    BaseSwiper,
   },
   setup() {
     const route = useRoute();
+    const products = reactive({ arr: [] });
     const product = reactive({ arr: [] });
-    const productNum = ref(0);
+    const productNum = ref(1);
     const total = computed(() => product.arr.price * productNum.value);
     const isLoading = ref(false);
 
@@ -33,10 +36,12 @@ export default {
           if (res.data.success) {
             product.arr = res.data.product;
             isLoading.value = false;
+          } else {
+            console.error(res.data.message);
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
     function addCart() {
@@ -51,41 +56,73 @@ export default {
         .then((res) => {
           if (res.data.success) {
             emitter.emit('update-cart');
+          } else {
+            console.error(res.data.message);
           }
           pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
+    function getAllProducts() {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+      axios
+        .get(url)
+        .then((res) => {
+          if (res.data.success) {
+            products.arr = res.data.products;
+          } else {
+            console.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    const suggestProduct = computed(() => products.arr.filter((item) => {
+      const { id } = route.params;
+      return item.id !== id;
+    }));
+    watch(
+      () => route.params.id,
+      () => {
+        getProduct();
+      },
+    );
 
     onMounted(() => {
       getProduct();
+      getAllProducts();
     });
 
     return {
-      // variable
       product,
       productNum,
       total,
       isLoading,
-      // methods
       currency,
       addCart,
+      products,
+      suggestProduct,
     };
   },
 };
 </script>
 
-<template >
-<BaseFrontendLoading :isLoading="isLoading"/>
+<template>
+  <BaseFrontendLoading :isLoading="isLoading" />
   <div class="py-5">
-    <div class="container">
+    <div class="container" style="min-height: calc(100vh - 112px)">
       <div class="row">
         <div class="mb-3 col-lg-6 col-12">
           <div class="product-card">
-            <img :src="product.arr.imageUrl" alt="" class="img-base" />
-            <h3 class="pt-3 text-orange border-top">【商品介紹】</h3>
+            <img
+              :src="product.arr.imageUrl"
+              :alt="product.arr.description"
+              class="img-base"
+            />
+            <h3 class="text-orange">【商品介紹】</h3>
             <p class="">{{ product.arr.description }}</p>
             <h3 class="pt-3 text-orange border-top">【使用方法】</h3>
             <ul class="list-unstyled">
@@ -120,7 +157,9 @@ export default {
             <p class="mb-0 text-secondary">
               原價 $ {{ currency(product.arr.origin_price) }}
             </p>
-            <p class="text-orange fs-4">特價 $ {{ currency(product.arr.price) }}</p>
+            <p class="text-orange fs-4">
+              特價 $ {{ currency(product.arr.price) }}
+            </p>
             <select
               class="mb-3 form-select"
               aria-label="Default select example"
@@ -133,13 +172,16 @@ export default {
             </select>
             <p>小計 $ {{ currency(total) }} 元</p>
             <div class="mb-3 d-grid w-100">
-              <button type="button" class="text-white btn btn-orange"
-              :class="{'disabled':productNum <= 0}"
-              @click="addCart">
+              <button
+                type="button"
+                class="text-white btn btn-primary"
+                :class="{ disabled: productNum <= 0 }"
+                @click="addCart"
+              >
                 加到購物車
               </button>
             </div>
-            <h3 class="pt-3 mb-3 text-orange border-top">【常見問題】</h3>
+            <h3 class="pt-3 text-orange border-top">【常見問題】</h3>
             <div class="question-card">
               <p class="mb-0 fs-5">Q: 如何知道能量石是否有吸收?</p>
               <p class="text-secondary">
@@ -162,6 +204,7 @@ export default {
           </div>
         </div>
       </div>
+      <BaseSwiper :products="suggestProduct">你可能會喜歡</BaseSwiper>
     </div>
   </div>
 </template>
@@ -169,19 +212,18 @@ export default {
 <style lang="scss" scoped>
 .product-card {
   padding: 1rem;
-  border: double 4px #ccc;
-  border-radius: 1rem;
+  border: solid 2px #ccc;
+  border-radius: 0.5rem;
   height: 100%;
+  background-color: #fff;
 }
 .img-base {
   display: block;
   width: 100%;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
 .question-card {
   padding: 1rem;
-  border: double 2px #ccc;
-  border-radius: 1rem;
 }
 </style>

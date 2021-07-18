@@ -24,12 +24,9 @@ export default {
   setup() {
     const products = reactive({ arr: [] });
     const pagination = reactive({ obj: {} });
-    const productModal = ref(null);
     const productDeleteModal = ref(null);
-    const newProduct = ref(false);
-    const tempProduct = reactive({ obj: { imagesUrl: [] } });
+
     const $swal = useVueSweetAlert2();
-    const isLoading = ref(false);
 
     function swalSuccess(title, text) {
       $swal.fire({
@@ -45,96 +42,118 @@ export default {
         text,
       });
     }
-    function getProducts(page = 1) {
-      isLoading.value = true;
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-        '$1',
-      );
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
-      axios.defaults.headers.common.Authorization = `${token}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-            pagination.obj = res.data.pagination;
-            isLoading.value = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    function productDetail() {
+      const isLoading = ref(false);
+
+      const getProducts = (page = 1) => {
+        isLoading.value = true;
+        const token = document.cookie.replace(
+          /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+          '$1',
+        );
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
+        axios.defaults.headers.common.Authorization = `${token}`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              products.arr = res.data.products;
+              pagination.obj = res.data.pagination;
+              isLoading.value = false;
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const delProduct = (id) => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${id}`;
+        axios
+          .delete(url)
+          .then((res) => {
+            if (res.data.success) {
+              getProducts();
+              swalSuccess('刪除', '刪除商品成功!');
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+        productDeleteModal.value.hideDelModal();
+      };
+
+      onMounted(() => {
+        getProducts();
+      });
+
+      return {
+        isLoading,
+        getProducts,
+        delProduct,
+      };
     }
-    function delProduct(id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${id}`;
-      axios
-        .delete(url)
-        .then((res) => {
-          if (res.data.success) {
-            getProducts();
-            swalSuccess('刪除', '刪除商品成功!');
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      productDeleteModal.value.hideDelModal();
-    }
-    function openProductModal(item, isNew) {
-      tempProduct.obj = JSON.parse(JSON.stringify(item));
-      newProduct.value = isNew;
-      productModal.value.showProductModal();
-    }
-    function openDeleteModal(item) {
-      tempProduct.obj = JSON.parse(JSON.stringify(item));
-      productDeleteModal.value.showDelModal();
-    }
-    function productStatus(item) {
-      tempProduct.obj = item;
-      let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-      let method = 'post';
-      if (!newProduct.value) {
-        url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
-        method = 'put';
-      }
-      axios[method](url, { data: tempProduct.obj })
-        .then((res) => {
-          if (res.data.success) {
-            getProducts();
-            swalSuccess(
-              newProduct.value ? '新增' : '修改',
-              newProduct.value ? '新增商品成功!' : '修改商品成功!',
-            );
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-          productModal.value.hideProductModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    function modalDetail() {
+      const productModal = ref(null);
+      const newProduct = ref(false);
+      const tempProduct = reactive({ obj: { imagesUrl: [] } });
+      const { getProducts } = productDetail();
+
+      const openProductModal = (item, isNew) => {
+        tempProduct.obj = JSON.parse(JSON.stringify(item));
+        newProduct.value = isNew;
+        productModal.value.showProductModal();
+      };
+      const openDeleteModal = (item) => {
+        tempProduct.obj = JSON.parse(JSON.stringify(item));
+        productDeleteModal.value.showDelModal();
+      };
+      const productStatus = (item) => {
+        tempProduct.obj = item;
+        let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+        let method = 'post';
+        if (!newProduct.value) {
+          url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+          method = 'put';
+        }
+        axios[method](url, { data: tempProduct.obj })
+          .then((res) => {
+            if (res.data.success) {
+              getProducts();
+              swalSuccess(
+                newProduct.value ? '新增' : '修改',
+                newProduct.value ? '新增商品成功!' : '修改商品成功!',
+              );
+            } else {
+              swalError('Oops...', res.data.message);
+            }
+            productModal.value.hideProductModal();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+
+      return {
+        productModal,
+        newProduct,
+        tempProduct,
+        openProductModal,
+        openDeleteModal,
+        productStatus,
+      };
     }
 
-    onMounted(() => {
-      getProducts();
-    });
     return {
-      // variable
       products,
       pagination,
-      productModal,
       productDeleteModal,
-      newProduct,
-      tempProduct,
-      isLoading,
-      // methods
-      delProduct,
-      getProducts,
-      openProductModal,
-      openDeleteModal,
-      productStatus,
       currency,
+      ...productDetail(),
+      ...modalDetail(),
     };
   },
 };
@@ -189,7 +208,10 @@ export default {
               </button>
             </td>
             <td>
-              <BaseDelteButton :btnSmall="true" @click="openDeleteModal(item)" />
+              <BaseDelteButton
+                :btnSmall="true"
+                @click="openDeleteModal(item)"
+              />
             </td>
           </tr>
         </tbody>
@@ -205,13 +227,13 @@ export default {
     :newProduct="newProduct"
     @product-status="productStatus"
   />
-  <base-delete-modal
+  <BaseDeleteModal
     ref="productDeleteModal"
     :deleteItem="tempProduct.obj"
     @delete-item="delProduct"
   >
     產品
-  </base-delete-modal>
+  </BaseDeleteModal>
 </template>
 
 <style lang="scss" scoped>

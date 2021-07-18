@@ -18,9 +18,7 @@ export default {
   setup() {
     const orders = reactive({ arr: [] });
     const pagination = reactive({ obj: {} });
-    const tempOrder = reactive({ obj: {} });
     const $swal = useVueSweetAlert2();
-    const isLoading = ref(false);
 
     function swalSuccess(title, text) {
       $swal.fire({
@@ -36,108 +34,101 @@ export default {
         text,
       });
     }
-    function getOrders(page = 1) {
-      isLoading.value = true;
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-        '$1',
-      );
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
-      axios.defaults.headers.common.Authorization = `${token}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            orders.arr = res.data.orders;
-            pagination.obj = res.data.pagination;
-            isLoading.value = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function delAllOrder() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders/all`;
-      axios
-        .delete(url)
-        .then((res) => {
-          if (res.data.success) {
-            getOrders();
-            swalSuccess('刪除所有訂單', '刪除所有訂單成功!');
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function delOrder(id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${id}`;
-      axios
-        .delete(url)
-        .then((res) => {
-          if (res.data.success) {
-            getOrders();
-            swalSuccess('刪除訂單', '刪除訂單成功!');
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    function editOrder() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${tempOrder.obj.id}`;
-      axios
-        .put(url, {
-          data: {
-            ...tempOrder.obj,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            console.log('edit :>> ', res);
-            getOrders();
-            swalSuccess('修改訂單', '修改訂單成功!');
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    function orderDetail() {
+      const tempOrder = reactive({ obj: {} });
+      const isLoading = ref(false);
+
+      const getOrders = (page = 1) => {
+        isLoading.value = true;
+        const token = document.cookie.replace(
+          /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
+          '$1',
+        );
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
+        axios.defaults.headers.common.Authorization = `${token}`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              orders.arr = res.data.orders;
+              pagination.obj = res.data.pagination;
+              isLoading.value = false;
+            } else {
+              console.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const delOrder = (id) => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${id}`;
+        axios
+          .delete(url)
+          .then((res) => {
+            if (res.data.success) {
+              getOrders();
+              swalSuccess('刪除訂單', '刪除訂單成功!');
+            } else {
+              swalError('Oops...', res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const editOrder = () => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${tempOrder.obj.id}`;
+        axios
+          .put(url, {
+            data: {
+              ...tempOrder.obj,
+            },
+          })
+          .then((res) => {
+            if (res.data.success) {
+              getOrders();
+              swalSuccess('修改訂單', '修改訂單成功!');
+            } else {
+              swalError('Oops...', res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+
+      onMounted(() => {
+        getOrders();
+      });
+
+      return {
+        tempOrder,
+        isLoading,
+        getOrders,
+        delOrder,
+        editOrder,
+      };
     }
     function isPhone(value) {
       const phoneNumber = /^(09)[0-9]{8}$/;
       return phoneNumber.test(value) ? true : '需要正確的電話號碼';
     }
 
-    onMounted(() => [getOrders()]);
-
     return {
-      // variable
       orders,
       pagination,
-      tempOrder,
-      isLoading,
-      // methods
-      getOrders,
-      delOrder,
-      delAllOrder,
       currency,
       formatDate,
       isPhone,
-      editOrder,
+      ...orderDetail(),
     };
   },
 };
 </script>
 
-<template >
-<BaseLoading :isLoading="isLoading" />
+<template>
+  <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
     <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
       訂單列表
@@ -183,18 +174,18 @@ export default {
             <div class="row">
               <div class="col-lg-6 col-12">
                 <div class="p-4">
-                  <h5 class="pb-2 border-2 border-bottom border-orange ">
+                  <h5 class="pb-2 border-2 border-bottom border-orange">
                     訂單內容
                   </h5>
                   <p
-                    class="pb-2 mb-2 border-bottom border-gray "
-                    v-for="(product) in tempOrder.obj.products"
+                    class="pb-2 mb-2 border-bottom border-gray"
+                    v-for="product in tempOrder.obj.products"
                     :key="product.id"
                   >
                     {{ product.product.title }}/{{ product.qty
                     }}{{ product.product.unit }}
                   </p>
-                  <h5 class=" text-end">
+                  <h5 class="text-end">
                     總金額:<span class="m-2">{{
                       currency(tempOrder.obj.total)
                     }}</span

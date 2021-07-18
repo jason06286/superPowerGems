@@ -31,19 +31,22 @@ export default {
 };
 </script>
 
-<template lang="">
-    <button type="button" class="scroll-btn"
-    :class="{'active':showScrollTop}"
-    @click="scrollTop">
-        ↑
-    </button>
+<template>
+  <button
+    type="button"
+    class="scroll-btn"
+    :class="{ active: showScrollTop }"
+    @click="scrollTop"
+  >
+    ↑
+  </button>
 </template>
 
 <style lang="scss" scoped>
 .scroll-btn {
   width: 50px;
   height: 50px;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   border: none;
   outline: none;
   display: block;
@@ -58,7 +61,7 @@ export default {
 .scroll-btn:hover {
   background: #b2734d;
 }
-.active{
+.active {
   opacity: 1;
 }
 </style>

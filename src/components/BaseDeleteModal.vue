@@ -2,6 +2,28 @@
 import Modal from 'bootstrap/js/dist/modal';
 import { onMounted, ref } from 'vue';
 
+function modalDetail() {
+  const delModal = ref(null);
+  let modal = null;
+
+  const showDelModal = () => {
+    modal.show();
+  };
+  const hideDelModal = () => {
+    modal.hide();
+  };
+
+  onMounted(() => {
+    modal = new Modal(delModal.value);
+  });
+
+  return {
+    delModal,
+    showDelModal,
+    hideDelModal,
+  };
+}
+
 export default {
   props: {
     deleteItem: {
@@ -9,32 +31,18 @@ export default {
       default: () => ({}),
     },
   },
+  emits: ['deleteItem'],
   setup(props, { emit }) {
-    const delModal = ref(null);
-    let modal = [];
-
-    function showDelModal() {
-      modal.show();
-    }
-    function hideDelModal() {
-      modal.hide();
-    }
-
-    onMounted(() => {
-      modal = new Modal(delModal.value);
-    });
     return {
       props,
       emit,
-      delModal,
-      showDelModal,
-      hideDelModal,
+      ...modalDetail(),
     };
   },
 };
 </script>
 
-<template lang="">
+<template>
   <div
     id="delModal"
     ref="delModal"
@@ -47,7 +55,7 @@ export default {
       <div class="border-0 modal-content">
         <div class="text-white modal-header bg-danger">
           <h5 id="delModalLabel" class="modal-title">
-            <span >刪除<slot></slot></span>
+            <span>刪除<slot></slot></span>
           </h5>
           <button
             type="button"

@@ -8,12 +8,39 @@ import useVueSweetAlert2 from '@/methods/useSwal';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+function backgroundDetail() {
+  const gridBackground = ref(null);
+
+  const getRandomInt = (min, max) => {
+    const minNum = Math.ceil(min);
+    const maxNum = Math.floor(max);
+    return Math.floor(Math.random() * (maxNum - minNum + 1)) + min;
+  };
+  const renderBackground = () => {
+    const gridItems = gridBackground.value.childNodes;
+    gridItems.forEach((item, index) => {
+      const delay = getRandomInt(0, 5);
+
+      const duration = getRandomInt(3, 6);
+
+      gridItems[index].style.animationDelay = `${delay}s`;
+      gridItems[index].style.animationDuration = `${duration}s`;
+    });
+  };
+
+  onMounted(() => {
+    renderBackground();
+  });
+
+  return {
+    gridBackground,
+  };
+}
 export default {
   components: {
     BaseNavbar,
   },
   setup() {
-    const gridBackground = ref(null);
     const user = reactive({});
     const router = useRouter();
     const $swal = useVueSweetAlert2();
@@ -23,22 +50,6 @@ export default {
         icon: 'error',
         title,
         text,
-      });
-    }
-    function getRandomInt(min, max) {
-      const minNum = Math.ceil(min);
-      const maxNum = Math.floor(max);
-      return Math.floor(Math.random() * (maxNum - minNum + 1)) + min;
-    }
-    function renderBackground() {
-      const gridItems = gridBackground.value.childNodes;
-      gridItems.forEach((item, index) => {
-        const delay = getRandomInt(0, 5);
-
-        const duration = getRandomInt(3, 6);
-
-        gridItems[index].style.animationDelay = `${delay}s`;
-        gridItems[index].style.animationDuration = `${duration}s`;
       });
     }
     function signIn() {
@@ -55,28 +66,23 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
 
-    onMounted(() => {
-      renderBackground();
-    });
     return {
-      // variable
-      gridBackground,
+      ...backgroundDetail(),
       user,
-      // methods
       signIn,
     };
   },
 };
 </script>
 
-<template >
+<template>
   <BaseNavbar />
   <div
-    class="grid overflow-hidden  position-relative d-flex justify-content-center align-items-center"
+    class="grid overflow-hidden position-relative d-flex justify-content-center align-items-center"
   >
     <div class="position-absolute grid-container" ref="gridBackground">
       <div class="col-span-2 grid-item animate-pulse"></div>
@@ -113,34 +119,34 @@ export default {
       <h2 class="title font-Tourney">Login</h2>
       <Form v-slot="{ errors }" @submit="signIn">
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label">信箱</label>
           <Field
             id="email"
-            name="email"
+            name="信箱"
             type="email"
             class="form-control"
-            :class="{ 'is-invalid': errors['email'] }"
+            :class="{ 'is-invalid': errors['信箱'] }"
             placeholder="請輸入 信箱"
             rules="email|required"
             v-model="user.username"
           ></Field>
 
-          <ErrorMessage name="email" class="invalid-feedback"></ErrorMessage>
+          <ErrorMessage name="信箱" class="invalid-feedback"></ErrorMessage>
         </div>
         <div class="mb-4">
-          <label for="password" class="form-label">Password</label>
+          <label for="password" class="form-label">密碼</label>
           <Field
             id="password"
-            name="password"
+            name="密碼"
             type="password"
             class="form-control"
-            :class="{ 'is-invalid': errors['password'] }"
+            :class="{ 'is-invalid': errors['密碼'] }"
             placeholder="請輸入 密碼"
             rules="required"
             v-model="user.password"
           ></Field>
 
-          <ErrorMessage name="password" class="invalid-feedback"></ErrorMessage>
+          <ErrorMessage name="密碼" class="invalid-feedback"></ErrorMessage>
         </div>
         <div class="d-flex justify-content-end">
           <button type="submit" class="text-white btn btn-lg btn-orange">
@@ -154,10 +160,10 @@ export default {
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,500&display=swap');
+
 .grid {
   min-height: 100vh;
   background-color: rgba(17, 24, 39, 1);
-  // background-color: #3d352e;
 }
 .grid-container {
   top: 0px;
@@ -171,7 +177,6 @@ export default {
 }
 .grid-item {
   background-color: rgba(31, 41, 55, 1);
-  // background-color: #b2734d;
   border-radius: 0.25rem;
 }
 @keyframes pulse {
@@ -184,7 +189,6 @@ export default {
   }
 }
 .animate-pulse {
-  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
