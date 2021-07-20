@@ -149,7 +149,7 @@ export default {
           <ErrorMessage name="密碼" class="invalid-feedback"></ErrorMessage>
         </div>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="text-white btn btn-lg btn-orange">
+          <button type="submit" class="text-white btn btn-lg btn-primary">
             登入
           </button>
         </div>
@@ -195,7 +195,7 @@ export default {
 .login {
   width: 500px;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top: 4px solid orange;
+  border-top: 4px solid #DD5C33;
   padding: 3rem;
   border-radius: 1rem;
   color: #fff;

@@ -2,13 +2,14 @@
 // kit
 import axios from 'axios';
 // vue
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const isLogin = ref(false);
 
     function signOut() {
       const url = `${process.env.VUE_APP_API}logout`;
@@ -40,7 +41,10 @@ export default {
         .post(url)
         .then((res) => {
           if (!res.data.success) {
+            isLogin.value = false;
             router.push('/login');
+          } else {
+            isLogin.value = true;
           }
         })
         .catch((err) => {
@@ -55,6 +59,7 @@ export default {
     return {
       signOut,
       route,
+      isLogin,
     };
   },
 };
@@ -123,7 +128,7 @@ export default {
           </button>
         </div>
       </div>
-      <div class="col-12 col-lg-8"><router-view></router-view></div>
+      <div class="col-12 col-lg-8"><router-view v-if="isLogin"></router-view></div>
     </div>
   </div>
 </template>

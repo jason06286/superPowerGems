@@ -166,19 +166,44 @@ export default {
 </script>
 
 <template>
-  <div class="container text-white" style="min-height: calc(100vh - 112px)">
+  <div
+    class="container text-white position-relative"
+    style="min-height: calc(100vh - 112px)"
+  >
     <div class="py-5">
       <div
         class=" d-flex w-100 h-100 justify-content-center align-items-center flex-column"
       >
         <h2 class="pb-2 border-orange border-bottom border-3">能量石測驗</h2>
         <p class="text-white fs-5">幫你找出適合的能量石</p>
+        <img
+          src="../../assets/img/undraw_Taken_re_yn20.svg"
+          class="img-quiz"
+          alt="有飛碟要把外星人帶走"
+          v-if="index < questions.questions.length"
+        />
+        <ul class="list" v-if="index < questions.questions.length">
+          <li>
+            <h3>
+              <i class="bi bi-emoji-smile"></i>
+            </h3>
+            請誠實回答
+          </li>
+          <li>
+            <h3>
+              <i class="bi bi-hand-index"></i>
+            </h3>
+            請根據第一直覺選擇答案
+          </li>
+        </ul>
         <div
           class="question"
           :class="{ active: selectAnswer === '' }"
           v-if="index < questions.questions.length"
         >
-          <h4 class="mb-3">{{ questions.questions[index].question }}</h4>
+          <h4 class="p-4 mb-3 text-white rounded-2 bg-secondary">
+            {{ questions.questions[index].question }}
+          </h4>
           <label
             :for="item.answer"
             class="p-2 mb-3 text-center border rounded w-100"
@@ -328,5 +353,43 @@ export default {
 }
 .img-card:hover .content {
   opacity: 1;
+}
+.list {
+  display: block;
+  list-style-type: none;
+  width: 100%;
+  padding-left: 0;
+  @media (min-width: 576px) {
+    display: flex;
+    justify-content: center;
+  }
+  li {
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    background: #ece9db;
+    color: #000;
+    @media (min-width: 576px) {
+      width: 25%;
+      margin-right: 1rem;
+    }
+  }
+  li:last-child {
+    background: #ddedee;
+  }
+}
+.img-quiz {
+  display: none;
+  object-fit: contain;
+  @media (min-width: 576px) {
+    display: block;
+    position: absolute;
+    top: 5%;
+    right: 0;
+    height: 200px;
+  }
 }
 </style>

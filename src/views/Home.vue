@@ -122,7 +122,7 @@ export default {
             <h2 class="pb-3 mb-3 border-bottom border-3 border-orange">
               關於我們
             </h2>
-            <p class="text-center" style="color: wheat">
+            <p class="text-center about">
               宇宙能源匱乏，外星人肆意掠奪，地球生存危在旦夕… <br />
               由各國頂尖科學家集結研發，透過能量轉換原則， <br />
               使能量透過能量石轉移到人體，以利人人擁有能量抵禦外敵。<br />
@@ -368,5 +368,11 @@ export default {
     url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924061162.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=QUQ3j12Xf773TV%2FlRxJldJjI%2BlIuBnj1XkpciscKx7no2yRTqN3eJztesYPU3FIf5Nm038Zsy%2B0emcUdw%2BDQHsuiEDYOpSyffzlSuxnLglBYp5sSNegxXe5Mec1PM%2FUWANSfwFT1nIh%2FjeIEfbkVZiJPlIH5Jdp%2F3oIWtFE%2FkcMFysJP%2FDaCnfOpnufSZbKfRQL66ioIYWqjE0NSMfzOSxqjR7T3JMERfsl9BMWtnPyj84IaFTkT%2BMDgZbsYMVRTZn9TjXJ0V%2F0oZQkU3w4jy4ecytYO1%2BYrFiX8MM2akXEYYV06c85RD12ZoFkRt51oWldugY6bXwy0yO8BYqKu6A%3D%3D')
     repeat;
   color: white;
+}
+.about{
+  background-color: #392F3C;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  color: wheat;
 }
 </style>

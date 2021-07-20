@@ -30,7 +30,7 @@ export default {
       </button>
       <div class="py-3 collapse navbar-collapse py-lg-0" id="navbarNav">
         <ul
-          class="text-center text-white  ms-lg-5 navbar-nav justify-content-lg-around w-lg-100"
+          class="text-center text-white ms-lg-5 navbar-nav justify-content-lg-around w-lg-100"
         >
           <li class="mx-md-3 nav-item w-lg-100">
             <router-link

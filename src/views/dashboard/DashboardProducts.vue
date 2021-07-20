@@ -47,12 +47,7 @@ export default {
 
       const getProducts = (page = 1) => {
         isLoading.value = true;
-        const token = document.cookie.replace(
-          /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-          '$1',
-        );
         const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
-        axios.defaults.headers.common.Authorization = `${token}`;
         axios
           .get(url)
           .then((res) => {
