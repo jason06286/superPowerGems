@@ -61,7 +61,8 @@ export default {
 </script>
 
 <template>
-  <div class="container bg-white" style="min-height: calc(100vh - 112px)">
+  <div class="bg-dark" style="height:68px"></div>
+  <div class="container bg-white" style="min-height: calc(100vh - 124px)">
     <div class="py-5">
       <div class="paySuccess" v-if="order.arr.is_paid">
         <p>已完成付款，感謝您的訂購!!</p>

@@ -167,8 +167,8 @@ export default {
 
 <template>
   <div
-    class="container text-white position-relative"
-    style="min-height: calc(100vh - 112px)"
+    class="container py-5 text-white position-relative"
+    style="min-height: calc(100vh - 56px)"
   >
     <div class="py-5">
       <div
@@ -387,7 +387,7 @@ export default {
   @media (min-width: 576px) {
     display: block;
     position: absolute;
-    top: 5%;
+    top: 8%;
     right: 0;
     height: 200px;
   }

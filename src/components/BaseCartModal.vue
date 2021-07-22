@@ -265,7 +265,7 @@ export default {
   position: fixed;
   bottom: 6%;
   right: 3%;
-  z-index: 999;
+  z-index: 66;
   display: none;
   @media (min-width: 992px) {
     display: block;

@@ -104,7 +104,7 @@ export default {
   <div>
     <div
       class="container d-flex justify-content-center align-items-center"
-      style="min-height: calc(100vh - 112px)"
+      style="min-height: calc(100vh - 56px)"
     >
       <div class="py-5">
         <div class="row">

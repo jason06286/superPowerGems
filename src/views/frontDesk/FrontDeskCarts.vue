@@ -178,8 +178,9 @@ export default {
 </script>
 
 <template>
-  <div class="container bg-white" style="min-height: calc(100vh - 112px)">
-    <div class="py-5">
+  <div class="bg-dark" style="height:68px"></div>
+  <div class="bg-white container-lg" style="min-height: calc(100vh - 124px)">
+    <div class="py-5 bg-white p-lg-5">
       <h2 class="pb-2 mb-3 border-3 border-bottom border-orange">購屋車內容</h2>
       <div class="cart-content" v-if="carts.arr?.carts?.length === 0">
         <p class="mb-0 fs-5">購物車內無東西</p>
