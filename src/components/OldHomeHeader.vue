@@ -1,229 +1,233 @@
 <script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { onMounted, onUnmounted, ref } from 'vue';
 
+gsap.registerPlugin(ScrollTrigger);
 export default {
   setup() {
-    const peopleDom = ref(null);
-    const typingContentDom = ref(null);
-    const typingContentShow = ref(false);
-    const typingDone = ref(false);
-    let i = 0;
-    const txt = '宇宙能源匱乏，外星人肆意掠奪，地球生存危在旦夕...';
-    const speed = 200;
-    let type = null;
-
-    function typeWriter() {
-      if (i < txt.length) {
-        typingContentDom.value.children[0].innerHTML += txt.charAt(i);
-        i += 1;
-        type = setTimeout(typeWriter, speed);
-        return;
-      }
-      typingDone.value = true;
-    }
-    function stopShine() {
-      typingContentShow.value = true;
-      peopleDom.value.classList.add('active');
-      typeWriter();
-    }
-    function scrollDown() {
-      const modalHeight = window.innerHeight;
-      window.scrollTo({
-        top: modalHeight + 20,
-        left: 0,
-        behavior: 'smooth',
+    const universeStart = ref(null);
+    const universe = ref(null);
+    const plane = ref(null);
+    const ufo = ref(null);
+    const triggers = ScrollTrigger.getAll();
+    function gsapSet() {
+      ScrollTrigger.matchMedia({
+        '(min-width: 768px)': () => {
+          gsap.to(plane.value, {
+            scrollTrigger: {
+              trigger: universeStart.value,
+              scrub: true,
+              start: 'top top',
+              toggleActions: 'play none none reverse',
+              invalidateOnResize: true,
+              markers: true,
+            },
+            x: 800,
+            y: -800,
+            duration: 5,
+            ease: 'circ.out',
+            scale: 0.5,
+          });
+          gsap.to(ufo.value, {
+            scrollTrigger: {
+              scrub: true,
+              toggleActions: 'play none none reverse',
+              invalidateOnResize: true,
+              start: 'top top',
+              // markers: true,
+            },
+            duration: 1,
+            ease: 'power4.out',
+            y: 400,
+            scale: 1.5,
+          });
+        },
       });
     }
 
     onMounted(() => {
-      typingContentDom.value.children[0].innerHTML = '';
+      gsapSet();
     });
-
     onUnmounted(() => {
-      clearTimeout(type);
+      triggers.forEach((trigger) => {
+        trigger.kill();
+      });
+      console.log(triggers);
+      ScrollTrigger.clearMatchMedia();
+      ScrollTrigger.kill();
+      console.log(5566);
     });
 
     return {
-      peopleDom,
-      typingContentDom,
-      typingContentShow,
-      typingDone,
-      stopShine,
-      typeWriter,
-      scrollDown,
+      universeStart,
+      universe,
+      plane,
+      ufo,
     };
   },
 };
 </script>
 
 <template>
-  <div class="star">
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-    <div class="container pepole" ref="peopleDom" data-aos="fade-down">
-      <div class="row">
-        <div class="mb-3 col-lg-7 col-12" v-show="typingContentShow">
-          <div class="typingContent" ref="typingContentDom">
-            <p></p>
-            <div class="text-end" v-show="typingDone">
-              <a
-                class="btn btn-outline-secondary btn-sm typingBtn"
-                href="#shop"
-                @click.prevent="scrollDown"
-                >Click</a
-              >
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-5 col-12">
-          <button
-            v-if="!typingContentShow"
-            class="mb-3 text-white btn btn-orange d-inline-block bounce"
-            type="button"
-            @click.prevent="stopShine"
-          >
-            請點擊
-          </button>
-          <img
-            src="../assets/img/pepole.svg"
-            alt="這是位女博士，她似乎有話要說"
-          />
-        </div>
+  <header ref="universeStart">
+    <div class="content">
+      <p class="mb-0">宇宙能源匱乏，外星人肆意掠奪，</p>
+      <div class="type-writer">
+        <p class="mb-0">地球生存危在旦夕…</p>
       </div>
     </div>
-    <div class="bg-wave" data-aos="fade-right"></div>
-  </div>
+    <img
+      src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627384359096.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=PZLPXWGpsOno%2B%2Bk3OsMqlv%2B1CJfLi0MlX9qp39RDaQ2vRAoNAUT9IpBbU%2F%2FHG0KUIT3%2FJ8BynDAOeMDsss5XdbLiyglbyOSMWNwwTPcN2ajmReADKGCc7hFpZn3lUHKkWw7%2BQ5Elkn7MMRW9BYyejefzaYGfRYhnmAQr%2B83%2FauOaOn3ErrE9sn7SckWPgKzTTduTYtnUWtET4DoziRHSZyHR7Nc9LRJJnCzhn7SoBlgRWNFU983phNjAWt8BgcevhchBrK7BPvsx%2FmHo2Dx6AFzCNI3tVWDRpA5ii7WAPL74zAIFEOLTS%2Bh10V%2Bt3qdCMbS8ePkJtZBLqfZdUp0G7w%3D%3D"
+      alt="戰爭背景"
+      class="bg-universe"
+      ref="universe"
+    />
+    <img
+      src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627384381955.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=WyzuiZNrMtQKNA7qPJP2TW%2BXtkFvvZMNDgPax%2F4XCPC9jTAVYWWjoqPD%2BoFAl7BwVJbhhFlo%2FEeYKm4I0OhuETdOQByihbYObcvUWEkAhJ6R%2FRjMlbG2keNcVAVIatEK5w7xS7xxX3uIZ3MSr9dj2Y3RGQN2q%2Bkcad%2FGabmPwmcrTcke7OxdlVL2Xrv%2FcxNo0kcVs7Be%2Fuu1ErRiLMojgpjI1IznU35X6hoagLzZV1nz5VI2PnEAc%2FxXQ2EZu0PVN7xXfOy97ISIie%2FfMSoEWlx2XaaVikzKA5kqyj%2BSImEaNsvz8gOPy9CXlTP1pCtiMaN2iaqTpO%2FEuo4WwygiIg%3D%3D"
+      alt="灰色的戰鬥機"
+      class="plane"
+      ref="plane"
+    />
+    <img src="../assets/img/ufo1.svg" alt="幽浮" class="ufo" ref="ufo" />
+    <div class="scroll">
+      <p class="mb-0">SCROLL DOWN</p>
+    </div>
+  </header>
 </template>
 
 <style lang="scss" scoped>
-.star {
+header {
   position: relative;
-  height: calc(100vh - 40px);
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-}
-.stars {
-  background: black
-    url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924061162.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=QUQ3j12Xf773TV%2FlRxJldJjI%2BlIuBnj1XkpciscKx7no2yRTqN3eJztesYPU3FIf5Nm038Zsy%2B0emcUdw%2BDQHsuiEDYOpSyffzlSuxnLglBYp5sSNegxXe5Mec1PM%2FUWANSfwFT1nIh%2FjeIEfbkVZiJPlIH5Jdp%2F3oIWtFE%2FkcMFysJP%2FDaCnfOpnufSZbKfRQL66ioIYWqjE0NSMfzOSxqjR7T3JMERfsl9BMWtnPyj84IaFTkT%2BMDgZbsYMVRTZn9TjXJ0V%2F0oZQkU3w4jy4ecytYO1%2BYrFiX8MM2akXEYYV06c85RD12ZoFkRt51oWldugY6bXwy0yO8BYqKu6A%3D%3D')
-    repeat;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: block;
-  z-index: -2;
-}
-.twinkling {
-  width: 10000px;
-  height: 100%;
-  background: transparent
-    url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924089645.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=kjs7DyqvRPpF1Lz9dQSwncjaXAmXQcR6zmvWdYNSxi17qtYTevW6OOcJfdfMw7NnBMyNkV6ZnWkh2WYGDvoh5xjsN540qi0hmfLLRWDGXhgCWPW%2BcS5Kah3eQcZ0T0LWU13Jxhyu%2FkmydrtmnBMQsskatfJKPBTygQJ4n8GZ4GyIqW2wLY8HAB1Kl5mnQ8yfp19I30okVJRygK3sE8sE3yF31o7RW6OdnQvmJ1M%2F1qTq2K%2Fob9reXHk%2FwkJcGSu8cXIVNvkmyedShzWlZlt2q4%2FRc%2BiuA2Xfg8WDugv2z8fvgayPW95OnmBZFB4HMvqx3GKhHtyFSGvYOguhoSKn6A%3D%3D')
-    repeat;
-  background-size: 1000px 1000px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: -1;
-  animation: move-background 70s linear infinite;
-}
-@keyframes move-background {
-  from {
-    transform: translate3d(0px, 0px, 0px);
-  }
-  to {
-    transform: translate3d(1000px, 0px, 0px);
-  }
-}
-.pepole {
-  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
-.pepole img {
-  display: block;
-  animation: people-shine 3s linear infinite;
-  transition: all 0.5s;
-  height: 400px;
-  z-index: 2;
+.bg-universe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.content {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0.25rem;
+  padding: 1.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 3;
   @media (min-width: 576px) {
-    height: 100%;
-  }
-}
-@keyframes people-shine {
-  0% {
-    filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7));
-  }
-  10% {
-    filter: drop-shadow(10px 0px 30px rgba(255, 255, 255, 0.7));
-  }
-  50% {
-    filter: drop-shadow(10px 0px 30px rgba(255, 255, 255, 0.7));
-  }
-  100% {
-    filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7));
-  }
-}
-.bounce {
-  animation: bounce 2s infinite 2s;
-}
-@keyframes bounce {
-  0%,
-  100%,
-  20%,
-  50%,
-  80% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-.active img {
-  animation: people-shine 3s linear infinite;
-  animation-play-state: paused;
-  animation-fill-mode: none;
-  filter: drop-shadow(10px 0px 30px rgba(0, 0, 0, 0.7)) !important;
-}
-.typingContent {
-  background-image: url('../assets/img/typing-background.svg');
-  background-size: cover;
-  background-position: center center;
-  padding: 1rem;
-  width: 280px;
-  @media (min-width: 576px) {
-    width: 400px;
-    padding: 2rem;
+    font-size: 2rem;
   }
   p {
-    letter-spacing: 0.1rem;
+    pointer-events: none;
+    text-align: center;
   }
 }
-.typingBtn {
-  animation: typingBtn 1s linear infinite;
+.type-writer p {
+  overflow: hidden;
+  border-right: 0.15em solid rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation: typing 5s steps(30, end) infinite,
+    blink-caret 0.5s step-end infinite;
 }
-@keyframes typingBtn {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 1;
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 75%;
+  }
+}
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
   }
   50% {
-    transform: translateY(-10%);
-    opacity: 0.5;
+    border-color: rgba(255, 255, 255, 0.8);
   }
 }
-.bg-wave {
-  background-image: url('../assets/img/wave-orange.svg');
-  background-size: cover;
+.plane {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 0;
   height: 200px;
-  z-index: -1;
+  z-index: 2;
+  transform: scale(1);
+  object-fit: contain;
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  @media (min-width: 992px) {
+    height: 500px;
+  }
+}
+
+.ufo {
+  position: absolute;
+  right: 30%;
+  bottom: 20%;
+  z-index: 2;
+  height: 200px;
+  transform: scale(0);
+  object-fit: contain;
+  @media (min-width: 768px) {
+    height: 300px;
+  }
+  @media (min-width: 992px) {
+    height: 500px;
+  }
+}
+.scroll {
+  position: absolute;
+  right: 2%;
+  bottom: 20%;
+  text-align: center;
+  font-size: 1rem;
+
+  @media (min-width: 576px) {
+    font-size: 1.5rem;
+  }
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    writing-mode: vertical-lr;
+    position: relative;
+  }
+  p::before {
+    content: '';
+    position: absolute;
+    top: 105%;
+    bottom: 0;
+    right: 50%;
+    display: block;
+    width: 1px;
+    height: 0;
+    background: #fff;
+    transform: translateX(-50%);
+    transition: all 1s;
+    animation: scroll-line 1.5s linear infinite;
+    @media (min-width: 576px) {
+      width: 1.5px;
+    }
+  }
+}
+@keyframes scroll-line {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
 }
 </style>

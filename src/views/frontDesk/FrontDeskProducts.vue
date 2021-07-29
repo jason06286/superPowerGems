@@ -1,14 +1,10 @@
 <script>
-// componets
 import BasePagination from '@/components/BasePagination.vue';
 import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
-// kit
 import axios from 'axios';
-// methods
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -36,11 +32,15 @@ export default {
             if (res.data.success) {
               Allproducts.arr = res.data.products;
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const getProducts = (page = 1) => {
@@ -54,11 +54,15 @@ export default {
               pagination.obj = res.data.pagination;
               showLoadinng.value = false;
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const addCart = (item) => {
@@ -76,12 +80,16 @@ export default {
               emitter.emit('update-cart');
               isLoading.value = '';
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
             pushMessageState(res, '購物車新增');
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const forwardingProduct = (id) => {
@@ -154,9 +162,7 @@ export default {
   <section>
     <div class="py-5">
       <div class="container" style="min-height: calc(100vh - 412px)">
-        <h4 class="pb-2 mb-3 text-white border-bottom border-orange">
-          能量石分類
-        </h4>
+        <h4 class="pb-2 mb-3 border-bottom border-orange">能量石分類</h4>
         <div class="row">
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
@@ -197,9 +203,12 @@ export default {
                 v-for="item in products.arr"
                 :key="item.id"
               >
-                <div class="border-2 card w-100">
+                <div
+                  class="border-2 card w-100"
+                  @click="forwardingProduct(item.id)"
+                >
                   <img
-                    :src="item.imageUrl"
+                    :src="item.imagesUrl[0]"
                     class="card-img-top"
                     :alt="item.description"
                   />
@@ -222,7 +231,7 @@ export default {
                       <button
                         type="button"
                         class="btn btn-outline-secondary me-3"
-                        @click="forwardingProduct(item.id)"
+                        @click.stop="forwardingProduct(item.id)"
                       >
                         查看更多
                       </button>
@@ -230,7 +239,7 @@ export default {
                         type="button"
                         class="btn btn-outline-primary"
                         :class="{ disabled: isLoading === item.id }"
-                        @click="addCart(item)"
+                        @click.stop="addCart(item)"
                       >
                         <div
                           class="spinner-border spinner-border-sm"
@@ -260,9 +269,12 @@ export default {
                 v-for="item in filterProducts.obj"
                 :key="item.id"
               >
-                <div class="border-2 card w-100">
+                <div
+                  class="border-2 card w-100"
+                  @click="forwardingProduct(item.id)"
+                >
                   <img
-                    :src="item.imageUrl"
+                    :src="item.imagesUrl[0]"
                     class="card-img-top"
                     :alt="item.description"
                   />
@@ -285,7 +297,7 @@ export default {
                       <button
                         type="button"
                         class="btn btn-outline-secondary me-3"
-                        @click="forwardingProduct(item.id)"
+                        @click.stop="forwardingProduct(item.id)"
                       >
                         查看更多
                       </button>
@@ -293,7 +305,7 @@ export default {
                         type="button"
                         class="btn btn-outline-primary"
                         :class="{ disabled: isLoading === item.id }"
-                        @click="addCart(item)"
+                        @click.stop="addCart(item)"
                       >
                         <div
                           class="spinner-border spinner-border-sm"
@@ -339,7 +351,7 @@ export default {
   transform: translateY(-0.5rem);
 }
 .list {
-  color: wheat;
+  color: black;
 }
 .list:hover {
   border: 2px solid #f59157 !important;

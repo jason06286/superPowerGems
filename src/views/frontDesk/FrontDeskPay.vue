@@ -1,17 +1,18 @@
 <script>
-// kit
 import axios from 'axios';
-// methods
 import { currency } from '@/methods/filter';
-// vue
-import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import {
+  onMounted, onUnmounted, reactive, ref,
+} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const order = reactive({ arr: [] });
     const isLoading = ref('');
+    let time = null;
 
     function getOrder() {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${route.params.id}`;
@@ -21,11 +22,15 @@ export default {
           if (res.data.success) {
             order.arr = res.data.order;
           } else {
-            console.error(res.data.message);
+            console.error = () => {
+              throw new Error(res.data.message);
+            };
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.error = () => {
+            throw new Error(err);
+          };
         });
     }
     function confirmPay() {
@@ -36,18 +41,29 @@ export default {
         .then((res) => {
           if (res.data.success) {
             getOrder();
+            time = setTimeout(() => {
+              router.push('/frontDesk/products');
+            }, 3000);
           } else {
-            console.error(res.data.message);
+            console.error = () => {
+              throw new Error(res.data.message);
+            };
           }
           isLoading.value = '';
         })
         .catch((err) => {
-          console.error(err);
+          console.error = () => {
+            throw new Error(err);
+          };
         });
     }
 
     onMounted(() => {
       getOrder();
+    });
+
+    onUnmounted(() => {
+      clearTimeout(time);
     });
 
     return {
@@ -61,8 +77,8 @@ export default {
 </script>
 
 <template>
-  <div class="bg-dark" style="height:68px"></div>
-  <div class="container bg-white" style="min-height: calc(100vh - 124px)">
+  <div class="bg-dark" style="height: 68px"></div>
+  <div class="container bg-white" style="min-height: calc(100vh - 212px)">
     <div class="py-5">
       <div class="paySuccess" v-if="order.arr.is_paid">
         <p>已完成付款，感謝您的訂購!!</p>
@@ -134,7 +150,7 @@ export default {
           >繼續購物</router-link
         >
         <button
-          class="btn btn-orange"
+          class="btn btn-primary"
           type="button"
           :class="{ disabled: isLoading === 'pay' }"
           @click="confirmPay"

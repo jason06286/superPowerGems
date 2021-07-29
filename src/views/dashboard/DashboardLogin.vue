@@ -1,10 +1,7 @@
 <script>
-// components
 import BaseNavbar from '@/components/BaseNavbar.vue';
-// kit
 import axios from 'axios';
 import useVueSweetAlert2 from '@/methods/useSwal';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -66,7 +63,9 @@ export default {
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.error = () => {
+            throw new Error(err);
+          };
         });
     }
 
@@ -82,7 +81,14 @@ export default {
 <template>
   <BaseNavbar />
   <div
-    class="grid overflow-hidden position-relative d-flex justify-content-center align-items-center"
+    class="
+      grid
+      overflow-hidden
+      position-relative
+      d-flex
+      justify-content-center
+      align-items-center
+    "
   >
     <div class="position-absolute grid-container" ref="gridBackground">
       <div class="col-span-2 grid-item animate-pulse"></div>
@@ -195,7 +201,7 @@ export default {
 .login {
   width: 500px;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top: 4px solid #DD5C33;
+  border-top: 4px solid #dd5c33;
   padding: 3rem;
   border-radius: 1rem;
   color: #fff;

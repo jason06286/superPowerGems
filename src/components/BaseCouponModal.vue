@@ -5,28 +5,6 @@ import {
   onMounted, reactive, ref, watch,
 } from 'vue';
 
-function modalDetail() {
-  const couponModal = ref(null);
-  let modal = null;
-
-  const showCouponModal = () => {
-    modal.show();
-  };
-  const hideCouponModal = () => {
-    modal.hide();
-  };
-
-  onMounted(() => {
-    modal = new Modal(couponModal.value);
-  });
-
-  return {
-    couponModal,
-    showCouponModal,
-    hideCouponModal,
-  };
-}
-
 export default {
   props: {
     coupon: {
@@ -40,6 +18,27 @@ export default {
   },
   emits: ['couponStatus'],
   setup(props, { emit }) {
+    function modalDetail() {
+      const couponModal = ref(null);
+      let modal = null;
+
+      const showCouponModal = () => {
+        modal.show();
+      };
+      const hideCouponModal = () => {
+        modal.hide();
+      };
+
+      onMounted(() => {
+        modal = new Modal(couponModal.value);
+      });
+
+      return {
+        couponModal,
+        showCouponModal,
+        hideCouponModal,
+      };
+    }
     const tempCoupon = reactive({ obj: {} });
     const today = formatDate(Date.now() / 1000);
 
@@ -102,10 +101,9 @@ export default {
                   v-model="tempCoupon.obj.title"
                 />
               </div>
-
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="percent "
+                  <label for="percent"
                     >優惠<span class="text-danger">*</span></label
                   >
                   <input

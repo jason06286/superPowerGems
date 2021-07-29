@@ -5,15 +5,19 @@ export default {};
 <template>
   <footer>
     <div class="bg-dark">
-      <div class="container py-3 text-center text-white">
-        <div class="d-flex justify-content-center">
-          <p class="mb-0 w-100">Copyright © 2021 Jason06286.</p>
-          <ul class="mb-0 d-flex list-unstyled ms-auto">
+      <div class="container py-3 text-center text-title">
+        <div
+          class="d-flex justify-content-center align-items-center flex-column"
+        >
+          <router-link class="link-home" to="/">Superpower Gems</router-link>
+          <small class="mb-2">本網站僅供個人作品使用，不提供商業用途</small>
+          <small class="mb-2">Copyright © 2021 jason06286.</small>
+          <ul class="mb-0 d-flex list-unstyled">
             <li class="mx-3">
               <a
                 href="https://github.com/jason06286"
                 target="_blank"
-                class="text-white d-block"
+                class="text-title d-block"
               >
                 <i class="bi bi-github"></i>
               </a>
@@ -22,9 +26,14 @@ export default {};
               <a
                 href="mailto:dj4871114@gmail.com"
                 target="_blank"
-                class="text-white d-block"
+                class="text-title d-block"
               >
                 <i class="bi bi-envelope-fill"></i>
+              </a>
+            </li>
+            <li class="mx-3">
+              <a href="javascript:;" class="text-title d-block">
+                <i class="bi bi-facebook"></i>
               </a>
             </li>
           </ul>
@@ -35,7 +44,20 @@ export default {};
 </template>
 
 <style lang="scss" scoped>
+.link-home {
+  font-family: 'Tourney', cursive;
+  text-decoration: none;
+  font-size: 1.25rem;
+  color: rgba($color: #fff, $alpha: 0.8);
+}
+.link-home:hover {
+  transform: scale(1.2);
+}
+li a {
+  font-size: 1rem;
+}
 li:hover a {
+  color: rgba($color: #fff, $alpha: 0.8);
   transform: scale(1.5);
 }
 </style>

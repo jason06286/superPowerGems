@@ -2,28 +2,6 @@
 import Modal from 'bootstrap/js/dist/modal';
 import { onMounted, ref } from 'vue';
 
-function modalDetail() {
-  const delModal = ref(null);
-  let modal = null;
-
-  const showDelModal = () => {
-    modal.show();
-  };
-  const hideDelModal = () => {
-    modal.hide();
-  };
-
-  onMounted(() => {
-    modal = new Modal(delModal.value);
-  });
-
-  return {
-    delModal,
-    showDelModal,
-    hideDelModal,
-  };
-}
-
 export default {
   props: {
     deleteItem: {
@@ -33,6 +11,28 @@ export default {
   },
   emits: ['deleteItem'],
   setup(props, { emit }) {
+    function modalDetail() {
+      const delModal = ref(null);
+      let modal = null;
+
+      const showDelModal = () => {
+        modal.show();
+      };
+      const hideDelModal = () => {
+        modal.hide();
+      };
+
+      onMounted(() => {
+        modal = new Modal(delModal.value);
+      });
+
+      return {
+        delModal,
+        showDelModal,
+        hideDelModal,
+      };
+    }
+
     return {
       props,
       emit,

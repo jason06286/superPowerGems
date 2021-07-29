@@ -1,16 +1,12 @@
 <script>
-// components
 import BaseDelteButton from '@/components/BaseDelteButton.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import BaseCouponModal from '@/components/BaseCouponModal.vue';
 import BaseDeleteCouponModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
-// kit
 import axios from 'axios';
-// methods
 import { formatDate } from '@/methods/filter';
 import useVueSweetAlert2 from '@/methods/useSwal';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 
 export default {
@@ -55,11 +51,15 @@ export default {
               pagination.obj = res.data.pagination;
               isLoading.value = false;
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const delCoupon = (id) => {
@@ -76,7 +76,9 @@ export default {
             couponDeleteModal.value.hideDelModal();
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
 

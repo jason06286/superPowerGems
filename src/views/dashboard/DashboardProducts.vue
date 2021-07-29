@@ -1,16 +1,12 @@
 <script>
-// componets
 import BaseDelteButton from '@/components/BaseDelteButton.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import BaseProductModal from '@/components/BaseProductModal.vue';
 import BaseDeleteModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
-// kit
 import axios from 'axios';
 import useVueSweetAlert2 from '@/methods/useSwal';
-// methods
 import { currency } from '@/methods/filter';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 
 export default {
@@ -56,11 +52,15 @@ export default {
               pagination.obj = res.data.pagination;
               isLoading.value = false;
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const delProduct = (id) => {
@@ -72,11 +72,15 @@ export default {
               getProducts();
               swalSuccess('刪除', '刪除商品成功!');
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
         productDeleteModal.value.hideDelModal();
       };

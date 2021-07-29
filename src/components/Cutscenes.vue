@@ -1,11 +1,44 @@
 <script>
+import {
+  onMounted, onUnmounted, ref,
+} from 'vue';
+import emitter from '@/methods/emitter';
+
 export default {
-  setup() {},
+  props: {
+    isShow: {
+      Boolean,
+      default: false,
+    },
+  },
+  setup() {
+    let time = null;
+    const isShowCut = ref(false);
+
+    function showCut() {
+      isShowCut.value = true;
+      time = setTimeout(() => {
+        isShowCut.value = false;
+      }, 2000);
+    }
+
+    onMounted(() => {
+      emitter.on('showCut', () => {
+        showCut();
+      });
+    });
+    onUnmounted(() => {
+      clearTimeout(time);
+    });
+    return {
+      isShowCut,
+    };
+  },
 };
 </script>
 
 <template>
-  <div class="cutscenes">
+  <div class="cutscenes" v-show="isShowCut">
     <div class="cutscenes-item">
       <div class="cutscenes-content"></div>
     </div>
@@ -36,7 +69,7 @@ export default {
   background: #dd5c33;
   clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
   transform: translate(100%);
-  animation: toleft 1s ease-in-out;
+  animation: toleft 1.5s ease-in-out;
 }
 @keyframes toleft {
   0% {

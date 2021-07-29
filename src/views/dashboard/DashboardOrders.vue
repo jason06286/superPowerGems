@@ -1,13 +1,9 @@
 <script>
-// components
 import BasePagination from '@/components/BasePagination.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
-// kit
 import axios from 'axios';
 import useVueSweetAlert2 from '@/methods/useSwal';
-// methods
 import { currency, formatDate } from '@/methods/filter';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 
 export default {
@@ -49,11 +45,15 @@ export default {
               pagination.obj = res.data.pagination;
               isLoading.value = false;
             } else {
-              console.error(res.data.message);
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const delOrder = (id) => {
@@ -69,7 +69,9 @@ export default {
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
       const editOrder = () => {
@@ -89,7 +91,9 @@ export default {
             }
           })
           .catch((err) => {
-            console.error(err);
+            console.error = () => {
+              throw new Error(err);
+            };
           });
       };
 

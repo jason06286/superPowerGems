@@ -15,10 +15,6 @@ export default {
         linkTo: '/frontDesk/products',
       },
       {
-        linkName: '測驗',
-        linkTo: '/frontDesk/quiz',
-      },
-      {
         linkName: '優惠券',
         linkTo: '/frontDesk/coupon',
       },
@@ -56,10 +52,10 @@ export default {
 
 <template>
   <div>
-    <nav class="text-white" :class="{ 'bg-dark': showScroll }">
+    <nav class="text-title" :class="{ 'bg-dark': showScroll }">
       <div class="container-fluid position-relative">
         <div class="d-lg-flex align-items-center">
-          <div class="nav-brand">Superpower Gems</div>
+          <router-link class="nav-brand" to="/">Superpower Gems</router-link>
           <div class="hamburger-btn-position">
             <div
               class="hamburger-btn d-flex d-lg-none"
@@ -150,6 +146,9 @@ nav {
 }
 .nav-brand {
   font-size: 1.5rem;
+  display: block;
+  text-decoration: none;
+  color: #fff;
   font-family: 'Tourney', cursive;
   text-align: right;
   padding: 1rem;
@@ -214,18 +213,27 @@ nav {
     bottom: 0;
     display: block;
     width: 0;
-    height: 4px;
-    background-color: #dd5c33;
+    height: 40%;
+    background-color: rgba($color: #dd5c33, $alpha: 0.6);
+    transform: translateY(-20%);
     z-index: -1;
-    transition: all 0.5s;
+    transition: all 0.3s;
   }
   li:hover::before {
     width: 100%;
   }
   .active {
     background: #dd5c33;
+    @media (min-width: 992px) {
+      background: none;
+    }
   }
 }
+.nav-list .active::before {
+  content: '';
+  width: 100%;
+}
+
 .nav-list.active {
   transform: translateX(0);
   border-radius: 0 0 0 0;

@@ -1,7 +1,5 @@
 <script>
-// kit
 import axios from 'axios';
-// vue
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -17,16 +15,18 @@ export default {
         .post(url)
         .then((res) => {
           if (res.data.success) {
-            // document.cookie = encodeURIComponent('hexToken');
             document.cookie = 'hexToken=; expires=; path=/superPowerGems/dist';
-            // document.cookie = 'hexToken=; expires=; path=/';
             router.push('/login');
           } else {
-            console.error(res.data.message);
+            console.error = () => {
+              throw new Error(res.data.message);
+            };
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.error = () => {
+            throw new Error(err);
+          };
         });
     }
 
@@ -48,7 +48,9 @@ export default {
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.error = () => {
+            throw new Error(err);
+          };
         });
     }
 
@@ -70,7 +72,16 @@ export default {
     <div class="row w-100">
       <div class="col-12 col-lg-4">
         <div
-          class="flex-shrink-0 p-3 mb-3 text-white bg-gray-900 rounded d-flex flex-column"
+          class="
+            flex-shrink-0
+            p-3
+            mb-3
+            text-white
+            bg-gray-900
+            rounded
+            d-flex
+            flex-column
+          "
         >
           <a href="/" class="link mb-md-0 me-md-auto">
             <span class="fs-4 font-Tourney"> Superpower Gems</span>
@@ -128,7 +139,9 @@ export default {
           </button>
         </div>
       </div>
-      <div class="col-12 col-lg-8"><router-view v-if="isLogin"></router-view></div>
+      <div class="col-12 col-lg-8">
+        <router-view v-if="isLogin"></router-view>
+      </div>
     </div>
   </div>
 </template>

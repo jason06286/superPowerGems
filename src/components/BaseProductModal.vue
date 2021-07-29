@@ -5,79 +5,6 @@ import {
   onMounted, reactive, ref, watch,
 } from 'vue';
 
-function modalDetail() {
-  const productModal = ref(null);
-  let modal = null;
-
-  const showProductModal = () => {
-    modal.show();
-  };
-  const hideProductModal = () => {
-    modal.hide();
-  };
-
-  onMounted(() => {
-    modal = new Modal(productModal.value);
-  });
-
-  return {
-    productModal,
-    showProductModal,
-    hideProductModal,
-  };
-}
-function imageDetail(props) {
-  const fileInput = ref(null);
-  const tempProduct = reactive({ obj: {} });
-
-  watch(
-    () => props.product.obj,
-    () => {
-      tempProduct.obj = props.product.obj;
-    },
-  );
-
-  const newPicture = () => {
-    tempProduct.obj.imagesUrl = [];
-    tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
-    tempProduct.obj.imageUrl = '';
-  };
-  const addPicture = () => {
-    tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
-    tempProduct.obj.imageUrl = '';
-  };
-  const delPicture = () => {
-    tempProduct.obj.imagesUrl.pop();
-  };
-  const uploadFile = () => {
-    const uploaderFile = fileInput.value.files[0];
-    const formData = new FormData();
-    formData.append('file-to-upload', uploaderFile);
-    const url = `   ${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
-    axios
-      .post(url, formData)
-      .then((res) => {
-        if (res.data.success) {
-          tempProduct.obj.imageUrl = res.data.imageUrl;
-        } else {
-          console.error(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  return {
-    tempProduct,
-    fileInput,
-    newPicture,
-    addPicture,
-    delPicture,
-    uploadFile,
-  };
-}
-
 export default {
   props: {
     product: {
@@ -91,10 +18,87 @@ export default {
   },
   emits: ['productStatus'],
   setup(props, { emit }) {
+    function modalDetail() {
+      const productModal = ref(null);
+      let modal = null;
+
+      const showProductModal = () => {
+        modal.show();
+      };
+      const hideProductModal = () => {
+        modal.hide();
+      };
+
+      onMounted(() => {
+        modal = new Modal(productModal.value);
+      });
+
+      return {
+        productModal,
+        showProductModal,
+        hideProductModal,
+      };
+    }
+    function imageDetail() {
+      const fileInput = ref(null);
+      const tempProduct = reactive({ obj: {} });
+
+      watch(
+        () => props.product.obj,
+        () => {
+          tempProduct.obj = props.product.obj;
+        },
+      );
+
+      const newPicture = () => {
+        tempProduct.obj.imagesUrl = [];
+        tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
+        tempProduct.obj.imageUrl = '';
+      };
+      const addPicture = () => {
+        tempProduct.obj.imagesUrl.push(tempProduct.obj.imageUrl);
+        tempProduct.obj.imageUrl = '';
+      };
+      const delPicture = () => {
+        tempProduct.obj.imagesUrl.pop();
+      };
+      const uploadFile = () => {
+        const uploaderFile = fileInput.value.files[0];
+        const formData = new FormData();
+        formData.append('file-to-upload', uploaderFile);
+        const url = `   ${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
+        axios
+          .post(url, formData)
+          .then((res) => {
+            if (res.data.success) {
+              tempProduct.obj.imageUrl = res.data.imageUrl;
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+          })
+          .catch((err) => {
+            console.error = () => {
+              throw new Error(err);
+            };
+          });
+      };
+
+      return {
+        tempProduct,
+        fileInput,
+        newPicture,
+        addPicture,
+        delPicture,
+        uploadFile,
+      };
+    }
+
     return {
       emit,
       ...modalDetail(),
-      ...imageDetail(props),
+      ...imageDetail(),
     };
   },
 };

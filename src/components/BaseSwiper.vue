@@ -4,7 +4,6 @@ import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
-import '../assets/scss/helpers/swiper.scss';
 // vue
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
@@ -61,7 +60,7 @@ export default {
     <div class="container">
       <div class="d-flex justify-content-center">
         <h2
-          class="pb-3 mb-3 text-white border-bottom border-3 border-orange d-inline-block"
+          class="pb-3 mb-3 border-bottom border-3 border-orange d-inline-block"
         >
           <slot></slot>
         </h2>
@@ -76,7 +75,11 @@ export default {
             <p class="p-1 mb-0 text-white bg-primary position-absolute">
               {{ item.category }}
             </p>
-            <img :src="item.imageUrl" :alt="item.description" class="image" />
+            <img
+              :src="item.imagesUrl[0]"
+              :alt="item.description"
+              class="image"
+            />
             <div class="content">
               <h3 class="text-center text-white">{{ item.title }}</h3>
               <div
@@ -91,6 +94,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  transform: translate3d(0, 0, 0);
+}
 .img-card {
   position: relative;
   width: 100%;

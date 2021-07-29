@@ -1,120 +1,128 @@
 <script>
-// component
 import BaseScrollTop from '@/components/BaseScrollTop.vue';
-// kit
 import Modal from 'bootstrap/js/dist/modal';
 import axios from 'axios';
-// methods
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
-// vue
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-function modalDetail() {
-  const router = useRouter();
-  const cartModal = ref(null);
-  let modal = null;
-
-  const showModal = () => {
-    modal.show();
-  };
-  const hideModal = () => {
-    modal.hide();
-  };
-  const payment = () => {
-    hideModal();
-    router.push('/frontDesk/carts');
-  };
-
-  onMounted(() => {
-    modal = new Modal(cartModal.value);
-  });
-
-  return {
-    cartModal,
-    showModal,
-    hideModal,
-    payment,
-  };
-}
-function cartDetail() {
-  const carts = reactive({ arr: [] });
-  const coupon = ref('');
-  const isLoading = ref('');
-
-  const getCarts = () => {
-    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-    axios
-      .get(url)
-      .then((res) => {
-        if (res.data.success) {
-          carts.arr = res.data.data;
-        } else {
-          console.error(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-  const delProduct = (item) => {
-    isLoading.value = item.id;
-    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-    axios
-      .delete(url)
-      .then((res) => {
-        if (res.data.success) {
-          getCarts();
-        } else {
-          console.error(res.data.message);
-        }
-        isLoading.value = '';
-        pushMessageState(res, '刪除商品');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-  const useCoupon = () => {
-    const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-    axios
-      .post(url, { data: { code: coupon.value } })
-      .then((res) => {
-        if (res.data.success) {
-          getCarts();
-        } else {
-          console.error(res.data.message);
-        }
-        pushMessageState(res, '套用優惠券');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  onMounted(() => {
-    getCarts();
-    emitter.on('update-cart', () => {
-      getCarts();
-    });
-  });
-
-  return {
-    carts,
-    coupon,
-    isLoading,
-    delProduct,
-    useCoupon,
-  };
-}
 
 export default {
   components: {
     BaseScrollTop,
   },
   setup() {
+    function modalDetail() {
+      const router = useRouter();
+      const cartModal = ref(null);
+      let modal = null;
+
+      const showModal = () => {
+        modal.show();
+      };
+      const hideModal = () => {
+        modal.hide();
+      };
+      const payment = () => {
+        hideModal();
+        router.push('/frontDesk/carts');
+      };
+
+      onMounted(() => {
+        modal = new Modal(cartModal.value);
+      });
+
+      return {
+        cartModal,
+        showModal,
+        hideModal,
+        payment,
+      };
+    }
+    function cartDetail() {
+      const carts = reactive({ arr: [] });
+      const coupon = ref('');
+      const isLoading = ref('');
+
+      const getCarts = () => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              carts.arr = res.data.data;
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+          })
+          .catch((err) => {
+            console.error = () => {
+              throw new Error(err);
+            };
+          });
+      };
+      const delProduct = (item) => {
+        isLoading.value = item.id;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
+        axios
+          .delete(url)
+          .then((res) => {
+            if (res.data.success) {
+              getCarts();
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+            isLoading.value = '';
+            pushMessageState(res, '刪除商品');
+          })
+          .catch((err) => {
+            console.error = () => {
+              throw new Error(err);
+            };
+          });
+      };
+      const useCoupon = () => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
+        axios
+          .post(url, { data: { code: coupon.value } })
+          .then((res) => {
+            if (res.data.success) {
+              getCarts();
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+            pushMessageState(res, '套用優惠券');
+          })
+          .catch((err) => {
+            console.error = () => {
+              throw new Error(err);
+            };
+          });
+      };
+
+      onMounted(() => {
+        getCarts();
+        emitter.on('update-cart', () => {
+          getCarts();
+        });
+      });
+
+      return {
+        carts,
+        coupon,
+        isLoading,
+        delProduct,
+        useCoupon,
+      };
+    }
+
     return {
       ...modalDetail(),
       ...cartDetail(),
@@ -153,7 +161,7 @@ export default {
               to="/frontDesk/products"
               class="d-block text-orange fs-4"
               @click="hideModal"
-              >選購商品</router-link
+              >請選購商品</router-link
             >
           </div>
           <table class="table text-center table-responsive-lg" v-else>

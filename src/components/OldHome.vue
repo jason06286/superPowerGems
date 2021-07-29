@@ -3,15 +3,11 @@
 import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
+import BaseSwiper from '@/components/BaseSwiper.vue';
 import BaseCartModal from '@/components/BaseCartModal.vue';
 import ToastMessages from '@/components/ToastMessages.vue';
 
 // kit
-import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/swiper.scss';
-import 'swiper/components/pagination/pagination.min.css';
-import '../assets/scss/helpers/swiper.scss';
 import axios from 'axios';
 // methods
 import emitter from '@/methods/emitter';
@@ -20,16 +16,13 @@ import pushMessageState from '@/methods/pushMessageState';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-SwiperCore.use([Pagination, Autoplay]);
-
 export default {
   components: {
     BaseNavbar,
     BaseFooter,
     HomeHeader,
+    BaseSwiper,
     BaseCartModal,
-    Swiper,
-    SwiperSlide,
     ToastMessages,
   },
   setup() {
@@ -104,11 +97,9 @@ export default {
     });
 
     return {
-      // variable
       products,
       swiperBreakpoints,
       isLoading,
-      // methods
       addCart,
       forwardingProduct,
     };
@@ -122,202 +113,159 @@ export default {
     <BaseNavbar />
     <HomeHeader />
     <BaseCartModal />
-    <section>
-      <div class="container">
-        <div
-          class="py-5 d-flex align-items-center justify-content-center flex-column"
-        >
-          <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
-            關於我們
-          </h2>
-          <p class="text-center">
-            由各國頂尖科學家集結研發，透過能量轉換原則， <br />
-            使能量透過能量石轉移到人體，以利人人擁有能量抵禦外敵。<br />
-            能量石分成三大類，精礦、精鋼與精石， <br />
-            各自蘊含其能力，又以精石最為稀有。
-          </p>
-          <router-link to="/frontDesk/products" class="text-orange h5"
-            >進入商城</router-link
-          >
-        </div>
-      </div>
-    </section>
-    <section class="my-5">
-      <div class="products">
+    <div class="bg-star">
+      <section>
         <div class="container">
-          <swiper :autoplay="true" :breakpoints="swiperBreakpoints.breakpoints">
-            <swiper-slide v-for="item in products.arr" :key="item.id">
-              <div class="img-card">
-                <img
-                  :src="item.imageUrl"
-                  :alt="item.description"
-                  class="image"
-                />
-                <div class="content">
-                  <h3 class="text-center text-white">{{ item.title }}</h3>
-                  <div
-                    class=" d-flex justify-content-center align-items-center w-100"
-                  >
-                    <button
-                      type="button"
-                      class="btn btn-secondary me-3"
-                      @click="forwardingProduct(item.id)"
-                    >
-                      查看更多
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-orange"
-                      :class="{ disabled: isLoading === item.id }"
-                      @click="addCart(item)"
-                    >
-                      <div
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        v-if="isLoading === item.id"
-                      >
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                      加入購物車
-                    </button>
-                  </div>
+          <div
+            class="py-5  d-flex align-items-center justify-content-center flex-column"
+          >
+            <h2 class="pb-3 mb-3 border-bottom border-3 border-orange">
+              關於我們
+            </h2>
+            <p class="text-center about">
+              宇宙能源匱乏，外星人肆意掠奪，地球生存危在旦夕… <br />
+              由各國頂尖科學家集結研發，透過能量轉換原則， <br />
+              使能量透過能量石轉移到人體，以利人人擁有能量抵禦外敵。<br />
+              能量石分成三大類，精礦、精鋼與精石， <br />
+              各自蘊含其能力，又以精石最為稀有。
+            </p>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="container">
+          <div class="d-flex justify-content-center">
+            <h2
+              class="pb-3 mb-3  border-bottom border-3 border-orange d-inline-block"
+            >
+              商品分類
+            </h2>
+          </div>
+          <div class="mb-3 row">
+            <router-link
+              class="py-3 text-center border  mb-lg-3 col-lg-3 col-6 fw-bold list"
+              to="/frontDesk/products"
+            >
+              全部商品
+            </router-link>
+            <router-link
+              class="py-3 text-center border  mb-lg-3 col-lg-3 col-6 fw-bold list"
+              to="/frontDesk/products"
+            >
+              精礦
+            </router-link>
+            <router-link
+              class="py-3 text-center border  mb-lg-3 col-lg-3 col-6 fw-bold list"
+              to="/frontDesk/products"
+            >
+              精鋼
+            </router-link>
+            <router-link
+              class="py-3 text-center border  mb-lg-3 col-lg-3 col-6 fw-bold list"
+              to="/frontDesk/products"
+            >
+              精石
+            </router-link>
+          </div>
+          <div class="row bg-coupon">
+            <div class="mb-3 mb-lg-0 col-12 col-lg-8">
+              <p class="mb-0 text-center fs-5">
+                想要更多優惠嗎?玩小遊戲領取優惠
+              </p>
+            </div>
+            <div class="col-12 col-lg-4 d-grid">
+              <router-link class="btn btn-primary" to="/frontDesk/coupon"
+                >領取優惠
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <BaseSwiper :products="products.arr">最新上架</BaseSwiper>
+      <section class="mt-5">
+        <div class="mb-3 d-flex justify-content-center w-100">
+          <h2 class="pb-3 border-bottom border-3 border-orange d-inline-block">
+            使用方法
+          </h2>
+        </div>
+        <div class="row g-0">
+          <div class="col-12 col-lg-6">
+            <div class="bg-steup bg-steup1">
+              <div class="bg-content">
+                <div>
+                  <h3>步驟一</h3>
+                  <p>拿到貨物時，內容物會有能量石和一組密碼</p>
                 </div>
               </div>
-            </swiper-slide>
-          </swiper>
-        </div>
-        <div class="bg-wave">
-          <img
-            src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625923944671.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=lR8K4LmkXfyKHLEaWMTDaWRrm%2BudqL67S4Xzz72aRR6FeX5RhWEoBOkI8OwxpStQWaHfUzPrZI0OU0MTmM34K9WgF%2BPwHcmcw74I1uOhUmpw3ooOxgTTc8f0uLYpdTUMMR1G07otsz07nepddnP88rcQlQJtfl9MpCaGnAqYIraKVjszGpE%2BwomH8xUlxie3mMNwYjL8WWwXgkbH6ldDWiH3%2BIOR2IahyDskkiSIIbt2kO%2FbTXSwn%2B1YiOX6lltPYPRkLMkOWMiN%2F3MWtLOyX5QePFB4G7MaHgtCOKrV5W77o6OpvXCAR6fJl1QAsWivcJ2MnMuPFB7QF6S430Qgiw%3D%3D"
-            alt="黑色波浪的背景圖片"
-          />
-        </div>
-      </div>
-    </section>
-    <section class="mt-5">
-      <div class="mb-3 d-flex justify-content-center w-100">
-        <h2
-          class="pb-3 fw-bold border-bottom border-3 border-orange d-inline-block"
-        >
-          使用方法
-        </h2>
-      </div>
-      <div class="row g-0">
-        <div class="col-12 col-lg-6">
-          <div class="bg-steup bg-steup1">
-            <div class="bg-content">
-              <p>拿到貨物時，內容物會有能量石和一組密碼</p>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="bg-steup bg-steup2">
+              <div class="bg-content">
+                <div>
+                  <h3>步驟二</h3>
+                  <p>手握能量石，心中默想著密碼</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="bg-steup bg-steup3">
+              <div class="bg-content">
+                <div>
+                  <h3>步驟三</h3>
+                  <p>
+                    此時會感到能量湧進身體，通常為 10 ~ 15
+                    分鐘吸收完成，因人而異
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="bg-steup bg-steup4">
+              <div class="bg-content">
+                <div>
+                  <h3>步驟四</h3>
+                  <p>
+                    吸收完能量石會消失，轉換為能量充斥身體，<br />
+                    可以心中默想能量石名稱、形狀，腦中就會浮現該能量石能力
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-6">
-          <div class="bg-steup bg-steup2">
-            <div class="bg-content">
-              <p>手握能量石，心中默想著密碼</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6">
-          <div class="bg-steup bg-steup3">
-            <div class="bg-content">
-              <p>
-                此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6">
-          <div class="bg-steup bg-steup4">
-            <div class="bg-content">
-              <p>
-                吸收完能量石會消失，轉換為能量充斥身體，<br />
-                可以心中默想能量石名稱、形狀，腦中就會浮現該能量石能力
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section>
-      <div class="container">
-        <div
-          class="py-5 d-flex align-items-center justify-content-center flex-column"
-        >
-          <div>
-            <img
-              class="w-100 h-100 d-block"
-              src="../assets/img/undraw_Faq_re_31cw.svg"
-              alt="兩個外星人頭上充滿著問號"
-            />
-          </div>
-          <div class="my-3 typewriter">
-            <p>還不知道適合哪種能量石?</p>
-          </div>
-          <router-link
-            to="/frontDesk/quiz"
-            class="text-white btn btn-orange btn-lg"
-            >進行測驗</router-link
+      </section>
+      <section>
+        <div class="container">
+          <div
+            class="py-5  d-flex align-items-center justify-content-center flex-column"
           >
+            <div>
+              <img
+                class="w-100 h-100 d-block"
+                src="../assets/img/undraw_Faq_re_31cw.svg"
+                alt="兩個外星人頭上充滿著問號"
+              />
+            </div>
+            <div class="my-3 typewriter">
+              <p>還不知道適合哪種能量石?</p>
+            </div>
+            <router-link to="/frontDesk/quiz" class="btn btn-primary btn-lg"
+              >進行測驗</router-link
+            >
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
     <BaseFooter />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.products {
-  position: relative;
-}
-.bg-wave {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-}
-.img-card {
-  position: relative;
-  width: 100%;
-  border: 2px solid gray;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-.image {
-  opacity: 1;
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: 0.5s ease;
-  backface-visibility: hidden;
-}
-.content {
-  transition: 0.5s ease;
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.img-card:hover {
-  border: 2px solid #f59157;
-}
-.img-card:hover .image {
-  opacity: 0.5;
-  filter: blur(2px);
-}
-
-.img-card:hover .content {
-  opacity: 1;
-}
 .typewriter p {
-  color: black;
+  color: white;
   font-size: 1rem;
   overflow: hidden;
   border-right: 0.15em solid orange;
@@ -382,6 +330,9 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
+  h3 {
+    color: wheat;
+  }
   p {
     margin-bottom: 0;
     font-size: 1rem;
@@ -392,5 +343,36 @@ export default {
 }
 .bg-steup:hover .bg-content {
   background-color: rgba(0, 0, 0, 0.3);
+}
+.list {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  background-color: #392f3c;
+  color: white;
+}
+.list:hover {
+  background-color: #dd5c33;
+  color: #fff;
+}
+.bg-coupon {
+  color: #fff;
+  padding: 0.75rem 0;
+  background-color: silver;
+  p {
+    letter-spacing: 0.25rem;
+  }
+}
+.bg-star {
+  background: black
+    url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924061162.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=QUQ3j12Xf773TV%2FlRxJldJjI%2BlIuBnj1XkpciscKx7no2yRTqN3eJztesYPU3FIf5Nm038Zsy%2B0emcUdw%2BDQHsuiEDYOpSyffzlSuxnLglBYp5sSNegxXe5Mec1PM%2FUWANSfwFT1nIh%2FjeIEfbkVZiJPlIH5Jdp%2F3oIWtFE%2FkcMFysJP%2FDaCnfOpnufSZbKfRQL66ioIYWqjE0NSMfzOSxqjR7T3JMERfsl9BMWtnPyj84IaFTkT%2BMDgZbsYMVRTZn9TjXJ0V%2F0oZQkU3w4jy4ecytYO1%2BYrFiX8MM2akXEYYV06c85RD12ZoFkRt51oWldugY6bXwy0yO8BYqKu6A%3D%3D')
+    repeat;
+  color: white;
+}
+.about {
+  background-color: #392f3c;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  color: wheat;
 }
 </style>

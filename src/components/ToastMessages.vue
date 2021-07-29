@@ -1,9 +1,6 @@
 <script>
-// component
 import Toast from '@/components/Toast.vue';
-// methods
 import emitter from '@/methods/emitter';
-// vue
 import { onMounted, reactive } from 'vue';
 
 export default {
@@ -29,7 +26,7 @@ export default {
 
 <template>
   <div class="toast-container toast-position">
-    <Toast v-for="(msg, key) in messages.arr" :key="key" :msg="msg"></Toast>
+    <Toast v-for="(msg, key) in messages.arr" :key="key" :msg="msg" />
   </div>
 </template>
 

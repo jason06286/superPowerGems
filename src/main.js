@@ -24,6 +24,10 @@ configure({
 });
 setLocale('zh_TW');
 
+router.afterEach(() => {
+  window.scrollTo(0, 0);
+});
+
 const app = createApp(App);
 app.use(VueSweetalert2);
 app.use(router);
