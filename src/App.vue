@@ -26,14 +26,4 @@ export default {
 body {
   font-family: 'Noto Sans TC', sans-serif;
 }
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: opacity 1s, transform 1s;
-}
-.slide-enter,
-.slide-leave {
-  opacity: 0;
-  transform: translateX(-30%);
-}
 </style>
