@@ -158,8 +158,10 @@ export default {
 .bg-gray-900 {
   background-color: rgba(31, 41, 55, 1);
 }
-li a:hover {
-  background-color: #055160;
+li a {
+  &:hover{
+    background-color: #055160;
+  }
 }
 .link {
   text-decoration: none;

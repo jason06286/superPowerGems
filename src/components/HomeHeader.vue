@@ -11,7 +11,6 @@ export default {
     const plane = ref(null);
     const ufo = ref(null);
     const triggers = ScrollTrigger.getAll();
-
     function gsapSet() {
       ScrollTrigger.matchMedia({
         '(min-width: 768px)': () => {
@@ -44,7 +43,6 @@ export default {
         },
       });
     }
-
     onMounted(() => {
       ScrollTrigger.refresh();
       gsapSet();
@@ -55,7 +53,6 @@ export default {
       });
       ScrollTrigger.clearMatchMedia();
     });
-
     return {
       universeStart,
       universe,
@@ -102,6 +99,15 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #5a4b3a, transparent);
+    z-index: 99;
+  }
 }
 .bg-universe {
   position: absolute;
@@ -128,14 +134,16 @@ header {
     text-align: center;
   }
 }
-.type-writer p {
-  overflow: hidden;
-  border-right: 0.15em solid rgba(255, 255, 255, 0.8);
-  white-space: nowrap;
-  margin: 0 auto;
-  letter-spacing: 0.15em;
-  animation: typing 5s steps(30, end) infinite,
-    blink-caret 0.5s step-end infinite;
+.type-writer {
+  p {
+    overflow: hidden;
+    border-right: 0.15em solid rgba(255, 255, 255, 0.8);
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 0.15em;
+    animation: typing 5s steps(30, end) infinite,
+      blink-caret 0.5s step-end infinite;
+  }
 }
 @keyframes typing {
   from {
@@ -169,7 +177,6 @@ header {
     height: 500px;
   }
 }
-
 .ufo {
   position: absolute;
   right: 30%;
@@ -191,7 +198,7 @@ header {
   bottom: 20%;
   text-align: center;
   font-size: 1rem;
-
+  z-index: 99;
   @media (min-width: 576px) {
     font-size: 1.5rem;
   }
@@ -200,22 +207,22 @@ header {
     pointer-events: none;
     writing-mode: vertical-lr;
     position: relative;
-  }
-  p::before {
-    content: '';
-    position: absolute;
-    top: 105%;
-    bottom: 0;
-    right: 50%;
-    display: block;
-    width: 1px;
-    height: 0;
-    background: #fff;
-    transform: translateX(-50%);
-    transition: all 1s;
-    animation: scroll-line 1.5s linear infinite;
-    @media (min-width: 576px) {
-      width: 1.5px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 105%;
+      bottom: 0;
+      right: 50%;
+      display: block;
+      width: 1px;
+      height: 0;
+      background: #fff;
+      transform: translateX(-50%);
+      transition: all 1s;
+      animation: scroll-line 1.5s linear infinite;
+      @media (min-width: 576px) {
+        width: 1.5px;
+      }
     }
   }
 }

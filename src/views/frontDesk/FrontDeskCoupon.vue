@@ -103,11 +103,11 @@ export default {
 <template>
   <div class="bg-coupon">
     <div
-      class="container d-flex justify-content-center align-items-center "
+      class="container d-flex justify-content-center align-items-center"
       style="min-height: calc(100vh - 144px)"
     >
       <div class="py-5">
-        <div class="row py-5">
+        <div class="py-5 row">
           <div class="mb-3 col-lg-6 col-12">
             <div class="mb-3 bg-unfinish">
               <ul class="mb-0 list-unstyled d-flex">
@@ -147,8 +147,12 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.bg-coupon{
-  background-image: linear-gradient( 109.6deg,  rgba(5,84,94,1) 16%, #bbb 91.1% );
+.bg-coupon {
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(5, 84, 94, 1) 16%,
+    #bbb 91.1%
+  );
 }
 .bg-unfinish {
   width: 100%;

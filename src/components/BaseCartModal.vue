@@ -298,7 +298,9 @@ export default {
     right: -5px;
   }
 }
-.cart-btn:hover {
-  background: #ce5814;
+.cart-btn {
+  &:hover {
+    background: #ce5814;
+  }
 }
 </style>

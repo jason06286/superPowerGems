@@ -57,9 +57,9 @@ export default {
   font-weight: 800;
   z-index: 999;
   opacity: 0;
-}
-.scroll-btn:hover {
+  &:hover {
   background: #b2734d;
+}
 }
 .active {
   opacity: 1;

@@ -49,15 +49,17 @@ export default {};
   text-decoration: none;
   font-size: 1.25rem;
   color: rgba($color: #fff, $alpha: 0.8);
+  &:hover {
+    transform: scale(1.2);
+  }
 }
-.link-home:hover {
-  transform: scale(1.2);
-}
-li a {
-  font-size: 1rem;
-}
-li:hover a {
-  color: rgba($color: #fff, $alpha: 0.8);
-  transform: scale(1.5);
+li {
+  a {
+    font-size: 1rem;
+  }
+  &:hover a {
+    color: rgba($color: #fff, $alpha: 0.8);
+    transform: scale(1.5);
+  }
 }
 </style>

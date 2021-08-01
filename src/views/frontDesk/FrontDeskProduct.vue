@@ -22,6 +22,9 @@ export default {
     const productNum = ref(1);
     const total = computed(() => product.arr.price * productNum.value);
     const isLoading = ref(false);
+    const isCartLoading = ref(false);
+    const showQuestion = ref(false);
+    const showMethod = ref(false);
 
     function getProduct() {
       isLoading.value = true;
@@ -43,6 +46,7 @@ export default {
         });
     }
     function addCart() {
+      isCartLoading.value = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       axios
         .post(url, {
@@ -54,6 +58,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             emitter.emit('update-cart');
+            isCartLoading.value = false;
           } else {
             console.error = () => {
               throw new Error(res.data.message);
@@ -111,6 +116,9 @@ export default {
       addCart,
       products,
       suggestProduct,
+      showQuestion,
+      showMethod,
+      isCartLoading,
     };
   },
 };
@@ -118,124 +126,227 @@ export default {
 
 <template>
   <BaseFrontendLoading :isLoading="isLoading" />
-  <div class="bg-dark" style="height: 68px"></div>
-  <div class="container" style="min-height: calc(100vh - 212px)">
-    <div class="py-5 row">
-      <div class="mb-3 col-lg-6 col-12">
-        <div class="product-card">
-          <img
-            :src="product.arr.imagesUrl[0]"
-            :alt="product.arr.description"
-            class="img-base"
-            v-if="product.arr.imagesUrl"
-          />
-          <img
-            v-else
-            :src="product.arr.imageUrl"
-            :alt="product.arr.description"
-            class="img-base"
-          />
-          <h3 class="text-orange">【商品介紹】</h3>
-          <p class="">{{ product.arr.description }}</p>
-          <h3 class="pt-3 text-orange border-top">【使用方法】</h3>
-          <ul class="list-unstyled">
-            <li>
-              <span class="me-1 fs-5 text-orange">1. </span>
-              拿到貨物時，內容物會有能量石和一組密碼
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">2. </span>
-              手握能量石，心中默想著密碼
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">3. </span>
-              此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">4. </span>
-              吸收完能量石會消失，轉換為能量充斥身體，<br />
-              可以心中默想能量石名稱、 形狀，腦中就會浮現該能量石能力
-            </li>
-          </ul>
+  <section class="py-5">
+    <div
+      class="pt-3 text-white container-fluid"
+      style="min-height: calc(100vh - 212px)"
+    >
+      <ul class="side-bar">
+        <li
+          @click="showQuestion = true"
+          data-aos="zoom-in"
+          data-aos-delay="200"
+        >
+          常見問題
+        </li>
+        <li @click="showMethod = true" data-aos="zoom-in" data-aos-delay="400">
+          使用方法
+        </li>
+      </ul>
+      <div class="content">
+        <img :src="product.arr.imageUrl" :alt="product.arr.description" />
+        <h2>{{ product.arr.title }}</h2>
+        <p>{{ product.arr.description }}</p>
+        <div class="mb-2 d-flex align-items-center w-100 justify-content-end">
+          <p class="mb-0 line-through text-danger me-2">
+            原價 $ {{ currency(product.arr.origin_price) }} 元
+          </p>
+          <p class="mb-0 fs-5">特價 $ {{ currency(product.arr.price) }} 元</p>
         </div>
-      </div>
-      <div class="mb-3 col-lg-6 col-12">
-        <div class="product-card">
-          <div class="pb-2 mb-3 border-bottom position-relative">
-            <span class="fs-3">{{ product.arr.title }}</span>
-            <span class="top-0 badge bg-orange position-absolute">{{
-              product.arr.category
-            }}</span>
-          </div>
-          <p class="mb-0 text-secondary">
-            原價 $ {{ currency(product.arr.origin_price) }}
-          </p>
-          <p class="text-orange fs-4">
-            特價 $ {{ currency(product.arr.price) }}
-          </p>
-          <select
-            class="mb-3 form-select"
-            aria-label="Default select example"
-            v-model="productNum"
-          >
+        <div class="d-flex align-items-center w-100 justify-content-end">
+          <select class="form-select form-select-sm" v-model="productNum">
             <option selected value="0">請選擇數量</option>
             <option v-for="item in 10" :key="item" :value="item">
               {{ item }}{{ product.arr.unit }}
             </option>
           </select>
-          <p>小計 $ {{ currency(total) }} 元</p>
-          <div class="mb-3 d-grid w-100">
-            <button
-              type="button"
-              class="text-white btn btn-primary"
-              :class="{ disabled: productNum <= 0 }"
-              @click="addCart"
-            >
-              加到購物車
-            </button>
-          </div>
-          <h3 class="pt-3 text-orange border-top">【常見問題】</h3>
-          <div class="question-card">
-            <p class="mb-0 fs-5">Q: 如何知道能量石是否有吸收?</p>
-            <p class="text-secondary">
-              A: 可以心中默想能量石名稱、形狀，<br />
-              腦中就會浮現該能量石能力
-            </p>
-            <p class="mb-0 fs-5">Q: 請問能量石使用有限制嗎?有使用時間嗎?</p>
-            <p class="text-secondary">
-              A: 能量石是個媒介，開啟人體的新能量，<br />
-              如果有持續鍛鍊使用，能量會持續保有
-            </p>
-            <p class="mb-0 fs-5">
-              Q: 請問人體吸收有上限嗎?可以一次使用多顆能量石嗎?
-            </p>
-            <p class="text-secondary">
-              A: 目前經實驗研究，人體吸收上限為 3 顆能量石，<br />
-              建議一次使用一顆， 以避免能量混亂，造成能量大爆炸
-            </p>
-          </div>
+          <p class="flex-shrink-0 mx-3 mb-0">小計 $ {{ currency(total) }} 元</p>
+          <a
+            href="#"
+            class="fs-2"
+            :class="{ disabled: productNum <= 0 }"
+            @click.prevent="addCart"
+          >
+            <div class="spinner-border" role="status" v-if="isCartLoading">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-cart-plus" v-else></i>
+          </a>
+        </div>
+      </div>
+      <div class="container product-swiper">
+        <BaseSwiper :products="suggestProduct">你可能會喜歡</BaseSwiper>
+      </div>
+
+      <div class="question" :class="{ active: showQuestion }">
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="mt-3 me-3 btn-close btn-close-white"
+            @click="showQuestion = !showQuestion"
+          ></button>
+        </div>
+        <div class="p-5 pt-3">
+          <h3 class="mb-3">常見問題</h3>
+          <p class="mb-0 text-white fs-5">Q: 如何知道能量石是否有吸收?</p>
+          <p>
+            A: 可以心中默想能量石名稱、形狀，<br />
+            腦中就會浮現該能量石能力
+          </p>
+          <p class="mb-0 text-white fs-5">
+            Q: 請問能量石使用有限制嗎?有使用時間嗎?
+          </p>
+          <p>
+            A: 能量石是個媒介，開啟人體的新能量，<br />
+            如果有持續鍛鍊使用，能量會持續保有
+          </p>
+          <p class="mb-0 text-white fs-5">
+            Q: 請問人體吸收有上限嗎?可以一次使用多顆能量石嗎?
+          </p>
+          <p>
+            A: 目前經實驗研究，人體吸收上限為 3 顆能量石，<br />
+            建議一次使用一顆， 以避免能量混亂，造成能量大爆炸
+          </p>
+        </div>
+      </div>
+      <div class="method" :class="{ active: showMethod }">
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="mt-3 me-3 btn-close btn-close-white"
+            @click="showMethod = !showMethod"
+          ></button>
+        </div>
+        <div class="p-5 pt-3">
+          <h3 class="mb-3">使用方法</h3>
+          <p class="mb-3 fs-5">
+            <span class="me-1 text-orange">1. </span>
+            拿到貨物時，內容物會有能量石和一組密碼
+          </p>
+          <p class="mb-3 fs-5">
+            <span class="me-1 text-orange">2. </span>
+            手握能量石，心中默想著密碼
+          </p>
+          <p class="mb-3 fs-5">
+            <span class="me-1 text-orange">3. </span>
+            此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異
+          </p>
+          <p class="mb-3 fs-5">
+            <span class="me-1 text-orange">4. </span>
+            吸收完能量石會消失，轉換為能量充斥身體，<br />
+            可以心中默想能量石名稱、 形狀，腦中就會浮現該能量石能力
+          </p>
         </div>
       </div>
     </div>
-    <BaseSwiper :products="suggestProduct">你可能會喜歡</BaseSwiper>
-  </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
-.product-card {
-  padding: 1rem;
-  border: solid 2px #ccc;
-  border-radius: 0.5rem;
-  height: 100%;
-  background-color: #fff;
+.line-through {
+  text-decoration: line-through;
 }
-.img-base {
-  display: block;
+section {
+  background: linear-gradient(to right, #181818 50%, #392f3c 50%);
+  position: relative;
+}
+.side-bar {
+  list-style: none;
+  font-size: 1.25rem;
+  height: calc(100% - 68px);
+  margin-top: 1rem;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  border-bottom: 1px solid #fff;
+  background: none;
+  z-index: 66;
+  @media (min-width: 992px) {
+    position: absolute;
+    font-size: 1.5rem;
+    margin-top: 0;
+    background: #181818;
+    padding-right: 2rem;
+    border-right: 1px solid #fff;
+    border-bottom: none;
+    justify-content: center;
+    flex-direction: column;
+  }
+  li {
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    @media (min-width: 992px) {
+      margin-right: 0;
+      writing-mode: vertical-lr;
+    }
+  }
+}
+.wrap {
   width: 100%;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
 }
-.question-card {
-  padding: 1rem;
+.content {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  @media (min-width: 321px) {
+    padding: 1rem;
+  }
+  @media (min-width: 768px) {
+    width: 500px;
+    padding: 0;
+  }
+  img {
+    display: block;
+    max-width: 100%;
+    height: 300px;
+    object-fit: contain;
+    animation: fly 4s ease-in-out infinite;
+  }
+  a {
+    text-decoration: none;
+    color: #dd5c33;
+    &:hover {
+      color: darken($color: #dd5c33, $amount: 10);
+      transform: scale(0.9);
+    }
+  }
+}
+@keyframes fly {
+  0% {
+    transform: translateY(4%);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+  100% {
+    transform: translateY(4%);
+  }
+}
+.question,
+.method {
+  width: 100%;
+  height: calc(100% - 64px);
+  background: lighten($color: #392f3c, $amount: 10);
+  position: absolute;
+  left: -100%;
+  top: 64px;
+  transition: all 0.8s;
+  z-index: 99;
+  @media (min-width: 768px) {
+    width: 400px;
+  }
+  p {
+    color: rgba($color: #fff, $alpha: 0.6);
+  }
+}
+.question.active,
+.method.active {
+  left: 0;
 }
 </style>

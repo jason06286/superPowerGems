@@ -17,9 +17,7 @@ export default {
 <template>
   <div class="d-flex align-items-center">
     <div class="overflow-hidden">
-      <div
-        class="position-relative btn-container "
-      >
+      <div class="position-relative btn-container">
         <button
           type="button"
           class="btn btn-outline-danger"
@@ -30,7 +28,7 @@ export default {
         </button>
         <button
           type="button"
-          class="position-absolute btn btn-danger"
+          class="position-absolute btn btn-danger w-100"
           :class="{ 'btn-sm': props.btnSmall }"
         >
           確定
@@ -46,7 +44,9 @@ export default {
   transform: translateX(0);
   transition: all 0.5s;
 }
-.btn-container:hover {
-  transform: translateX(-100%);
+.btn-container {
+  &:hover {
+    transform: translateX(-100%);
+  }
 }
 </style>

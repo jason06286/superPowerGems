@@ -74,7 +74,7 @@ export default {
   >
     <div class="modal-dialog">
       <div class="border-0 modal-content">
-        <div class="text-white bg-orange-600 modal-header">
+        <div class="text-white bg-primary modal-header">
           <h5 id="couponModalLabel" class="modal-title">
             <span v-if="newCoupon">新增優惠券</span>
             <span v-else>修改優惠券</span>
@@ -173,7 +173,7 @@ export default {
           </button>
           <button
             type="button"
-            class="btn btn-orange"
+            class="btn btn-primary"
             @click="emit('couponStatus', tempCoupon.obj)"
           >
             確認
@@ -185,7 +185,4 @@ export default {
 </template>
 
 <style scoped>
-.bg-orange-600 {
-  background-color: #ca6510;
-}
 </style>

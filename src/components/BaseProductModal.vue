@@ -115,7 +115,7 @@ export default {
   >
     <div class="modal-dialog modal-xl">
       <div class="border-0 modal-content">
-        <div class="text-white bg-orange-600 modal-header">
+        <div class="text-white bg-primary modal-header">
           <h5 id="productModalLabel" class="modal-title">
             <span v-if="newProduct">新增產品</span>
             <span v-else>修改產品</span>
@@ -312,7 +312,7 @@ export default {
           </button>
           <button
             type="button"
-            class="btn btn-orange"
+            class="btn btn-primary"
             @click="emit('productStatus', tempProduct.obj)"
           >
             確認
@@ -324,7 +324,4 @@ export default {
 </template>
 
 <style scoped>
-.bg-orange-600 {
-  background-color: #ca6510;
-}
 </style>

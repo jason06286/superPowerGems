@@ -167,28 +167,60 @@ export default {
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '全部' }"
                 @click="showAll"
               >
                 全部
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精礦' }"
                 @click="filterProduct('精礦')"
               >
                 精礦
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精鋼' }"
                 @click="filterProduct('精鋼')"
               >
                 精鋼
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精石' }"
                 @click="filterProduct('精石')"
               >
@@ -218,7 +250,12 @@ export default {
                       {{ item.description }}
                     </p>
                     <div
-                      class="mb-3 d-flex justify-content-center align-items-center"
+                      class="
+                        mb-3
+                        d-flex
+                        justify-content-center
+                        align-items-center
+                      "
                     >
                       <span class="line-through text-secondary me-3"
                         >${{ currency(item.origin_price) }}</span
@@ -284,7 +321,12 @@ export default {
                       {{ item.description }}
                     </p>
                     <div
-                      class="mb-3 d-flex justify-content-center align-items-center"
+                      class="
+                        mb-3
+                        d-flex
+                        justify-content-center
+                        align-items-center
+                      "
                     >
                       <span class="line-through text-secondary me-3"
                         >${{ currency(item.origin_price) }}</span
@@ -346,16 +388,16 @@ export default {
 .card {
   cursor: pointer;
   transition: all 0.3s;
-}
-.card:hover {
-  transform: translateY(-0.5rem);
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
 }
 .list {
   color: black;
-}
-.list:hover {
-  border: 2px solid #f59157 !important;
-  box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
+  &:hover {
+    border: 2px solid #f59157 !important;
+    box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
+  }
 }
 .active {
   border: 2px solid #f59157 !important;

@@ -125,14 +125,16 @@ export default {
   top: 50%;
   transform: translateY(-50%);
 }
-.img-card:hover {
-  border: 2px solid #f59157;
-}
-.img-card:hover .image {
-  opacity: 0.5;
-  filter: blur(2px);
-}
-.img-card:hover .content {
-  opacity: 1;
+.img-card {
+  &:hover {
+    border: 2px solid #f59157;
+  }
+  &:hover .image {
+    opacity: 0.9;
+    filter: blur(2px);
+  }
+  &:hover .content {
+    opacity: 1;
+  }
 }
 </style>

@@ -89,7 +89,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9;
+  z-index: 999;
 }
 .hamburger-btn-position {
   position: absolute;
@@ -116,33 +116,34 @@ nav {
   background: #dd5c33;
   border-radius: 1px;
   transition: all 0.5s ease-in-out;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background: #dd5c33;
+    border-radius: 1px;
+    transition: all 0.5s ease-in-out;
+  }
+  &::before {
+    transform: translateY(-8px);
+  }
+  &::after {
+    transform: translateY(8px);
+  }
 }
-.hamburger-icon::before,
-.hamburger-icon::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 3px;
-  background: #dd5c33;
-  border-radius: 1px;
-  transition: all 0.5s ease-in-out;
-}
-.hamburger-icon::before {
-  transform: translateY(-8px);
-}
-.hamburger-icon::after {
-  transform: translateY(8px);
-}
+
 .hamburger-btn.active .hamburger-icon {
   transform: translateX(-32px);
-}
-.hamburger-btn.active .hamburger-icon::before {
-  background: #fff;
-  transform: rotate(45deg) translate(20px, -20px);
-}
-.hamburger-btn.active .hamburger-icon::after {
-  background: #fff;
-  transform: rotate(-45deg) translate(20px, 20px);
+  &::before {
+    background: #fff;
+    transform: rotate(45deg) translate(20px, -20px);
+  }
+  &::after {
+    background: #fff;
+    transform: rotate(-45deg) translate(20px, 20px);
+  }
 }
 .nav-brand {
   font-size: 1.5rem;
@@ -206,34 +207,33 @@ nav {
       margin-right: 0.5rem;
       margin-bottom: 0;
     }
-  }
-  li::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    display: block;
-    width: 0;
-    height: 40%;
-    background-color: rgba($color: #dd5c33, $alpha: 0.6);
-    transform: translateY(-20%);
-    z-index: -1;
-    transition: all 0.3s;
-  }
-  li:hover::before {
-    width: 100%;
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      display: block;
+      width: 0;
+      height: 40%;
+      background-color: rgba($color: #dd5c33, $alpha: 0.6);
+      transform: translateY(-20%);
+      z-index: -1;
+      transition: all 0.3s;
+    }
+    &:hover::before {
+      width: 100%;
+    }
   }
   .active {
     background: #dd5c33;
     @media (min-width: 992px) {
       background: none;
     }
+    &::before {
+      content: '';
+      width: 100%;
+    }
   }
 }
-.nav-list .active::before {
-  content: '';
-  width: 100%;
-}
-
 .nav-list.active {
   transform: translateX(0);
   border-radius: 0 0 0 0;

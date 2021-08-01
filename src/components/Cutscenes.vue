@@ -1,82 +1,49 @@
 <script>
-import {
-  onMounted, onUnmounted, ref,
-} from 'vue';
-import emitter from '@/methods/emitter';
+import { gsap } from 'gsap';
+import { onMounted, ref } from 'vue';
 
 export default {
-  props: {
-    isShow: {
-      Boolean,
-      default: false,
-    },
-  },
   setup() {
-    let time = null;
-    const isShowCut = ref(false);
-
-    function showCut() {
-      isShowCut.value = true;
-      time = setTimeout(() => {
-        isShowCut.value = false;
-      }, 2000);
-    }
-
+    const cutscenes = ref(null);
     onMounted(() => {
-      emitter.on('showCut', () => {
-        showCut();
+      gsap.to(cutscenes.value, {
+        duration: 0.8,
+        left: '-100%',
       });
     });
-    onUnmounted(() => {
-      clearTimeout(time);
-    });
+
     return {
-      isShowCut,
+      cutscenes,
     };
   },
 };
 </script>
 
 <template>
-  <div class="cutscenes" v-show="isShowCut">
-    <div class="cutscenes-item">
-      <div class="cutscenes-content"></div>
-    </div>
-  </div>
+  <section style="overflow: hidden">
+    <div class="cutscenes" ref="cutscenes"></div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
 .cutscenes {
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  top: 0;
   left: 0;
+  z-index: 9999;
   width: 100%;
-  height: 100vh;
-  z-index: 666;
-  background: transparent;
-}
-.cutscenes-item {
-  position: absolute;
-  top: 0;
-  width: 300%;
-  height: 100vh;
-}
-.cutscenes-content {
-  position: absolute;
-  top: 0;
-  width: 500vw;
-  height: 100vh;
+  height: 100%;
   background: #dd5c33;
-  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-  transform: translate(100%);
-  animation: toleft 1.5s ease-in-out;
 }
-@keyframes toleft {
-  0% {
-    transform: translate(100%);
-  }
-  100% {
-    transform: translate(-100%);
-  }
+.cuscenes-item1 {
+  background: #dd5c33;
+}
+.cuscenes-item2 {
+  background: #dd5c33;
+  left: 33.3%;
+}
+.cuscenes-item3 {
+  background: #dd5c33;
+  left: 66.6%;
 }
 </style>
