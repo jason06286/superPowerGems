@@ -58,8 +58,8 @@ export default {
   z-index: 999;
   opacity: 0;
   &:hover {
-  background: #b2734d;
-}
+    background: #b2734d;
+  }
 }
 .active {
   opacity: 1;

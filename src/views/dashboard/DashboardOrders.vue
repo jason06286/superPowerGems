@@ -129,9 +129,9 @@ export default {
 <template>
   <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
+    <h4 class="pb-3 mb-3 fw-bold border-bottom border-3 border-darkred">
       訂單列表
-    </h2>
+    </h4>
     <div class="accordion" id="accordionExample">
       <div class="accordion-item" v-for="item in orders.arr" :key="item.id">
         <h2 class="accordion-header" :id="`${item.id}6`">
@@ -173,7 +173,7 @@ export default {
             <div class="row">
               <div class="col-lg-6 col-12">
                 <div class="p-4">
-                  <h5 class="pb-2 border-2 border-bottom border-orange">
+                  <h5 class="pb-2 border-2 border-bottom border-darkred">
                     訂單內容
                   </h5>
                   <p
@@ -264,14 +264,14 @@ export default {
                   </div>
                   <div class="d-flex justify-content-end w-100">
                     <button
-                      class="btn btn-primary me-3"
+                      class="btn btn-outline-title me-3"
                       type="button"
                       @click="editOrder"
                     >
                       修改客戶資料
                     </button>
                     <button
-                      class="btn btn-danger"
+                      class="btn btn-outline-darkred"
                       type="button"
                       @click="delOrder(item.id)"
                     >

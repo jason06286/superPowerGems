@@ -78,15 +78,15 @@ export default {
 
 <template>
   <div class="bg-dark" style="height: 68px"></div>
-  <div class="container bg-white" style="min-height: calc(100vh - 212px)">
+  <div class="container" style="min-height: calc(100vh - 212px)">
     <div class="py-5">
       <div class="paySuccess" v-if="order.arr.is_paid">
         <p>已完成付款，感謝您的訂購!!</p>
       </div>
-      <h2 class="pb-2 mb-3 border-3 border-bottom border-orange">訂單明細</h2>
-      <table class="table text-center table-responsive-lg">
+      <h4 class="pb-2 mb-3 border-2 border-bottom border-darkred">訂單明細</h4>
+      <table class="table text-center table-responsive-lg text-content">
         <thead>
-          <tr class="table-dark">
+          <tr>
             <th scope="col">商品名稱</th>
             <th scope="col" width="120">數量</th>
             <th scope="col" class="text-end">小計</th>
@@ -112,9 +112,9 @@ export default {
           </tr>
         </tfoot>
       </table>
-      <h2 class="pb-2 mb-3 border-3 border-bottom border-orange">訂單資訊</h2>
-      <table class="table" v-if="order.arr.user">
-        <tbody class="text-secondary">
+      <h4 class="pb-2 mb-3 border-2 border-bottom border-darkred">訂單資訊</h4>
+      <table class="table text-content" v-if="order.arr.user">
+        <tbody>
           <tr>
             <th scope="row" class="font-weight-normal">Email</th>
             <td>{{ order.arr.user.email }}</td>
@@ -145,18 +145,18 @@ export default {
       <div class="d-flex justify-content-end" v-if="!order.arr.is_paid">
         <router-link
           type="button"
-          class="btn btn-secondary me-3"
+          class="btn btn-outline-title me-3"
           to="/frontDesk/products"
           >繼續購物</router-link
         >
         <button
-          class="btn btn-primary"
+          class="btn btn-darkred"
           type="button"
           :class="{ disabled: isLoading === 'pay' }"
           @click="confirmPay"
         >
           <div
-            class="spinner-grow text-dark spinner-grow-sm"
+            class="spinner-grow spinner-grow-sm"
             role="status"
             v-if="isLoading === 'pay'"
           >

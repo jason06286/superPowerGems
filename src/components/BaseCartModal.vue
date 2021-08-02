@@ -144,12 +144,12 @@ export default {
   </div>
   <div class="modal" tabindex="-1" ref="cartModal">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content bg-dark border-title">
         <div class="modal-header">
-          <h5 class="modal-title">購物車</h5>
+          <h5 class="modal-title text-title">購物車</h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
@@ -159,23 +159,28 @@ export default {
             <p class="mb-0 fs-5">購物車內無東西</p>
             <router-link
               to="/frontDesk/products"
-              class="d-block text-orange fs-4"
+              class="d-block text-darkred fs-4"
               @click="hideModal"
               >請選購商品</router-link
             >
           </div>
           <table class="table text-center table-responsive-lg" v-else>
             <thead>
-              <tr class="table-dark">
-                <th scope="col"></th>
+              <tr class="text-title">
                 <th scope="col">商品名稱</th>
                 <th scope="col">數量</th>
                 <th scope="col" class="text-end">小計</th>
+                <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-content">
               <tr v-for="item in carts.arr.carts" :key="item.id">
-                <td>
+                <td class="align-middle">{{ item.product.title }}</td>
+                <td class="align-middle">{{ item.qty }}</td>
+                <td class="align-middle text-end">
+                  $ {{ currency(item.total) }}
+                </td>
+                <td class="text-end">
                   <button
                     class="btn btn-outline-danger btn-sm"
                     type="button"
@@ -192,23 +197,18 @@ export default {
                   <button
                     v-else
                     type="button"
-                    class="btn btn-outline-danger btn-sm"
+                    class="btn btn-sm btn-trash"
                     @click="delProduct(item)"
                   >
                     <i class="bi bi-trash-fill"></i>
                   </button>
-                </td>
-                <td class="align-middle">{{ item.product.title }}</td>
-                <td class="align-middle">{{ item.qty }}</td>
-                <td class="align-middle text-end">
-                  $ {{ currency(item.total) }}
                 </td>
               </tr>
             </tbody>
             <tfoot>
               <tr
                 v-show="carts.arr.total > carts.arr.final_total"
-                class="text-danger"
+                class="text-darkred"
               >
                 <td colspan="3" class="text-end">折扣優惠</td>
                 <td class="line-through text-end">
@@ -233,7 +233,7 @@ export default {
               v-model="coupon"
             />
             <button
-              class="btn btn-outline-secondary"
+              class="btn btn-outline-content"
               type="button"
               id="button-addon2"
               :class="{ disabled: coupon === '' }"
@@ -246,14 +246,14 @@ export default {
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-outline-title"
             data-bs-dismiss="modal"
           >
             再逛逛
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-darkred"
             :class="{ disabled: carts.arr?.carts?.length === 0 }"
             @click="payment"
           >
@@ -301,6 +301,12 @@ export default {
 .cart-btn {
   &:hover {
     background: #ce5814;
+  }
+}
+.btn-trash {
+  color: rgba($color: #fff, $alpha: 0.4);
+  &:hover {
+    color: #98142b;
   }
 }
 </style>

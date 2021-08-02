@@ -59,11 +59,11 @@ export default {
   <section class="my-5">
     <div class="container">
       <div class="d-flex justify-content-center">
-        <h2
-          class="pb-3 mb-3 border-bottom border-3 border-orange d-inline-block"
+        <h4
+          class="pb-3 mb-3 border-bottom border-3 border-darkred d-inline-block"
         >
           <slot></slot>
-        </h2>
+        </h4>
       </div>
       <swiper
         :autoplay="true"
@@ -72,7 +72,7 @@ export default {
       >
         <swiper-slide v-for="item in props.products" :key="item.id">
           <div class="img-card" @click="forwardingProduct(item.id)">
-            <p class="p-1 mb-0 text-white bg-primary position-absolute">
+            <p class="p-1 mb-0 text-title bg-darkred position-absolute">
               {{ item.category }}
             </p>
             <img
@@ -81,7 +81,7 @@ export default {
               class="image"
             />
             <div class="content">
-              <h3 class="text-center text-white">{{ item.title }}</h3>
+              <h3 class="text-center text-title">{{ item.title }}</h3>
               <div
                 class="d-flex justify-content-center align-items-center w-100"
               ></div>
@@ -127,7 +127,7 @@ export default {
 }
 .img-card {
   &:hover {
-    border: 2px solid #f59157;
+    border: 2px solid #98142b;
   }
   &:hover .image {
     opacity: 0.9;

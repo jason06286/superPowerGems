@@ -57,10 +57,10 @@ export default {
         aria-label="Close"
       ></button>
     </div>
-    <div class="toast-body" v-if="!props.msg.content">
+    <div class="toast-body text-dark" v-if="!props.msg.content">
       {{ props.msg.title }}
     </div>
-    <div class="toast-body" v-else>
+    <div class="toast-body text-dark" v-else>
       {{ props.msg.content }}
     </div>
   </div>

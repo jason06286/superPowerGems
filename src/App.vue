@@ -25,5 +25,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap');
 body {
   font-family: 'Noto Sans TC', sans-serif;
+  color: rgba($color: #fff, $alpha: 0.6);
+  background: #212529;
 }
 </style>

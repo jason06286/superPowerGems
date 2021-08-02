@@ -52,7 +52,7 @@ export default {
 
 <template>
   <div>
-    <nav class="text-title" :class="{ 'bg-dark': showScroll }">
+    <nav class="text-title" :class="{ 'bg-navbar': showScroll }">
       <div class="container-fluid position-relative">
         <div class="d-lg-flex align-items-center">
           <router-link class="nav-brand" to="/">Superpower Gems</router-link>
@@ -84,6 +84,11 @@ export default {
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,500&display=swap');
+
+.bg-navbar {
+  background: rgba($color: #212529, $alpha: 0.5);
+  border-bottom: 1px solid rgba($color: #fff, $alpha: 0.6);
+}
 nav {
   position: fixed;
   top: 0;
@@ -113,7 +118,7 @@ nav {
 .hamburger-icon {
   width: 25px;
   height: 3px;
-  background: #dd5c33;
+  background: rgba($color: #fff, $alpha: 0.6);
   border-radius: 1px;
   transition: all 0.5s ease-in-out;
   &::before,
@@ -122,7 +127,7 @@ nav {
     position: absolute;
     width: 25px;
     height: 3px;
-    background: #dd5c33;
+    background: rgba($color: #fff, $alpha: 0.6);
     border-radius: 1px;
     transition: all 0.5s ease-in-out;
   }
@@ -137,11 +142,11 @@ nav {
 .hamburger-btn.active .hamburger-icon {
   transform: translateX(-32px);
   &::before {
-    background: #fff;
+    background: rgba($color: #fff, $alpha: 0.6);
     transform: rotate(45deg) translate(20px, -20px);
   }
   &::after {
-    background: #fff;
+    background: rgba($color: #fff, $alpha: 0.6);
     transform: rotate(-45deg) translate(20px, 20px);
   }
 }
@@ -149,7 +154,7 @@ nav {
   font-size: 1.5rem;
   display: block;
   text-decoration: none;
-  color: #fff;
+  color: rgba($color: #fff, $alpha: 0.8);
   font-family: 'Tourney', cursive;
   text-align: right;
   padding: 1rem;
@@ -175,7 +180,7 @@ nav {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #392f3c;
+  background: #212529;
   border-radius: 0 500px 500px 0;
   transform: translateX(-100%);
   transition: all 0.5s ease-in-out;
@@ -192,7 +197,7 @@ nav {
   a {
     display: block;
     text-decoration: none;
-    color: whitesmoke;
+    color: rgba($color: #fff, $alpha: 0.6);
     padding: 0.5rem;
   }
   li {
@@ -214,7 +219,7 @@ nav {
       display: block;
       width: 0;
       height: 40%;
-      background-color: rgba($color: #dd5c33, $alpha: 0.6);
+      background-color: rgba($color: #98142b, $alpha: 0.6);
       transform: translateY(-20%);
       z-index: -1;
       transition: all 0.3s;
@@ -224,7 +229,7 @@ nav {
     }
   }
   .active {
-    background: #dd5c33;
+    background: #98142b;
     @media (min-width: 992px) {
       background: none;
     }

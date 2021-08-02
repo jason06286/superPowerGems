@@ -162,12 +162,12 @@ export default {
 <template>
   <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
+    <h4 class="pb-3 mb-3 fw-bold border-bottom border-3 border-darkred">
       優惠券
-    </h2>
+    </h4>
     <div class="text-end">
       <button
-        class="text-white btn btn-orange"
+        class="text-white btn btn-darkred"
         type="button"
         @click="openCouponModal({}, true)"
       >
@@ -175,8 +175,8 @@ export default {
       </button>
     </div>
     <div class="table-responsive-lg">
-      <table class="table mt-4 table-hover">
-        <thead>
+      <table class="table mt-4 table-dark table-hover">
+        <thead class="text-title">
           <tr>
             <th>優惠券名稱</th>
             <th>優惠</th>
@@ -187,7 +187,7 @@ export default {
             <th>刪除</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="text-content">
           <tr v-for="item in coupons.arr" :key="item.id">
             <td>{{ item.title }}</td>
             <td class="text-center">{{ item.percent }}%</td>
@@ -195,12 +195,12 @@ export default {
             <td class="text-center">{{ item.code }}</td>
             <td class="text-center">
               <span class="text-success" v-if="item.is_enabled">啟用</span>
-              <span v-else class="text-secondary">未啟用</span>
+              <span v-else class="text-content">未啟用</span>
             </td>
             <td>
               <button
                 type="button"
-                class="btn btn-orange btn-sm"
+                class="btn btn-outline-title btn-sm"
                 @click="openCouponModal(item, false)"
               >
                 編輯

@@ -103,31 +103,34 @@ export default {
       >
         <swiper-slide v-for="item in props.products" :key="item.id">
           <div class="product-card" @click="forwardingProduct(item.id)">
-            <div class="img-bx">
+            <div class="product-inner">
               <img :src="item.imageUrl" :alt="item.description" />
-            </div>
-            <div class="content">
-              <h3 class="text-white">{{ item.title }}</h3>
-              <h4 class="text-white">
-                <small class="line-through text-danger"
-                  >${{ currency(item.origin_price) }}</small
-                >
-                ${{ currency(item.price) }}
-              </h4>
-              <a
-                href="javascript:;"
-                class="text-white"
-                @click.stop="addCart(item)"
-              >
-                <div
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  v-if="isLoading === item.id"
-                >
-                  <span class="visually-hidden">Loading...</span>
+              <h4 class="text-title">{{ item.title }}</h4>
+              <p>
+                {{ item.description }}
+              </p>
+              <div class="product-footer">
+                <div class="d-flex">
+                  <p class="mb-0 line-through text-darkred me-3">
+                    $ {{ currency(item.origin_price) }} 元
+                  </p>
+                  <p class="mb-0">$ {{ currency(item.price) }} 元</p>
                 </div>
-                加入購物車</a
-              >
+                <a
+                  href="javascript:;"
+                  class="text-darkred fs-3"
+                  @click.stop="addCart(item)"
+                >
+                  <div
+                    class="spinner-border"
+                    role="status"
+                    v-if="isLoading === item.id"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <i class="bi bi-cart-plus" v-else></i>
+                </a>
+              </div>
             </div>
           </div>
         </swiper-slide>
@@ -139,7 +142,7 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 100%;
+  height: 500px;
   transform: translate3d(0, 0, 0);
   overflow: hidden;
 }
@@ -149,73 +152,116 @@ export default {
 .line-through {
   text-decoration: line-through;
 }
+@mixin circle {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(215, 223, 252, 1) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(215, 223, 252, 1) 84%
+  );
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+}
+@mixin diamond {
+  display: block;
+  width: 20px;
+  height: 40px;
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(15, 2, 2, 1) 11.2%,
+    rgba(36, 163, 190, 1) 91.1%
+  );
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  position: absolute;
+}
 .product-card {
-  position: relative;
   width: 100%;
-  height: 420px;
-  background: rgba($color: #272827, $alpha: 0.7);
-  border-radius: 1rem;
-  overflow: hidden;
+  height: 400px;
+  padding: 20px;
+  border-radius: 0.5rem;
   cursor: pointer;
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    width: 100%;
-    height: 100%;
-    background: #272827;
-    transform: skewY(345deg);
-    transition: 0.5s;
-  }
-  &:hover::before {
-    top: -70%;
-    transform: skewY(390deg);
-  }
-  &:hover .img-bx img {
-    max-width: 90%;
-  }
-}
-.img-bx {
+  border: 1px solid rgba($color: #fff, $alpha: 0.6);
+  background: rgba($color: #000, $alpha: 0.2);
   position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  img {
+  perspective: 1000px;
+  &:hover {
+    box-shadow: 0px 0px 30px #969160;
+  }
+  &:hover .product-inner img {
     max-width: 100%;
-    transition: 0.5s;
   }
-}
-.content {
-  position: relative;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 1;
-  top: 0;
-  @media (min-width: 424px) {
-    top: -30px;
-  }
-  @media (min-width: 767px) {
-    top: 0;
-  }
-  h3 {
-    color: rgba($color: #fff, $alpha: 0.6);
-    letter-spacing: 1px;
-  }
-  a {
+  .product-inner {
+    border: 1px dashed #fff;
+    display: flex;
+    padding: 2rem 1rem;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    height: 100%;
     position: relative;
-    padding: 10px 30px;
-    text-decoration: none;
-    margin-top: 1rem;
-    color: #fff;
-    border-radius: 2rem;
-    background-color: #dd5c33;
-    &:hover {
-      background-color: #7e290f;
+    img {
+      display: block;
+      height: 200px;
+      max-width: 80%;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+    &::before {
+      content: '';
+      top: -20px;
+      left: 50%;
+      @include circle;
+    }
+    &::after {
+      content: '';
+      display: block;
+      bottom: -20px;
+      left: 50%;
+      @include circle;
+    }
+    h4 {
+      &::before {
+        content: '';
+        top: -24px;
+        left: -14px;
+        transform: rotate(-45deg);
+        @include diamond;
+      }
+      &::after {
+        content: '';
+        top: -24px;
+        right: -14px;
+        transform: rotate(45deg);
+        @include diamond;
+      }
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      &::before {
+        content: '';
+        bottom: -24px;
+        left: -14px;
+        transform: rotate(45deg);
+        @include diamond;
+      }
+      &::after {
+        content: '';
+        bottom: -24px;
+        right: -14px;
+        transform: rotate(-45deg);
+        @include diamond;
+      }
+      a {
+        &:hover {
+          color: darken($color: #98142b, $amount: 10) !important;
+        }
+      }
     }
   }
 }

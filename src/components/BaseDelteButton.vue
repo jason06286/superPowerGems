@@ -20,7 +20,7 @@ export default {
       <div class="position-relative btn-container">
         <button
           type="button"
-          class="btn btn-outline-danger"
+          class="btn btn-outline-darkred"
           :class="{ 'btn-sm': props.btnSmall }"
         >
           刪除
@@ -28,7 +28,7 @@ export default {
         </button>
         <button
           type="button"
-          class="position-absolute btn btn-danger w-100"
+          class="position-absolute btn btn-darkred w-100"
           :class="{ 'btn-sm': props.btnSmall }"
         >
           確定

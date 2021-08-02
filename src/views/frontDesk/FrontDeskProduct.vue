@@ -128,7 +128,7 @@ export default {
   <BaseFrontendLoading :isLoading="isLoading" />
   <section class="py-5">
     <div
-      class="pt-3 text-white container-fluid"
+      class="pt-3 text-content container-fluid"
       style="min-height: calc(100vh - 212px)"
     >
       <ul class="side-bar">
@@ -145,10 +145,10 @@ export default {
       </ul>
       <div class="content">
         <img :src="product.arr.imageUrl" :alt="product.arr.description" />
-        <h2>{{ product.arr.title }}</h2>
+        <h3 class="text-title">{{ product.arr.title }}</h3>
         <p>{{ product.arr.description }}</p>
         <div class="mb-2 d-flex align-items-center w-100 justify-content-end">
-          <p class="mb-0 line-through text-danger me-2">
+          <p class="mb-0 line-through text-darkred me-2">
             原價 $ {{ currency(product.arr.origin_price) }} 元
           </p>
           <p class="mb-0 fs-5">特價 $ {{ currency(product.arr.price) }} 元</p>
@@ -187,20 +187,18 @@ export default {
           ></button>
         </div>
         <div class="p-5 pt-3">
-          <h3 class="mb-3">常見問題</h3>
-          <p class="mb-0 text-white fs-5">Q: 如何知道能量石是否有吸收?</p>
+          <h4 class="mb-3 text-title">常見問題</h4>
+          <p class="mb-3 fs-5">Q: 如何知道能量石是否有吸收?</p>
           <p>
             A: 可以心中默想能量石名稱、形狀，<br />
             腦中就會浮現該能量石能力
           </p>
-          <p class="mb-0 text-white fs-5">
-            Q: 請問能量石使用有限制嗎?有使用時間嗎?
-          </p>
+          <p class="mb-3 fs-5">Q: 請問能量石使用有限制嗎?有使用時間嗎?</p>
           <p>
             A: 能量石是個媒介，開啟人體的新能量，<br />
             如果有持續鍛鍊使用，能量會持續保有
           </p>
-          <p class="mb-0 text-white fs-5">
+          <p class="mb-3 fs-5">
             Q: 請問人體吸收有上限嗎?可以一次使用多顆能量石嗎?
           </p>
           <p>
@@ -218,21 +216,21 @@ export default {
           ></button>
         </div>
         <div class="p-5 pt-3">
-          <h3 class="mb-3">使用方法</h3>
-          <p class="mb-3 fs-5">
-            <span class="me-1 text-orange">1. </span>
+          <h4 class="mb-3">使用方法</h4>
+          <p class="mb-3">
+            <span class="me-1 text-title">1. </span>
             拿到貨物時，內容物會有能量石和一組密碼
           </p>
-          <p class="mb-3 fs-5">
-            <span class="me-1 text-orange">2. </span>
+          <p class="mb-3">
+            <span class="me-1 text-title">2. </span>
             手握能量石，心中默想著密碼
           </p>
-          <p class="mb-3 fs-5">
-            <span class="me-1 text-orange">3. </span>
+          <p class="mb-3">
+            <span class="me-1 text-title">3. </span>
             此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異
           </p>
-          <p class="mb-3 fs-5">
-            <span class="me-1 text-orange">4. </span>
+          <p class="mb-3">
+            <span class="me-1 text-title">4. </span>
             吸收完能量石會消失，轉換為能量充斥身體，<br />
             可以心中默想能量石名稱、 形狀，腦中就會浮現該能量石能力
           </p>
@@ -247,7 +245,7 @@ export default {
   text-decoration: line-through;
 }
 section {
-  background: linear-gradient(to right, #181818 50%, #392f3c 50%);
+  background: linear-gradient(to right, #212529 50%, #392f3c 50%);
   position: relative;
 }
 .side-bar {
@@ -259,16 +257,16 @@ section {
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgba($color: #fff, $alpha: 0.6);
   background: none;
   z-index: 66;
   @media (min-width: 992px) {
     position: absolute;
     font-size: 1.5rem;
     margin-top: 0;
-    background: #181818;
+    background: #212529;
     padding-right: 2rem;
-    border-right: 1px solid #fff;
+    border-right: 1px solid rgba($color: #fff, $alpha: 0.6);
     border-bottom: none;
     justify-content: center;
     flex-direction: column;
@@ -310,9 +308,9 @@ section {
   }
   a {
     text-decoration: none;
-    color: #dd5c33;
+    color: #98142b;
     &:hover {
-      color: darken($color: #dd5c33, $amount: 10);
+      color: darken($color: #98142b, $amount: 10);
       transform: scale(0.9);
     }
   }
@@ -332,7 +330,7 @@ section {
 .method {
   width: 100%;
   height: calc(100% - 64px);
-  background: lighten($color: #392f3c, $amount: 10);
+  background: lighten($color: #212529, $amount: 10);
   position: absolute;
   left: -100%;
   top: 64px;

@@ -68,13 +68,4 @@ export default {
 </template>
 
 <style scoped>
-nav a.active {
-  background-color: #dd5c33 !important;
-}
-.page-item.active .page-link {
-  z-index: 3;
-  color: #fff;
-  background-color: #dd5c33;
-  border-color: #dd5c33;
-}
 </style>

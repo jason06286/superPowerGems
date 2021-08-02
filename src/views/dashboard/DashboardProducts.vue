@@ -161,12 +161,12 @@ export default {
 <template>
   <BaseLoading :isLoading="isLoading" />
   <div class="my-2">
-    <h2 class="pb-3 mb-3 fw-bold border-bottom border-3 border-orange">
+    <h4 class="pb-3 mb-3 fw-bold border-bottom border-3 border-darkred">
       產品列表
-    </h2>
+    </h4>
     <div class="text-end">
       <button
-        class="text-white btn btn-orange"
+        class="btn btn-darkred"
         type="button"
         @click="openProductModal({}, true)"
       >
@@ -174,8 +174,8 @@ export default {
       </button>
     </div>
     <div class="table-responsive-lg">
-      <table class="table mt-4 table-hover">
-        <thead>
+      <table class="table mt-4 table-dark table-hover">
+        <thead class="text-title">
           <tr>
             <th width="120">分類</th>
             <th>產品名稱</th>
@@ -186,7 +186,7 @@ export default {
             <th width="120">刪除</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="text-content">
           <tr v-for="item in products.arr" :key="item.id">
             <td>{{ item.category }}</td>
             <td>{{ item.title }}</td>
@@ -194,12 +194,12 @@ export default {
             <td class="text-center">{{ currency(item.price) }}</td>
             <td class="text-center">
               <span class="text-success" v-if="item.is_enabled">啟用</span>
-              <span v-else class="text-secondary">未啟用</span>
+              <span v-else class="text-content">未啟用</span>
             </td>
             <td>
               <button
                 type="button"
-                class="btn btn-orange btn-sm"
+                class="btn btn-outline-title btn-sm"
                 @click="openProductModal(item, false)"
               >
                 編輯

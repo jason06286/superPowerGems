@@ -101,59 +101,50 @@ export default {
 </script>
 
 <template>
-  <div class="bg-coupon">
-    <div
-      class="container d-flex justify-content-center align-items-center"
-      style="min-height: calc(100vh - 144px)"
-    >
-      <div class="py-5">
-        <div class="py-5 row">
-          <div class="mb-3 col-lg-6 col-12">
-            <div class="mb-3 bg-unfinish">
-              <ul class="mb-0 list-unstyled d-flex">
-                <li
-                  v-for="(item, index) in waitPuzzle.puzzle"
-                  :key="item.imageUrl"
-                  @click="goDone(item, index)"
-                >
-                  <img :src="item.imageUrl" alt="還未拼湊的拼圖" />
-                </li>
-              </ul>
-            </div>
+  <div
+    class="container d-flex justify-content-center align-items-center"
+    style="min-height: calc(100vh - 144px)"
+  >
+    <div class="py-5">
+      <div class="py-5 row">
+        <div class="mb-3 col-lg-6 col-12">
+          <div class="mb-3 bg-unfinish">
+            <ul class="mb-0 list-unstyled d-flex">
+              <li
+                v-for="(item, index) in waitPuzzle.puzzle"
+                :key="item.imageUrl"
+                @click="goDone(item, index)"
+              >
+                <img :src="item.imageUrl" alt="還未拼湊的拼圖" />
+              </li>
+            </ul>
           </div>
-          <div class="col-lg-6 col-12">
-            <div class="bg-finish">
-              <ul class="mb-0 list-unstyled d-flex">
-                <li
-                  v-for="(item, index) in donePuzzle.puzzle"
-                  :key="item.imageUrl"
-                  @click="goWait(item, index)"
-                >
-                  <img :src="item.imageUrl" alt="已拼湊的拼圖" />
-                </li>
-              </ul>
-            </div>
+        </div>
+        <div class="col-lg-6 col-12">
+          <div class="bg-finish">
+            <ul class="mb-0 list-unstyled d-flex">
+              <li
+                v-for="(item, index) in donePuzzle.puzzle"
+                :key="item.imageUrl"
+                @click="goWait(item, index)"
+              >
+                <img :src="item.imageUrl" alt="已拼湊的拼圖" />
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-    <div class="win-page" :class="{ open: isWin }" @click.self="isWin = !isWin">
-      <h3 class="p-5 text-white rounded bg-dark">
-        恭喜過關!! <br />
-        優惠券代碼: {{ coupon }}
-      </h3>
-    </div>
+  </div>
+  <div class="win-page" :class="{ open: isWin }" @click.self="isWin = !isWin">
+    <h3 class="p-5 rounded text-content bg-dark">
+      恭喜過關!! <br />
+      優惠券代碼: {{ coupon }}
+    </h3>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.bg-coupon {
-  background-image: linear-gradient(
-    109.6deg,
-    rgba(5, 84, 94, 1) 16%,
-    #bbb 91.1%
-  );
-}
 .bg-unfinish {
   width: 100%;
   height: 293.05px;
@@ -215,7 +206,7 @@ li {
   height: 100%;
   top: -100%;
   left: 0;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

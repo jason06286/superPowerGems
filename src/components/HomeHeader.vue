@@ -37,12 +37,22 @@ export default {
             },
             duration: 1,
             ease: 'power4.out',
+            x: 400,
             y: 400,
             scale: 1.5,
           });
         },
       });
     }
+    function scrollDown() {
+      const height = window.innerHeight;
+      window.scrollTo({
+        top: height - 64,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+
     onMounted(() => {
       ScrollTrigger.refresh();
       gsapSet();
@@ -58,6 +68,7 @@ export default {
       universe,
       plane,
       ufo,
+      scrollDown,
     };
   },
 };
@@ -84,8 +95,9 @@ export default {
       ref="plane"
     />
     <img src="../assets/img/ufo1.svg" alt="幽浮" class="ufo" ref="ufo" />
-    <div class="scroll">
-      <p class="mb-0">SCROLL DOWN</p>
+    <div class="scroll" @click="scrollDown">
+      <span></span>
+      Scroll
     </div>
   </header>
 </template>
@@ -105,8 +117,9 @@ header {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, #5a4b3a, transparent);
-    z-index: 99;
+    background: linear-gradient(to top, #212529, transparent);
+    box-shadow: inset 0px 0px 180px rgba($color: #212529, $alpha: 0.8);
+    z-index: 4;
   }
 }
 .bg-universe {
@@ -125,9 +138,9 @@ header {
   padding: 1.5rem;
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
-  z-index: 3;
+  z-index: 5;
   @media (min-width: 576px) {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   p {
     pointer-events: none;
@@ -194,44 +207,38 @@ header {
 }
 .scroll {
   position: absolute;
-  right: 2%;
-  bottom: 20%;
-  text-align: center;
-  font-size: 1rem;
-  z-index: 99;
-  @media (min-width: 576px) {
-    font-size: 1.5rem;
-  }
-  p {
-    color: rgba(255, 255, 255, 0.8);
-    pointer-events: none;
-    writing-mode: vertical-lr;
-    position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      top: 105%;
-      bottom: 0;
-      right: 50%;
-      display: block;
-      width: 1px;
-      height: 0;
-      background: #fff;
-      transform: translateX(-50%);
-      transition: all 1s;
-      animation: scroll-line 1.5s linear infinite;
-      @media (min-width: 576px) {
-        width: 1.5px;
-      }
-    }
+  left: 50%;
+  bottom: 8%;
+  transform: translate(-50%, 0);
+  z-index: 5;
+  padding-top: 60px;
+  font-size: 20px;
+  cursor: pointer;
+  span {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: -12px;
+    border-left: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    transform: rotate(-45deg);
+    animation: down 1.5s infinite;
+    box-sizing: border-box;
   }
 }
-@keyframes scroll-line {
+@keyframes down {
   0% {
-    height: 0;
+    transform: rotate(-45deg) translate(0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
   100% {
-    height: 100%;
+    transform: rotate(-45deg) translate(-20px, 20px);
+    opacity: 0;
   }
 }
 </style>

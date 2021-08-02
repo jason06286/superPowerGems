@@ -74,19 +74,19 @@ export default {
   >
     <div class="modal-dialog">
       <div class="border-0 modal-content">
-        <div class="text-white bg-primary modal-header">
-          <h5 id="couponModalLabel" class="modal-title">
+        <div class="bg-darkred modal-header">
+          <h5 id="couponModalLabel" class="modal-title text-title">
             <span v-if="newCoupon">新增優惠券</span>
             <span v-else>修改優惠券</span>
           </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body bg-dark">
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
@@ -163,17 +163,17 @@ export default {
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-dark">
           <button
             type="button"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-title"
             data-bs-dismiss="modal"
           >
             取消
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-darkred"
             @click="emit('couponStatus', tempCoupon.obj)"
           >
             確認

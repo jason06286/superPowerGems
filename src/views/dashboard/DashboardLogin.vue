@@ -81,14 +81,7 @@ export default {
 <template>
   <BaseNavbar />
   <div
-    class="
-      grid
-      overflow-hidden
-      position-relative
-      d-flex
-      justify-content-center
-      align-items-center
-    "
+    class="grid overflow-hidden  position-relative d-flex justify-content-center align-items-center"
   >
     <div class="position-absolute grid-container" ref="gridBackground">
       <div class="col-span-2 grid-item animate-pulse"></div>
@@ -122,7 +115,7 @@ export default {
       <div class="col-span-1 grid-item animate-pulse"></div>
     </div>
     <div class="mx-3 position-relative login">
-      <h2 class="title font-Tourney">Login</h2>
+      <h3 class="title font-Tourney">Login</h3>
       <Form v-slot="{ errors }" @submit="signIn">
         <div class="mb-3">
           <label for="email" class="form-label">信箱</label>
@@ -155,9 +148,7 @@ export default {
           <ErrorMessage name="密碼" class="invalid-feedback"></ErrorMessage>
         </div>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="text-white btn btn-lg btn-primary">
-            登入
-          </button>
+          <button type="submit" class="btn btn-darkred">登入</button>
         </div>
       </Form>
     </div>
@@ -201,14 +192,14 @@ export default {
 .login {
   width: 500px;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top: 4px solid #dd5c33;
+  border-top: 4px solid #98142b;
   padding: 3rem;
   border-radius: 1rem;
-  color: #fff;
+  color: rgba($color: #fff, $alpha: 0.8);
 }
 .title {
   padding-bottom: 1rem;
-  border-bottom: 4px solid #fff;
+  border-bottom: 2px solid rgba($color: #fff, $alpha: 0.8);
   font-family: 'Tourney', cursive;
 }
 </style>

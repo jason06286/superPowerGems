@@ -1,8 +1,8 @@
 <script>
 import BaseNavbar from '@/components/BaseNavbar.vue';
 import BaseFooter from '@/components/BaseFooter.vue';
+import BaseScrollTop from '@/components/BaseScrollTop.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
-import BaseCartModal from '@/components/BaseCartModal.vue';
 import ToastMessages from '@/components/ToastMessages.vue';
 import HomeSwiper from '@/components/HomeSwiper.vue';
 import axios from 'axios';
@@ -15,8 +15,8 @@ export default {
   components: {
     BaseNavbar,
     BaseFooter,
+    BaseScrollTop,
     HomeHeader,
-    BaseCartModal,
     ToastMessages,
     HomeSwiper,
   },
@@ -125,7 +125,8 @@ export default {
     <HomeHeader />
     <section class="py-5" style="overflow: hidden">
       <div class="container">
-        <div class="row">
+        <div class="segmentation"></div>
+        <div class="py-5 row">
           <div
             class="mb-3 col-12 col-md-6 mb-md-0"
             data-aos="vis-anim"
@@ -140,12 +141,6 @@ export default {
             data-aos-delay="300"
           >
             <div class="science-content">
-              <p class="pb-3 border-bottom">
-                由各國頂尖科學家集結研發，透過能量轉換原則， <br />
-                使能量透過能量石轉移到人體， 以利人人擁有能量抵禦外敵。 <br />
-                能量石分成三大類，精礦、精鋼與精石，<br />
-                各自蘊含其能力，又以精石最為稀有。
-              </p>
               <h4>
                 <span data-aos="text-anim" data-aos-delay="400">參</span>
                 <span data-aos="text-anim" data-aos-delay="600">與</span>
@@ -153,114 +148,101 @@ export default {
                 <span data-aos="text-anim" data-aos-delay="1000">學</span>
                 <span data-aos="text-anim" data-aos-delay="1200">家</span>
               </h4>
-              <p>愛因斯坦、牛頓、霍金、特斯拉、伽利略等共同研發製作。</p>
+              <p class="mt-3">
+                愛因斯坦、牛頓、霍金、特斯拉、伽利略等共同研發製作。
+              </p>
+              <p>
+                由各國頂尖科學家集結研發，透過能量轉換原則， <br />
+                使能量透過能量石轉移到人體， 以利人人擁有能量抵禦外敵。 <br />
+                能量石分成三大類，精礦、精鋼與精石，<br />
+                各自蘊含其能力，又以精石最為稀有。
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="segmentation"></div>
+      </div>
+    </section>
+    <section>
+      <div class="container">
+        <div class="d-flex justify-content-center">
+          <h2 class="pb-3 mb-3 d-inline-block">
+            <span data-aos="text-anim" data-aos-delay="400">使</span>
+            <span data-aos="text-anim" data-aos-delay="600">用</span>
+            <span data-aos="text-anim" data-aos-delay="800">者</span>
+            <span data-aos="text-anim" data-aos-delay="1000">推</span>
+            <span data-aos="text-anim" data-aos-delay="1200">薦</span>
+          </h2>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div
+              class=" d-flex justify-content-center align-items-center flex-column"
+            >
+              <img
+                class="user-image"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370873181.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=aAJOaBj8gvPzrxn6uEf4B8qCZ%2BljKXzObYzhqeb5wnRa8G1zDer8yx%2BYNT0AfxAV1Piusm4ou5TP3a3BB9nm6fIoxdE7pnFXh0llfN%2FpOPcfxcrC1TSXupdnoyCEFlmVvGbd50boCHYiqA8WFb9LDL%2FUSM2LhoNPTK9K1gWcaX1Ib5ncuEMZb3UxylesRpRpFZrOsKBHqOQMQizsJ27dexibwmdq1AFwWq8tb32K8VrjlVEeaX5GmKQ5sIQBzFJvMpsUW3Xk2YHfARnC7Gur219Mi3fiYJYTcjOntgSaWw%2FP3f%2F%2FPwL2ZAlY3SgVQqYZVV73zWo6yKVSFvtvmYSuqQ%3D%3D"
+                alt="people"
+                data-aos="vis-anim"
+                data-aos-delay="400"
+              />
+              <h4 class="text-center" data-aos="zoom-in" data-aos-delay="400">
+                實況主 <br />
+                <span class="fs-5">黃小姐</span>
+              </h4>
+              <p class="text-center" data-aos="zoom-in" data-aos-delay="400">
+                在還沒發現能量石之前，半夜都會有外星人來我家敲門。<br />
+                多虧了能量石，使我獲取超能力，可以一覺到天亮， <br />
+                也讓我從平凡的上班族有了新特色，開啟實況主之路。
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div
+              class=" d-flex justify-content-center align-items-center flex-column"
+            >
+              <img
+                class="user-image"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370844857.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=hU%2BsmkfPkRdXDEIsPkIIK4mn3TYjVc2LhLBJeXDsXFRCmWoKJaThkDJq%2Fcpic6EFUqTXSq%2FQKF6PCtHCLyiopI7r8XpFqcjWNmXHMGDkBxHAq4ml3Eq%2FzuzOWpvhFe4QiMs4ArZAxYvcwa92W09vQwnQdPYm2I4sTkzAgarhCM%2Bsx1O3mINeP0DFxS7f%2BO9SJwmHF9UiBvnnext3OVdAoPsZrV%2FL8SvALdSXjJTVzy28fqGlyRtUNEKB0ZZ9Yacaka7mOzxbK9Zm7ctqEmyYmJkLhRwiDRMclHSobc0iqmrtuM%2BRtUYeE1F0Yda4q%2BGabBY8wCASqyg9Q58ht0tF6A%3D%3D"
+                alt="people"
+                data-aos="vis-anim"
+                data-aos-delay="600"
+              />
+              <h4 class="text-center" data-aos="zoom-in" data-aos-delay="600">
+                上班族 <br />
+                <span class="fs-5">陳先生</span>
+              </h4>
+              <p class="text-center" data-aos="zoom-in" data-aos-delay="600">
+                以前在上班的路上都要蜷縮著身子，深怕撞到外星人，<br />
+                有了能量石獲得超能力，上班的路上，終於能抬頭昂首的大步向前走。
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div
+              class=" d-flex justify-content-center align-items-center flex-column"
+            >
+              <img
+                class="user-image"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370888998.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=iKWp3FQu9R5Cm8nM3b%2FGQ6lcgfuG%2FmEgfriNDr3inTbKCr6oS09APilL772oOLu0pBf%2BXaBhF2LxJfUQ3a9gYV742udVIGWyb46skopMWYsRd9hb%2BT2oxS20G%2FjsllQQcBSUBkPHytwXc%2BRRhOHlf2o7%2FHXkMpXlHsyLTox150J9TVMiPztUhPVoOR3y0Vn44ui5uQ9e6gNS9ZXh%2BRAlMwnBiBkfCwBs%2Bz7GG94EudZSALx4CdFDewIgM6JKVQm%2FzUhECsJ12vdaGKXmAuxFt59GZsI0sFAUyVIBPMggQy3M47E%2FI%2BsNeJYo1OQmdBg5RFkjp%2Bu%2F5LTZgi%2F1q3pDCg%3D%3D"
+                alt="people"
+                data-aos="vis-anim"
+                data-aos-delay="800"
+              />
+              <h4 class="text-center" data-aos="zoom-in" data-aos-delay="800">
+                大學生<br />
+                <span class="fs-5">朱小姐</span>
+              </h4>
+              <p class="text-center" data-aos="zoom-in" data-aos-delay="800">
+                以前坐在教室上課，要眼觀四方，<br />
+                時不時警戒著外星人來襲，有了能量石獲得超能力， <br />
+                使我有安全感能安心得上課。
+              </p>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <div class="bg-gray">
-      <HomeSwiper :products="products.arr" />
-      <section>
-        <div class="container">
-          <div class="d-flex justify-content-center">
-            <h2 class="pb-3 mb-3 d-inline-block">
-              <span data-aos="text-anim" data-aos-delay="400">使</span>
-              <span data-aos="text-anim" data-aos-delay="600">用</span>
-              <span data-aos="text-anim" data-aos-delay="800">者</span>
-              <span data-aos="text-anim" data-aos-delay="1000">推</span>
-              <span data-aos="text-anim" data-aos-delay="1200">薦</span>
-            </h2>
-          </div>
-          <div class="row">
-            <div class="col-lg-4 col-12">
-              <div
-                class="
-                  d-flex
-                  justify-content-center
-                  align-items-center
-                  flex-column
-                "
-              >
-                <img
-                  class="user-image"
-                  src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370873181.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=aAJOaBj8gvPzrxn6uEf4B8qCZ%2BljKXzObYzhqeb5wnRa8G1zDer8yx%2BYNT0AfxAV1Piusm4ou5TP3a3BB9nm6fIoxdE7pnFXh0llfN%2FpOPcfxcrC1TSXupdnoyCEFlmVvGbd50boCHYiqA8WFb9LDL%2FUSM2LhoNPTK9K1gWcaX1Ib5ncuEMZb3UxylesRpRpFZrOsKBHqOQMQizsJ27dexibwmdq1AFwWq8tb32K8VrjlVEeaX5GmKQ5sIQBzFJvMpsUW3Xk2YHfARnC7Gur219Mi3fiYJYTcjOntgSaWw%2FP3f%2F%2FPwL2ZAlY3SgVQqYZVV73zWo6yKVSFvtvmYSuqQ%3D%3D"
-                  alt="people"
-                  data-aos="vis-anim"
-                  data-aos-delay="400"
-                />
-                <h4 class="text-center" data-aos="zoom-in" data-aos-delay="400">
-                  實況主黃小姐
-                </h4>
-                <p class="text-center" data-aos="zoom-in" data-aos-delay="400">
-                  在還沒發現能量石之前，半夜都會有外星人來我家敲門。<br />
-                  多虧了能量石，使我獲取超能力，可以一覺到天亮， <br />
-                  也讓我從平凡的上班族有了新特色，開啟實況主之路。
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-12">
-              <div
-                class="
-                  d-flex
-                  justify-content-center
-                  align-items-center
-                  flex-column
-                "
-              >
-                <img
-                  class="user-image"
-                  src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370844857.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=hU%2BsmkfPkRdXDEIsPkIIK4mn3TYjVc2LhLBJeXDsXFRCmWoKJaThkDJq%2Fcpic6EFUqTXSq%2FQKF6PCtHCLyiopI7r8XpFqcjWNmXHMGDkBxHAq4ml3Eq%2FzuzOWpvhFe4QiMs4ArZAxYvcwa92W09vQwnQdPYm2I4sTkzAgarhCM%2Bsx1O3mINeP0DFxS7f%2BO9SJwmHF9UiBvnnext3OVdAoPsZrV%2FL8SvALdSXjJTVzy28fqGlyRtUNEKB0ZZ9Yacaka7mOzxbK9Zm7ctqEmyYmJkLhRwiDRMclHSobc0iqmrtuM%2BRtUYeE1F0Yda4q%2BGabBY8wCASqyg9Q58ht0tF6A%3D%3D"
-                  alt="people"
-                  data-aos="vis-anim"
-                  data-aos-delay="600"
-                />
-                <h4 class="text-center" data-aos="zoom-in" data-aos-delay="600">
-                  上班族陳先生
-                </h4>
-                <p class="text-center" data-aos="zoom-in" data-aos-delay="600">
-                  以前在上班的路上都要蜷縮著身子，深怕撞到外星人，<br />
-                  有了能量石獲得超能力，上班的路上，終於能抬頭昂首的大步向前走。
-                </p>
-              </div>
-            </div>
-            <div class="col-lg-4 col-12">
-              <div
-                class="
-                  d-flex
-                  justify-content-center
-                  align-items-center
-                  flex-column
-                "
-              >
-                <img
-                  class="user-image"
-                  src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370888998.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=iKWp3FQu9R5Cm8nM3b%2FGQ6lcgfuG%2FmEgfriNDr3inTbKCr6oS09APilL772oOLu0pBf%2BXaBhF2LxJfUQ3a9gYV742udVIGWyb46skopMWYsRd9hb%2BT2oxS20G%2FjsllQQcBSUBkPHytwXc%2BRRhOHlf2o7%2FHXkMpXlHsyLTox150J9TVMiPztUhPVoOR3y0Vn44ui5uQ9e6gNS9ZXh%2BRAlMwnBiBkfCwBs%2Bz7GG94EudZSALx4CdFDewIgM6JKVQm%2FzUhECsJ12vdaGKXmAuxFt59GZsI0sFAUyVIBPMggQy3M47E%2FI%2BsNeJYo1OQmdBg5RFkjp%2Bu%2F5LTZgi%2F1q3pDCg%3D%3D"
-                  alt="people"
-                  data-aos="vis-anim"
-                  data-aos-delay="800"
-                />
-                <h4 class="text-center" data-aos="zoom-in" data-aos-delay="800">
-                  大學生朱小姐
-                </h4>
-                <p class="text-center" data-aos="zoom-in" data-aos-delay="800">
-                  以前坐在教室上課，要眼觀四方，<br />
-                  時不時警戒著外星人來襲，有了能量石獲得超能力， <br />
-                  使我有安全感能安心得上課。
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="row no-gutters justify-content-center">
-            <div class="text-center col-10">
-              <router-link to="/frontDesk/products" class="btn-product"
-                >查看所有商品</router-link
-              >
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
     <section class="my-5">
       <div class="container-fluid">
         <div class="d-flex justify-content-center">
@@ -337,6 +319,7 @@ export default {
         </div>
       </div>
     </section>
+    <HomeSwiper :products="products.arr" />
     <section>
       <div class="bg-subscribe">
         <div class="container h-100">
@@ -368,7 +351,7 @@ export default {
                   ></Field>
 
                   <button
-                    class="btn btn-secondary"
+                    class="btn btn-outline-title"
                     type="submit"
                     :class="{ 'not-allowed': subscribeEmail === '' }"
                   >
@@ -389,22 +372,17 @@ export default {
         </div>
       </div>
     </section>
-    <BaseCartModal />
+    <BaseScrollTop class="scroll-top" />
     <BaseFooter />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.star {
-  background: #181818
-    url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1625924061162.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=QUQ3j12Xf773TV%2FlRxJldJjI%2BlIuBnj1XkpciscKx7no2yRTqN3eJztesYPU3FIf5Nm038Zsy%2B0emcUdw%2BDQHsuiEDYOpSyffzlSuxnLglBYp5sSNegxXe5Mec1PM%2FUWANSfwFT1nIh%2FjeIEfbkVZiJPlIH5Jdp%2F3oIWtFE%2FkcMFysJP%2FDaCnfOpnufSZbKfRQL66ioIYWqjE0NSMfzOSxqjR7T3JMERfsl9BMWtnPyj84IaFTkT%2BMDgZbsYMVRTZn9TjXJ0V%2F0oZQkU3w4jy4ecytYO1%2BYrFiX8MM2akXEYYV06c85RD12ZoFkRt51oWldugY6bXwy0yO8BYqKu6A%3D%3D')
-    repeat;
-}
 .bg-science {
-  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627359462076.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=LmT4GpvBEdCQ5gY88pxglD%2Fqcx92Q67j7hvyfss4sdr8VGctWKLBJtw7u%2FGsovPyPUBMk01Md27IeGQYzL1c5opwhTWv7mUG0G62ENMWJob8FvkkLDaHZIjndJZgpceuhwJ9jRiqqhIxrsB4o1FIzrDKJLLwJzzDfJcF7ubSrYnHJmNWPw3TBc%2BJCXM4WSjnpKMfEVrEoejUQCZd1dAu1ahP2CuJ%2Fu0JjPB4ljmcJFoKATBjIsrsMy71nhNqbIbk%2FUrRDQ4mpmEclALf5AjIgaQ7x8FwQ9xD2RsVu%2BFTsKNbc6mpdOWiAgXmvWbjapYwbwbw5LNPqW0fSXub5wJ5Ww%3D%3D');
+  background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627895683918.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=FeqYWZOeQKEBEf71PssyaKccvNhdELtiSt48r5X33BTRuALvFjcPXSwXipv0SYE7LYQznE4ejLQcYd6mq1xj2VEkblVwTvN5PxFMI15zlIqSZzXK1wmA3glGE3EjKB2ByTVmVEpwDDMgO%2FdW5jwBr24sVVYEDQKlWgmyAnJ3v6OeiQ8U2jvQ2lelsML1D%2FidnfDx2m5RSyhGYQm3ZNZ08Zy%2BZr60WfOgDoXlfD9vf4m6DTtpX8uVfAf31%2Bt%2BXSMqzV6hDRfcD79gScwiP%2BvBtTkLwicaQ2%2BwH%2F7hWWCzVu6WwJly8yKQBuXqt7cfQHlV4c%2Bd%2Fnzd9G8nMqkV3An5Dw%3D%3D');
   background-size: cover;
   background-position: center center;
-  height: 500px;
+  height: 400px;
   border-radius: 0.5rem;
 }
 .science-content {
@@ -415,23 +393,26 @@ export default {
   flex-direction: column;
   height: 100%;
   position: relative;
-  color: gray;
-  &::before {
-    content: '';
-    background-color: rgba($color: #392f3c, $alpha: 0.2);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    border-radius: 30% 70% 33% 67% / 48% 30% 70% 52%;
-  }
 }
-.bg-gray {
-  background: #ededed;
-  padding-top: 2rem;
-  margin-bottom: 4rem;
+.segmentation {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: #d9be93;
+  margin: 8px 0;
+  box-shadow: #f5f4f3 0px 0px 20px;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25%;
+    height: 4px;
+    border-radius: 20%;
+    transform: translate(-50%, -50%);
+    background: #e2c89f;
+    box-shadow: #f5f4f3 0px 0px 20px;
+  }
 }
 .user-image {
   display: block;
@@ -440,23 +421,6 @@ export default {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 1rem;
-}
-.btn-product {
-  display: inline-block;
-  width: 100%;
-  padding: 1rem 1rem;
-  color: #fff;
-  font-weight: 600;
-  background: #dd5c33;
-  text-decoration: none;
-  transform: translateY(50%);
-  transition: all 0.3s;
-  @media (min-width: 576px) {
-    width: 300px;
-  }
-  &:hover {
-    background: #63210d;
-  }
 }
 .bg-subscribe {
   background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626525384383.png?Expires=1742169600&GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Signature=N1rUFn07i3d3R3UaKsSy3ThoMJOKWzWwgtokpj9Yg36cx%2BcpAYxVep3NEcmITPnuZ8%2Bz1mZDHFMGkooaSXL1QAU4YNZT5JlyaG%2Bb%2FRlIOUB6GWNHAvHarIuvKG2uPgqU4K8K2f3EhXvmLi8R4NMlh0O5%2FTkOyizOpG8AKfREvWAJFvU%2F%2ByfHTz%2BELafg%2Bj9vdXoh7q56y7nz%2BSoYJHWTmD3vmGdO2uyMfwLkOPsAWgoJeiUbheAIWTt7RkUzDlAmREGmLA7Fi80ygEjDQoFiQ2EOh20IiFV3APSZ4m3FnbdbRGXrPKMGMuVv6O8hX6tc%2BBr%2FTjm6FcoAzEMwQspCWA%3D%3D');
@@ -542,5 +506,10 @@ export default {
   .bg-steup4 {
     background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006870474.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ofVZI%2Ffz8%2BxxmTi2QJTuuLhxsIkJL94l0Vc%2FgOYxeSJs4vYGkJrsTH%2F6%2FvfuJkAw6I%2BdlXdv88edDZqYWW3Qr6lftdzqLNsq36xI45UacARYDprKJKUiLC9%2Bhn1uatMykmjzpR6SkdW1kHmfDFGZqcXVK%2B62mvrrgJV3Lkat1o6lBEpX9MWyGspQ4PfbIOw6c7MbEtvdO2vWN1qIYarQLD3ZfVrYhhFJkzn6fL45ayvydVmObgrwMzw92dp0PDcRogzF42jXM8dHDyQ%2FsUGtip633hSbFml5sffITfX5LcondiEQ36oNw%2F0Irlkse89mUfemZed2S8HqELJgqebkxg%3D%3D');
   }
+}
+.scroll-top{
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
 }
 </style>

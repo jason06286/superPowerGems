@@ -115,19 +115,19 @@ export default {
   >
     <div class="modal-dialog modal-xl">
       <div class="border-0 modal-content">
-        <div class="text-white bg-primary modal-header">
-          <h5 id="productModalLabel" class="modal-title">
+        <div class="bg-darkred modal-header">
+          <h5 id="productModalLabel" class="modal-title text-title">
             <span v-if="newProduct">新增產品</span>
             <span v-else>修改產品</span>
           </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body bg-dark">
           <div class="row">
             <div class="col-sm-4">
               <div class="mb-1">
@@ -159,7 +159,7 @@ export default {
               </div>
               <div v-if="Array.isArray(tempProduct.obj.imagesUrl)">
                 <button
-                  class="btn btn-outline-primary btn-sm d-block w-100"
+                  class="btn btn-darkred btn-sm d-block w-100"
                   @click="addPicture"
                 >
                   新增圖片
@@ -167,7 +167,7 @@ export default {
               </div>
               <div v-else>
                 <button
-                  class="btn btn-outline-primary btn-sm d-block w-100"
+                  class="btn btn-darkred btn-sm d-block w-100"
                   @click="newPicture"
                 >
                   新增圖片
@@ -175,7 +175,7 @@ export default {
               </div>
               <div>
                 <button
-                  class="btn btn-outline-danger btn-sm d-block w-100"
+                  class="btn btn-outline-content btn-sm d-block w-100"
                   @click="delPicture"
                 >
                   刪除圖片
@@ -302,17 +302,17 @@ export default {
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer bg-dark">
           <button
             type="button"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-title"
             data-bs-dismiss="modal"
           >
             取消
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-darkred"
             @click="emit('productStatus', tempProduct.obj)"
           >
             確認
@@ -323,5 +323,8 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+#fileInput {
+  background: #000 !important;
+}
 </style>

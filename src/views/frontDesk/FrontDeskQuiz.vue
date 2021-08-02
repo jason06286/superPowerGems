@@ -174,14 +174,7 @@ export default {
   >
     <div class="py-5">
       <div
-        class="
-          d-flex
-          w-100
-          h-100
-          justify-content-center
-          align-items-center
-          flex-column
-        "
+        class=" d-flex w-100 h-100 justify-content-center align-items-center flex-column"
       >
         <h2 class="pb-2 border-orange border-bottom border-3">能量石測驗</h2>
         <p class="text-white fs-5">幫你找出適合的能量石</p>
@@ -270,12 +263,7 @@ export default {
                   <div class="content">
                     <h3 class="text-center text-white">{{ item.title }}</h3>
                     <div
-                      class="
-                        d-flex
-                        justify-content-center
-                        align-items-center
-                        w-100
-                      "
+                      class=" d-flex justify-content-center align-items-center w-100"
                     >
                       <button
                         type="button"

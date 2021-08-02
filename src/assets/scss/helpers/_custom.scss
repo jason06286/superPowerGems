@@ -27,13 +27,6 @@
     grid-column: span 7 / span 7;
   }
 
-  .text-title{
-    color: rgba($color: #fff, $alpha: 0.8);
-  }
-  .text-content{
-    color: rgba($color: #fff, $alpha: 0.6);
-  }
-
   [data-aos="vis-anim"] {
     transform: translate(50px,50px);
     transform:rotate(-10deg);
@@ -54,13 +47,13 @@
       transform:translateY(0);
       transform:rotate(0);
       opacity: 1;
-      border-bottom: #fd7e14 3px solid;
+      border-bottom: #98142b 3px solid;
     }
   }
   [data-aos="text-border"] {
     border-bottom: 0;
     &.aos-animate {
-    border-bottom: #fd7e14 3px solid;
+    border-bottom: #98142b 3px solid;
     }
   }
 
