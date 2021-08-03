@@ -1,241 +1,497 @@
 <script>
+import BasePagination from '@/components/BasePagination.vue';
 import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
-import BaseSwiper from '@/components/BaseSwiper.vue';
 import axios from 'axios';
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
-import {
-  onMounted, reactive, ref, computed, watch,
-} from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
+    BasePagination,
     BaseFrontendLoading,
-    BaseSwiper,
   },
   setup() {
-    const route = useRoute();
+    const router = useRouter();
+    const Allproducts = reactive({ arr: [] });
     const products = reactive({ arr: [] });
-    const product = reactive({ arr: [] });
-    const productNum = ref(1);
-    const total = computed(() => product.arr.price * productNum.value);
-    const isLoading = ref(false);
+    const pagination = reactive({ obj: {} });
+    const filterProducts = reactive({ obj: {} });
+    const showAllProducts = ref(true);
+    const isLoading = ref('');
+    const showLoadinng = ref(false);
 
-    function getProduct() {
-      isLoading.value = true;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${route.params.id}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            product.arr = res.data.product;
-            isLoading.value = false;
-          } else {
+    function productDetail() {
+      const getAllProducts = () => {
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              Allproducts.arr = res.data.products;
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+          })
+          .catch((err) => {
             console.error = () => {
-              throw new Error(res.data.message);
+              throw new Error(err);
             };
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-    function addCart() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .post(url, {
-          data: {
-            product_id: product.arr.id,
-            qty: productNum.value,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart');
-          } else {
+          });
+      };
+      const getProducts = (page = 1) => {
+        showLoadinng.value = true;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.success) {
+              products.arr = res.data.products;
+              pagination.obj = res.data.pagination;
+              showLoadinng.value = false;
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+          })
+          .catch((err) => {
             console.error = () => {
-              throw new Error(res.data.message);
+              throw new Error(err);
             };
-          }
-          pushMessageState(res, '購物車新增');
-        })
-        .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
-        });
-    }
-    function getAllProducts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-          } else {
+          });
+      };
+      const addCart = (item) => {
+        isLoading.value = item.id;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        axios
+          .post(url, {
+            data: {
+              product_id: item.id,
+              qty: 1,
+            },
+          })
+          .then((res) => {
+            if (res.data.success) {
+              emitter.emit('update-cart');
+              isLoading.value = '';
+            } else {
+              console.error = () => {
+                throw new Error(res.data.message);
+              };
+            }
+            pushMessageState(res, '購物車新增');
+          })
+          .catch((err) => {
             console.error = () => {
-              throw new Error(res.data.message);
+              throw new Error(err);
             };
-          }
-        })
-        .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
-        });
-    }
-    const suggestProduct = computed(() => products.arr.filter((item) => {
-      const { id } = route.params;
-      return item.id !== id;
-    }));
-    watch(
-      () => route.params.id,
-      () => {
-        getProduct();
-      },
-    );
+          });
+      };
+      const forwardingProduct = (id) => {
+        router.push(`/frontDesk/product/${id}`);
+      };
 
-    onMounted(() => {
-      getProduct();
-      getAllProducts();
-    });
+      onMounted(() => {
+        getProducts();
+        getAllProducts();
+      });
+
+      return {
+        getAllProducts,
+        getProducts,
+        addCart,
+        forwardingProduct,
+      };
+    }
+    function filterDetail() {
+      const tempCategory = ref('全部');
+
+      const filterProduct = (condition = '') => {
+        showAllProducts.value = false;
+        tempCategory.value = condition;
+        filterProducts.obj = Allproducts.arr.filter((item) => item.category.match(condition));
+      };
+
+      const showAll = () => {
+        tempCategory.value = '全部';
+        showAllProducts.value = true;
+      };
+
+      return {
+        tempCategory,
+        filterProduct,
+        showAll,
+      };
+    }
 
     return {
-      product,
-      productNum,
-      total,
-      isLoading,
-      currency,
-      addCart,
       products,
-      suggestProduct,
+      pagination,
+      filterProducts,
+      isLoading,
+      showLoadinng,
+      currency,
+      showAllProducts,
+      ...productDetail(),
+      ...filterDetail(),
     };
   },
 };
 </script>
 
 <template>
-  <BaseFrontendLoading :isLoading="isLoading" />
-  <div class="bg-dark" style="height: 68px"></div>
-  <div class="container" style="min-height: calc(100vh - 212px)">
-    <div class="py-5 row">
-      <div class="mb-3 col-lg-6 col-12">
-        <div class="product-card">
-          <img
-            :src="product.arr.imagesUrl[0]"
-            :alt="product.arr.description"
-            class="img-base"
-            v-if="product.arr.imagesUrl"
-          />
-          <img
-            v-else
-            :src="product.arr.imageUrl"
-            :alt="product.arr.description"
-            class="img-base"
-          />
-          <h3 class="text-orange">【商品介紹】</h3>
-          <p class="">{{ product.arr.description }}</p>
-          <h3 class="pt-3 text-orange border-top">【使用方法】</h3>
-          <ul class="list-unstyled">
-            <li>
-              <span class="me-1 fs-5 text-orange">1. </span>
-              拿到貨物時，內容物會有能量石和一組密碼
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">2. </span>
-              手握能量石，心中默想著密碼
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">3. </span>
-              此時會感到能量湧進身體，通常為 10 ~ 15 分鐘吸收完成，因人而異
-            </li>
-            <li>
-              <span class="me-1 fs-5 text-orange">4. </span>
-              吸收完能量石會消失，轉換為能量充斥身體，<br />
-              可以心中默想能量石名稱、 形狀，腦中就會浮現該能量石能力
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="mb-3 col-lg-6 col-12">
-        <div class="product-card">
-          <div class="pb-2 mb-3 border-bottom position-relative">
-            <span class="fs-3">{{ product.arr.title }}</span>
-            <span class="top-0 badge bg-orange position-absolute">{{
-              product.arr.category
-            }}</span>
+  <BaseFrontendLoading :isLoading="showLoadinng" />
+  <header>
+    <div class="bg-universe">
+      <p class="fs-3">想要更多優惠嗎?</p>
+      <p class="fs-1">
+        玩小遊戲領取
+        <router-link
+          to="/frontDesk/coupon"
+          class="text-primary d-inline-block animate-bounce"
+          >優惠券</router-link
+        >
+      </p>
+    </div>
+  </header>
+  <section>
+    <div class="py-5">
+      <div class="container" style="min-height: calc(100vh - 412px)">
+        <h4 class="pb-2 mb-3 border-bottom border-darkred">能量石分類</h4>
+        <div class="row">
+          <div class="mb-5 col-lg-3 col-12">
+            <div class="row">
+              <div
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
+                :class="{ active: tempCategory === '全部' }"
+                @click="showAll"
+              >
+                全部
+              </div>
+              <div
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
+                :class="{ active: tempCategory === '精礦' }"
+                @click="filterProduct('精礦')"
+              >
+                精礦
+              </div>
+              <div
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
+                :class="{ active: tempCategory === '精鋼' }"
+                @click="filterProduct('精鋼')"
+              >
+                精鋼
+              </div>
+              <div
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
+                :class="{ active: tempCategory === '精石' }"
+                @click="filterProduct('精石')"
+              >
+                精石
+              </div>
+            </div>
           </div>
-          <p class="mb-0 text-secondary">
-            原價 $ {{ currency(product.arr.origin_price) }}
-          </p>
-          <p class="text-orange fs-4">
-            特價 $ {{ currency(product.arr.price) }}
-          </p>
-          <select
-            class="mb-3 form-select"
-            aria-label="Default select example"
-            v-model="productNum"
-          >
-            <option selected value="0">請選擇數量</option>
-            <option v-for="item in 10" :key="item" :value="item">
-              {{ item }}{{ product.arr.unit }}
-            </option>
-          </select>
-          <p>小計 $ {{ currency(total) }} 元</p>
-          <div class="mb-3 d-grid w-100">
-            <button
-              type="button"
-              class="text-white btn btn-primary"
-              :class="{ disabled: productNum <= 0 }"
-              @click="addCart"
-            >
-              加到購物車
-            </button>
+          <div class="col-lg-9 col-12" v-if="showAllProducts">
+            <div class="row">
+              <div
+                class="mb-3 col-12 col-md-6 col-lg-4"
+                v-for="item in products.arr"
+                :key="item.id"
+              >
+                <div class="product-card" @click="forwardingProduct(item.id)">
+                  <div class="product-inner">
+                    <img :src="item.imageUrl" :alt="item.description" />
+                    <h4 class="text-title">{{ item.title }}</h4>
+                    <p>
+                      {{ item.description }}
+                    </p>
+                    <div class="product-footer">
+                      <div class="d-flex">
+                        <p class="mb-0 line-through text-darkred me-3">
+                          $ {{ currency(item.origin_price) }} 元
+                        </p>
+                        <p class="mb-0">$ {{ currency(item.price) }} 元</p>
+                      </div>
+                      <a
+                        href="javascript:;"
+                        class="text-darkred fs-3"
+                        @click.stop="addCart(item)"
+                      >
+                        <div
+                          class="spinner-border"
+                          role="status"
+                          v-if="isLoading === item.id"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <i class="bi bi-cart-plus" v-else></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center">
+                <BasePagination
+                  :pagination="pagination"
+                  @get-nowpage="getProducts"
+                />
+              </div>
+            </div>
           </div>
-          <h3 class="pt-3 text-orange border-top">【常見問題】</h3>
-          <div class="question-card">
-            <p class="mb-0 fs-5">Q: 如何知道能量石是否有吸收?</p>
-            <p class="text-secondary">
-              A: 可以心中默想能量石名稱、形狀，<br />
-              腦中就會浮現該能量石能力
-            </p>
-            <p class="mb-0 fs-5">Q: 請問能量石使用有限制嗎?有使用時間嗎?</p>
-            <p class="text-secondary">
-              A: 能量石是個媒介，開啟人體的新能量，<br />
-              如果有持續鍛鍊使用，能量會持續保有
-            </p>
-            <p class="mb-0 fs-5">
-              Q: 請問人體吸收有上限嗎?可以一次使用多顆能量石嗎?
-            </p>
-            <p class="text-secondary">
-              A: 目前經實驗研究，人體吸收上限為 3 顆能量石，<br />
-              建議一次使用一顆， 以避免能量混亂，造成能量大爆炸
-            </p>
+          <div class="col-lg-9 col-12" v-if="!showAllProducts">
+            <div class="row">
+              <div
+                class="mb-3 col-12 col-md-6 col-lg-4"
+                v-for="item in filterProducts.obj"
+                :key="item.id"
+              >
+                <div class="product-card" @click="forwardingProduct(item.id)">
+                  <div class="product-inner">
+                    <img :src="item.imageUrl" :alt="item.description" />
+                    <h4 class="text-title">{{ item.title }}</h4>
+                    <p>
+                      {{ item.description }}
+                    </p>
+                    <div class="product-footer">
+                      <div class="d-flex">
+                        <p class="mb-0 line-through text-darkred me-3">
+                          $ {{ currency(item.origin_price) }} 元
+                        </p>
+                        <p class="mb-0">$ {{ currency(item.price) }} 元</p>
+                      </div>
+                      <a
+                        href="javascript:;"
+                        class="text-darkred fs-3"
+                        @click.stop="addCart(item)"
+                      >
+                        <div
+                          class="spinner-border"
+                          role="status"
+                          v-if="isLoading === item.id"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <i class="bi bi-cart-plus" v-else></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <BaseSwiper :products="suggestProduct">你可能會喜歡</BaseSwiper>
-  </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
-.product-card {
-  padding: 1rem;
-  border: solid 2px #ccc;
-  border-radius: 0.5rem;
-  height: 100%;
-  background-color: #fff;
+.bg-universe {
+  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626503091865.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=B9ZlBe%2BEcAh3pqtgb3Ud6i%2Fpa0YCS%2BpznWGHqCz2R2EM5whzsxTMOGCjsvESELy7mYJoXOH5Z10mQayTVn1FFd72d61Veg%2Bky26U0zEzcoeyroGHuYH0G6B%2BA0eC8JnFm1I2V1%2B02nq%2BwYBJTZ8gTUW0ooI4fo88yjJYymp4OBcbdf190Fl4XwSUQ9vRiEUUss8WdHsvGv3TJeR8jYGalCbZqgzhBobnmd2aScYjrrCMiseInXU8cnli%2FZBguT94KFwwVfVDccEnV44aLSVT70S3Su1VN%2BpZOTwCHKev38jnGxx1cqpM64aDtdToxq0W7LboWCgimyRojzRtYm9SPQ%3D%3D');
+  background-size: cover;
+  background-position-x: right;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: rgba($color: #fff, $alpha: 0.8);
+  position: relative;
+  p {
+    z-index: 1;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000, $alpha: 0.2);
+  }
 }
-.img-base {
+.line-through {
+  text-decoration: line-through;
+}
+.line-through {
+  text-decoration: line-through;
+}
+@mixin circle {
   display: block;
-  width: 100%;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  width: 20px;
+  height: 20px;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(215, 223, 252, 1) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(215, 223, 252, 1) 84%
+  );
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
 }
-.question-card {
-  padding: 1rem;
+@mixin diamond {
+  display: block;
+  width: 20px;
+  height: 40px;
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(15, 2, 2, 1) 11.2%,
+    rgba(36, 163, 190, 1) 91.1%
+  );
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  position: absolute;
+}
+.product-card {
+  width: 100%;
+  height: 400px;
+  padding: 20px;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: 1px solid rgba($color: #fff, $alpha: 0.6);
+  background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627962847726.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ea%2FjDGHdOZk7kveNiz61uFsNvmmZSIa5k5s%2F4DCY9XD46vTPe2Tu0JuZsyux6rrYxSOWyDQlNAB9mEzJs%2Fn7M47pZwGvDh%2FRKqTTddYIYiWX%2BAUVkdHapGc%2B7FwhfKlYTc4BdbnqBRgr3PTFcUVFulLK9lAOb0a%2F042HrWGyCAjjE5l7nMsR0CRTrVo92z8ns%2FM3zxaYwcEHAUGycUmJJQ4r%2BNzuprjgIvNYgBQU169z3J959IctIzRzqY8bS2%2FyGSN2dqLkWlScdgXAE0WuT81DPD8hTAFQ33uaeYNOdEuNQyhfg%2FxZvctof3mqqcR3F3s%2Fhbofg6AvcpspdSmiew%3D%3D');
+  position: relative;
+  perspective: 1000px;
+  transition: all 3s;
+  &:hover {
+    box-shadow: 0px 0px 30px #969160;
+    transform: rotateY(360deg);
+  }
+  &:hover .product-inner img {
+    max-width: 100%;
+  }
+  .product-inner {
+    background: rgba($color: #000, $alpha: 0.6);
+    border: 1px dashed #fff;
+    display: flex;
+    padding: 2rem 1rem;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    img {
+      display: block;
+      height: 200px;
+      max-width: 80%;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+    &::before {
+      content: '';
+      top: -20px;
+      left: 50%;
+      @include circle;
+    }
+    &::after {
+      content: '';
+      display: block;
+      bottom: -20px;
+      left: 50%;
+      @include circle;
+    }
+    h4 {
+      &::before {
+        content: '';
+        top: -24px;
+        left: -14px;
+        transform: rotate(-45deg);
+        @include diamond;
+      }
+      &::after {
+        content: '';
+        top: -24px;
+        right: -14px;
+        transform: rotate(45deg);
+        @include diamond;
+      }
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      &::before {
+        content: '';
+        bottom: -24px;
+        left: -14px;
+        transform: rotate(45deg);
+        @include diamond;
+      }
+      &::after {
+        content: '';
+        bottom: -24px;
+        right: -14px;
+        transform: rotate(-45deg);
+        @include diamond;
+      }
+      a {
+        &:hover {
+          color: darken($color: #98142b, $amount: 10) !important;
+        }
+      }
+    }
+  }
+}
+.list {
+  color: rgba($color: #fff, $alpha: 0.8);
+  &:hover {
+    border: 2px solid #98142b !important;
+    box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
+  }
+}
+.active {
+  border: 2px solid #98142b !important;
+  box-shadow: 3px 3px 6px rgba($color: gray, $alpha: 1);
+}
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-15%);
+    animationtimingfunction: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animationtimingfunction: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 </style>

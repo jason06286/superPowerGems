@@ -265,6 +265,9 @@ export default {
                       </a>
                     </div>
                   </div>
+                  <div class="magic-circle">
+                    <img src="../../assets/img/magic-circle.svg" alt="" />
+                  </div>
                 </div>
               </div>
               <div class="d-flex justify-content-center">
@@ -312,6 +315,9 @@ export default {
                       </a>
                     </div>
                   </div>
+                  <div class="magic-circle">
+                    <img src="../../assets/img/magic-circle.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,9 +352,6 @@ export default {
     height: 100%;
     background: rgba($color: #000, $alpha: 0.2);
   }
-}
-.line-through {
-  text-decoration: line-through;
 }
 .line-through {
   text-decoration: line-through;
@@ -388,14 +391,36 @@ export default {
   border: 1px solid rgba($color: #fff, $alpha: 0.6);
   background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627962847726.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ea%2FjDGHdOZk7kveNiz61uFsNvmmZSIa5k5s%2F4DCY9XD46vTPe2Tu0JuZsyux6rrYxSOWyDQlNAB9mEzJs%2Fn7M47pZwGvDh%2FRKqTTddYIYiWX%2BAUVkdHapGc%2B7FwhfKlYTc4BdbnqBRgr3PTFcUVFulLK9lAOb0a%2F042HrWGyCAjjE5l7nMsR0CRTrVo92z8ns%2FM3zxaYwcEHAUGycUmJJQ4r%2BNzuprjgIvNYgBQU169z3J959IctIzRzqY8bS2%2FyGSN2dqLkWlScdgXAE0WuT81DPD8hTAFQ33uaeYNOdEuNQyhfg%2FxZvctof3mqqcR3F3s%2Fhbofg6AvcpspdSmiew%3D%3D');
   position: relative;
+  perspective-origin: 50% 87.5%;
   perspective: 1000px;
-  transition: all 3s;
+  transition: all 1s;
   &:hover {
-    box-shadow: 0px 0px 30px #969160;
-    transform: rotateY(360deg);
+    box-shadow: 0px 0px 30px #3871a6;
+    @media (min-width: 992px) {
+      margin-bottom: 1.5rem;
+    }
   }
   &:hover .product-inner img {
     max-width: 100%;
+  }
+  &:hover .magic-circle {
+    @media (min-width: 992px) {
+      display: block;
+    }
+  }
+  .magic-circle {
+    position: absolute;
+    bottom: -42%;
+    left: 0;
+    display: none;
+    perspective-origin: 50% 50%;
+    transform: rotateX(90deg);
+    animation: rotate 8s linear infinite;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
   .product-inner {
     background: rgba($color: #000, $alpha: 0.6);
@@ -467,6 +492,15 @@ export default {
         }
       }
     }
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg) rotateX(90deg) scale(1);
+  }
+
+  100% {
+    transform: rotateY(360deg) rotateX(90deg) scale(1);
   }
 }
 .list {
