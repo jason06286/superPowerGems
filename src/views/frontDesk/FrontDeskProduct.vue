@@ -161,9 +161,16 @@ export default {
             </option>
           </select>
           <p class="flex-shrink-0 mx-3 mb-0">小計 $ {{ currency(total) }} 元</p>
+        </div>
+        <div class="mt-3 d-flex justify-content-between w-100 align-items-end">
+          <router-link
+            to="/frontDesk/products"
+            class="btn btn-outline-title "
+            >繼續選購</router-link
+          >
           <a
             href="#"
-            class="fs-2"
+            class="fs-2 cart"
             :class="{ disabled: productNum <= 0 }"
             @click.prevent="addCart"
           >
@@ -306,7 +313,7 @@ section {
     object-fit: contain;
     animation: fly 4s ease-in-out infinite;
   }
-  a {
+  .cart {
     text-decoration: none;
     color: #98142b;
     &:hover {

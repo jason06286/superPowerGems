@@ -141,15 +141,15 @@ export default {
             data-aos-delay="300"
           >
             <div class="science-content">
-              <h4>
+              <h3>
                 <span data-aos="text-anim" data-aos-delay="400">參</span>
                 <span data-aos="text-anim" data-aos-delay="600">與</span>
                 <span data-aos="text-anim" data-aos-delay="800">科</span>
                 <span data-aos="text-anim" data-aos-delay="1000">學</span>
                 <span data-aos="text-anim" data-aos-delay="1200">家</span>
-              </h4>
+              </h3>
               <p class="mt-3">
-                愛因斯坦、牛頓、霍金、特斯拉、伽利略等共同研發製作。
+                達文西、柏拉圖、霍金、特斯拉、伽利略等共同研發製作。
               </p>
               <p>
                 由各國頂尖科學家集結研發，透過能量轉換原則， <br />
@@ -166,15 +166,15 @@ export default {
     <section>
       <div class="container">
         <div class="d-flex justify-content-center">
-          <h2 class="pb-3 mb-3 d-inline-block">
+          <h3 class="pb-3 mb-3 d-inline-block">
             <span data-aos="text-anim" data-aos-delay="400">使</span>
             <span data-aos="text-anim" data-aos-delay="600">用</span>
             <span data-aos="text-anim" data-aos-delay="800">者</span>
             <span data-aos="text-anim" data-aos-delay="1000">推</span>
             <span data-aos="text-anim" data-aos-delay="1200">薦</span>
-          </h2>
+          </h3>
         </div>
-        <div class="row">
+        <div class="mb-5 row">
           <div class="col-lg-4 col-12">
             <div
               class=" d-flex justify-content-center align-items-center flex-column"
@@ -190,9 +190,9 @@ export default {
                 實況主 <br />
                 <span class="fs-5">黃小姐</span>
               </h4>
-              <p class="text-center" data-aos="zoom-in" data-aos-delay="400">
-                在還沒發現能量石之前，半夜都會有外星人來我家敲門。<br />
-                多虧了能量石，使我獲取超能力，可以一覺到天亮， <br />
+              <p class="px-2" data-aos="zoom-in" data-aos-delay="400">
+                在還沒發現能量石之前，半夜都會有外星人來我家敲門。 <br />
+                多虧了能量石，使我獲取超能力，可以一覺到天亮，<br />
                 也讓我從平凡的上班族有了新特色，開啟實況主之路。
               </p>
             </div>
@@ -212,8 +212,8 @@ export default {
                 上班族 <br />
                 <span class="fs-5">陳先生</span>
               </h4>
-              <p class="text-center" data-aos="zoom-in" data-aos-delay="600">
-                以前在上班的路上都要蜷縮著身子，深怕撞到外星人，<br />
+              <p class="px-2" data-aos="zoom-in" data-aos-delay="600">
+                以前在上班的路上都要蜷縮著身子，深怕撞到外星人，
                 有了能量石獲得超能力，上班的路上，終於能抬頭昂首的大步向前走。
               </p>
             </div>
@@ -233,28 +233,29 @@ export default {
                 大學生<br />
                 <span class="fs-5">朱小姐</span>
               </h4>
-              <p class="text-center" data-aos="zoom-in" data-aos-delay="800">
-                以前坐在教室上課，要眼觀四方，<br />
-                時不時警戒著外星人來襲，有了能量石獲得超能力， <br />
+              <p class="px-2" data-aos="zoom-in" data-aos-delay="800">
+                以前坐在教室上課，要眼觀四方，
+                時不時警戒著外星人來襲，有了能量石獲得超能力，
                 使我有安全感能安心得上課。
               </p>
             </div>
           </div>
         </div>
+        <div class="segmentation"></div>
       </div>
     </section>
     <section class="my-5">
-      <div class="container-fluid">
+      <div class="container">
         <div class="d-flex justify-content-center">
-          <h2 class="pb-3 mb-3 d-inline-block">
+          <h3 class="pb-3 mb-3 d-inline-block">
             <span data-aos="text-anim" data-aos-delay="400">如</span>
             <span data-aos="text-anim" data-aos-delay="600">何</span>
             <span data-aos="text-anim" data-aos-delay="800">使</span>
             <span data-aos="text-anim" data-aos-delay="1000">用</span>
             <span data-aos="text-anim" data-aos-delay="1200">?</span>
-          </h2>
+          </h3>
         </div>
-        <div class="row">
+        <div class="mb-5 row">
           <div
             class="mb-3 col-lg-3 col-12"
             data-aos="zoom-in"
@@ -317,9 +318,20 @@ export default {
             </div>
           </div>
         </div>
+        <div class="segmentation"></div>
       </div>
     </section>
-    <HomeSwiper :products="products.arr" />
+    <section class="mb-3">
+      <HomeSwiper :products="products.arr" />
+      <div class="d-flex justify-content-center">
+        <router-link
+          class="my-3 btn btn-lg btn-darkred text-title fs-5"
+          to="/frontDesk/products"
+        >
+          查看所有商品
+        </router-link>
+      </div>
+    </section>
     <section>
       <div class="bg-subscribe">
         <div class="container h-100">
@@ -416,14 +428,14 @@ export default {
 }
 .user-image {
   display: block;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 1rem;
 }
 .bg-subscribe {
-  background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626525384383.png?Expires=1742169600&GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Signature=N1rUFn07i3d3R3UaKsSy3ThoMJOKWzWwgtokpj9Yg36cx%2BcpAYxVep3NEcmITPnuZ8%2Bz1mZDHFMGkooaSXL1QAU4YNZT5JlyaG%2Bb%2FRlIOUB6GWNHAvHarIuvKG2uPgqU4K8K2f3EhXvmLi8R4NMlh0O5%2FTkOyizOpG8AKfREvWAJFvU%2F%2ByfHTz%2BELafg%2Bj9vdXoh7q56y7nz%2BSoYJHWTmD3vmGdO2uyMfwLkOPsAWgoJeiUbheAIWTt7RkUzDlAmREGmLA7Fi80ygEjDQoFiQ2EOh20IiFV3APSZ4m3FnbdbRGXrPKMGMuVv6O8hX6tc%2BBr%2FTjm6FcoAzEMwQspCWA%3D%3D');
+  background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628011051062.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=GllSPBslNBVy4cujG2gmLyYO84gRGKZfJ4LQE%2FJVNqw0%2B2%2B%2FGzC6Tc1ieHnEmkrgDOT1f84aKNKcJzc%2FmiZ4sDSwl%2FXmK7pbkJ3iO9%2BEXjaKesTkNQBJ%2FA8zH1GVoHHQ%2FVMl11lBZ%2BBk3yzzblyIOnq7akv7v2xnrGyMJII1%2BvT80LlJqLMyM6rQ0PzcawjaaQfbygrXS1Ge5ri6%2Bzu4Z9lJIRKRB3uqYiVT283w8Hz3Bkx93Mfa043GKUvDdFZTDie0Nzaad1D24Uf8FzekS7g%2BWKqbnWXEeM3FWApiRuahKWGIcraf5mO7PCGw%2BHBTrbe%2BnCxhJhAf5G7ELRQILw%3D%3D');
   background-size: cover;
   height: 200px;
   color: rgba($color: #fff, $alpha: 0.8);
@@ -451,7 +463,7 @@ export default {
     margin-bottom: 0;
     font-size: 1rem;
     @media (min-width: 576px) {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
   }
 }
@@ -470,10 +482,10 @@ export default {
 .setup {
   .cover {
     background-size: cover;
-    background-image: radial-gradient(
-      circle farthest-corner at 10% 20%,
-      rgba(14, 174, 87, 1) 0%,
-      rgba(12, 116, 117, 1) 90%
+    background-image: linear-gradient(
+      90.5deg,
+      rgba(255, 207, 139, 0.5) 1.1%,
+      rgba(255, 207, 139, 1) 81.3%
     );
     transform: rotateY(0deg);
   }
@@ -507,7 +519,7 @@ export default {
     background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626006870474.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ofVZI%2Ffz8%2BxxmTi2QJTuuLhxsIkJL94l0Vc%2FgOYxeSJs4vYGkJrsTH%2F6%2FvfuJkAw6I%2BdlXdv88edDZqYWW3Qr6lftdzqLNsq36xI45UacARYDprKJKUiLC9%2Bhn1uatMykmjzpR6SkdW1kHmfDFGZqcXVK%2B62mvrrgJV3Lkat1o6lBEpX9MWyGspQ4PfbIOw6c7MbEtvdO2vWN1qIYarQLD3ZfVrYhhFJkzn6fL45ayvydVmObgrwMzw92dp0PDcRogzF42jXM8dHDyQ%2FsUGtip633hSbFml5sffITfX5LcondiEQ36oNw%2F0Irlkse89mUfemZed2S8HqELJgqebkxg%3D%3D');
   }
 }
-.scroll-top{
+.scroll-top {
   position: fixed;
   bottom: 2%;
   right: 2%;

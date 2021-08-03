@@ -136,7 +136,7 @@ export default {
   <div class="cart-btn-position">
     <BaseScrollTop />
     <button type="button" class="cart-btn" @click="showModal">
-      <i class="bi bi-cart-fill"></i>
+     <i class="bi bi-cart-plus-fill"></i>
       <span v-show="carts.arr?.carts?.length">{{
         carts.arr?.carts?.length
       }}</span>

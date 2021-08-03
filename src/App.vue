@@ -6,7 +6,7 @@ export default {
   setup() {
     onMounted(() => {
       AOS.init({
-        duration: 1200,
+        duration: 1500,
       });
     });
 

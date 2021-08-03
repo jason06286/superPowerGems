@@ -648,7 +648,7 @@ $btn-link-disabled-color:     $gray-600 !default;
 // Allows for customizing button radius independently from global border radius
 $btn-border-radius:           none !default;//$border-radius !default;
 $btn-border-radius-sm:        none !default;//$border-radius-sm !default;
-$btn-border-radius-lg:        $border-radius-lg !default;
+$btn-border-radius-lg:        none !default;//$border-radius-lg !default;
 
 $btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 

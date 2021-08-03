@@ -153,7 +153,7 @@ export default {
         玩小遊戲領取
         <router-link
           to="/frontDesk/coupon"
-          class="text-primary d-inline-block animate-bounce"
+          class="text-darkred d-inline-block animate-bounce"
           >優惠券</router-link
         >
       </p>
@@ -162,65 +162,33 @@ export default {
   <section>
     <div class="py-5">
       <div class="container" style="min-height: calc(100vh - 412px)">
-        <h4 class="pb-2 mb-3 border-bottom border-darkred">能量石分類</h4>
+        <h3 class="pb-2 mb-3 border-bottom border-darkred">能量石分類</h3>
         <div class="row">
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '全部' }"
                 @click="showAll"
               >
                 全部
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精礦' }"
                 @click="filterProduct('精礦')"
               >
                 精礦
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精鋼' }"
                 @click="filterProduct('精鋼')"
               >
                 精鋼
               </div>
               <div
-                class="
-                  py-2
-                  text-center
-                  border
-                  mb-lg-3
-                  col-lg-12 col-6
-                  fw-bold
-                  list
-                "
+                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
                 :class="{ active: tempCategory === '精石' }"
                 @click="filterProduct('精石')"
               >
@@ -231,7 +199,7 @@ export default {
           <div class="col-lg-9 col-12" v-if="showAllProducts">
             <div class="row">
               <div
-                class="mb-3 col-12 col-md-6 col-lg-4"
+                class="mb-4-5 col-12 col-md-6 col-lg-4"
                 v-for="item in products.arr"
                 :key="item.id"
               >
@@ -266,7 +234,7 @@ export default {
                     </div>
                   </div>
                   <div class="magic-circle">
-                    <img src="../../assets/img/magic-circle.svg" alt="" />
+                    <img src="../../assets/img/magic-circle.svg" alt="魔法陣" />
                   </div>
                 </div>
               </div>
@@ -281,7 +249,7 @@ export default {
           <div class="col-lg-9 col-12" v-if="!showAllProducts">
             <div class="row">
               <div
-                class="mb-3 col-12 col-md-6 col-lg-4"
+                class="mb-4-5 col-12 col-md-6 col-lg-4"
                 v-for="item in filterProducts.obj"
                 :key="item.id"
               >
@@ -316,7 +284,7 @@ export default {
                     </div>
                   </div>
                   <div class="magic-circle">
-                    <img src="../../assets/img/magic-circle.svg" alt="" />
+                    <img src="../../assets/img/magic-circle.svg" alt="魔法陣" />
                   </div>
                 </div>
               </div>
@@ -329,6 +297,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.mb-4-5 {
+  margin-bottom: 2rem;
+}
 .bg-universe {
   background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1626503091865.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=B9ZlBe%2BEcAh3pqtgb3Ud6i%2Fpa0YCS%2BpznWGHqCz2R2EM5whzsxTMOGCjsvESELy7mYJoXOH5Z10mQayTVn1FFd72d61Veg%2Bky26U0zEzcoeyroGHuYH0G6B%2BA0eC8JnFm1I2V1%2B02nq%2BwYBJTZ8gTUW0ooI4fo88yjJYymp4OBcbdf190Fl4XwSUQ9vRiEUUss8WdHsvGv3TJeR8jYGalCbZqgzhBobnmd2aScYjrrCMiseInXU8cnli%2FZBguT94KFwwVfVDccEnV44aLSVT70S3Su1VN%2BpZOTwCHKev38jnGxx1cqpM64aDtdToxq0W7LboWCgimyRojzRtYm9SPQ%3D%3D');
   background-size: cover;
@@ -396,9 +367,6 @@ export default {
   transition: all 1s;
   &:hover {
     box-shadow: 0px 0px 30px #3871a6;
-    @media (min-width: 992px) {
-      margin-bottom: 1.5rem;
-    }
   }
   &:hover .product-inner img {
     max-width: 100%;

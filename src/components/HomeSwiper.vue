@@ -86,66 +86,64 @@ export default {
 </script>
 
 <template>
-  <section class="my-5">
-    <div class="container">
-      <div class="d-flex justify-content-center">
-        <h2 class="pb-3 mb-3 d-inline-block">
-          <span data-aos="text-anim" data-aos-delay="400">精</span>
-          <span data-aos="text-anim" data-aos-delay="600">選</span>
-          <span data-aos="text-anim" data-aos-delay="800">商</span>
-          <span data-aos="text-anim" data-aos-delay="1000">品</span>
-        </h2>
-      </div>
-      <swiper
-        :autoplay="true"
-        :breakpoints="swiperBreakpoints.breakpoints"
-        class="mb-3"
-      >
-        <swiper-slide v-for="item in props.products" :key="item.id">
-          <div class="product-card" @click="forwardingProduct(item.id)">
-            <div class="product-inner">
-              <img :src="item.imageUrl" :alt="item.description" />
-              <h4 class="text-title">{{ item.title }}</h4>
-              <p>
-                {{ item.description }}
-              </p>
-              <div class="product-footer">
-                <div class="d-flex">
-                  <p class="mb-0 line-through text-darkred me-3">
-                    $ {{ currency(item.origin_price) }} 元
-                  </p>
-                  <p class="mb-0">$ {{ currency(item.price) }} 元</p>
-                </div>
-                <a
-                  href="javascript:;"
-                  class="text-darkred fs-3"
-                  @click.stop="addCart(item)"
-                >
-                  <div
-                    class="spinner-border"
-                    role="status"
-                    v-if="isLoading === item.id"
-                  >
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                  <i class="bi bi-cart-plus" v-else></i>
-                </a>
+  <div class="container">
+    <div class="d-flex justify-content-center">
+      <h3 class="pb-3 mb-3 d-inline-block">
+        <span data-aos="text-anim" data-aos-delay="400">精</span>
+        <span data-aos="text-anim" data-aos-delay="600">選</span>
+        <span data-aos="text-anim" data-aos-delay="800">商</span>
+        <span data-aos="text-anim" data-aos-delay="1000">品</span>
+      </h3>
+    </div>
+    <swiper
+      :autoplay="true"
+      :breakpoints="swiperBreakpoints.breakpoints"
+      class="mb-3"
+    >
+      <swiper-slide v-for="item in props.products" :key="item.id">
+        <div class="product-card" @click="forwardingProduct(item.id)">
+          <div class="product-inner">
+            <img :src="item.imageUrl" :alt="item.description" />
+            <h4 class="text-title">{{ item.title }}</h4>
+            <p>
+              {{ item.description }}
+            </p>
+            <div class="product-footer">
+              <div class="d-flex">
+                <p class="mb-0 line-through text-darkred me-3">
+                  $ {{ currency(item.origin_price) }} 元
+                </p>
+                <p class="mb-0">$ {{ currency(item.price) }} 元</p>
               </div>
-            </div>
-            <div class="magic-circle">
-              <img src="../assets/img/magic-circle.svg" alt="" />
+              <a
+                href="javascript:;"
+                class="text-darkred fs-3"
+                @click.stop="addCart(item)"
+              >
+                <div
+                  class="spinner-border"
+                  role="status"
+                  v-if="isLoading === item.id"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <i class="bi bi-cart-plus" v-else></i>
+              </a>
             </div>
           </div>
-        </swiper-slide>
-      </swiper>
-    </div>
-  </section>
+          <div class="magic-circle">
+            <img src="../assets/img/magic-circle.svg" alt="魔法陣" />
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 500px;
+  height: 420px;
   transform: translate3d(0, 0, 0);
   overflow: hidden;
 }

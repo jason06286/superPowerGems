@@ -196,7 +196,7 @@ export default {
     justify-content: center;
     flex-direction: column;
     margin-bottom: 0;
-    color: #fd7e14;
+    color: #98142b;
     font-size: 1.2rem;
     background: rgba(0, 0, 0, 0.5);
     @media (min-width: 576px) {

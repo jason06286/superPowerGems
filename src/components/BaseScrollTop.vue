@@ -51,14 +51,14 @@ export default {
   outline: none;
   display: block;
   border-radius: 50%;
-  background: #58422f;
+  background: #98142b;
   color: #fff;
   font-size: 20px;
   font-weight: 800;
   z-index: 999;
   opacity: 0;
   &:hover {
-    background: #b2734d;
+    background: lighten($color: #98142b, $amount: 5);
   }
 }
 .active {
