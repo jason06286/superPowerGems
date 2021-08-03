@@ -163,9 +163,7 @@ export default {
           <p class="flex-shrink-0 mx-3 mb-0">小計 $ {{ currency(total) }} 元</p>
         </div>
         <div class="mt-3 d-flex justify-content-between w-100 align-items-end">
-          <router-link
-            to="/frontDesk/products"
-            class="btn btn-outline-title "
+          <router-link to="/frontDesk/products" class="btn btn-outline-title"
             >繼續選購</router-link
           >
           <a
@@ -280,9 +278,10 @@ section {
   }
   li {
     margin-bottom: 1rem;
-    margin-right: 1rem;
+    margin-right: 2rem;
     cursor: pointer;
     @media (min-width: 992px) {
+      margin-bottom: 2rem;
       margin-right: 0;
       writing-mode: vertical-lr;
     }

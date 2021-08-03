@@ -158,12 +158,14 @@ nav {
   font-family: 'Tourney', cursive;
   text-align: right;
   padding: 1rem;
+  width: 280px;
+  margin: 0 auto;
   @media (min-width: 321px) {
     text-align: center;
   }
   @media (min-width: 992px) {
     text-align: left;
-    width: 100%;
+    width: 320px;
     margin-right: auto;
   }
 }

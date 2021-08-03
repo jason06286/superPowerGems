@@ -206,10 +206,12 @@ export default {
                 <div class="product-card" @click="forwardingProduct(item.id)">
                   <div class="product-inner">
                     <img :src="item.imageUrl" :alt="item.description" />
-                    <h4 class="text-title">{{ item.title }}</h4>
-                    <p>
-                      {{ item.description }}
-                    </p>
+                    <div class="product-content">
+                      <h4 class="text-title">{{ item.title }}</h4>
+                      <p>
+                        {{ item.description }}
+                      </p>
+                    </div>
                     <div class="product-footer">
                       <div class="d-flex">
                         <p class="mb-0 line-through text-darkred me-3">
@@ -256,10 +258,12 @@ export default {
                 <div class="product-card" @click="forwardingProduct(item.id)">
                   <div class="product-inner">
                     <img :src="item.imageUrl" :alt="item.description" />
-                    <h4 class="text-title">{{ item.title }}</h4>
-                    <p>
-                      {{ item.description }}
-                    </p>
+                    <div class="product-content">
+                      <h4 class="text-title">{{ item.title }}</h4>
+                      <p>
+                        {{ item.description }}
+                      </p>
+                    </div>
                     <div class="product-footer">
                       <div class="d-flex">
                         <p class="mb-0 line-through text-darkred me-3">
@@ -435,6 +439,9 @@ export default {
         transform: rotate(45deg);
         @include diamond;
       }
+    }
+    .product-content {
+      height: 200px;
     }
     .product-footer {
       display: flex;

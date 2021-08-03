@@ -88,7 +88,7 @@ export default {
 <template>
   <div class="container">
     <div class="d-flex justify-content-center">
-      <h3 class="pb-3 mb-3 d-inline-block">
+      <h3 class="pb-3 d-inline-block">
         <span data-aos="text-anim" data-aos-delay="400">精</span>
         <span data-aos="text-anim" data-aos-delay="600">選</span>
         <span data-aos="text-anim" data-aos-delay="800">商</span>
@@ -104,10 +104,12 @@ export default {
         <div class="product-card" @click="forwardingProduct(item.id)">
           <div class="product-inner">
             <img :src="item.imageUrl" :alt="item.description" />
-            <h4 class="text-title">{{ item.title }}</h4>
-            <p>
-              {{ item.description }}
-            </p>
+            <div class="product-content">
+              <h4 class="text-title">{{ item.title }}</h4>
+              <p>
+                {{ item.description }}
+              </p>
+            </div>
             <div class="product-footer">
               <div class="d-flex">
                 <p class="mb-0 line-through text-darkred me-3">
@@ -143,7 +145,7 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 420px;
+  height: 435px;
   transform: translate3d(0, 0, 0);
   overflow: hidden;
 }
@@ -183,6 +185,7 @@ export default {
   width: 100%;
   height: 400px;
   padding: 20px;
+  margin-top: 15px;
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid rgba($color: #fff, $alpha: 0.6);
@@ -191,6 +194,7 @@ export default {
   perspective-origin: 50% 87.5%;
   perspective: 1000px;
   transition: all 1s;
+
   &:hover {
     box-shadow: 0px 0px 30px #3871a6;
   }
@@ -261,6 +265,9 @@ export default {
         transform: rotate(45deg);
         @include diamond;
       }
+    }
+    .product-content {
+      height: 200px;
     }
     .product-footer {
       display: flex;
