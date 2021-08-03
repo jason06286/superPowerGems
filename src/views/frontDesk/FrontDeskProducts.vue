@@ -167,28 +167,60 @@ export default {
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '全部' }"
                 @click="showAll"
               >
                 全部
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精礦' }"
                 @click="filterProduct('精礦')"
               >
                 精礦
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精鋼' }"
                 @click="filterProduct('精鋼')"
               >
                 精鋼
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精石' }"
                 @click="filterProduct('精石')"
               >
@@ -354,16 +386,19 @@ export default {
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid rgba($color: #fff, $alpha: 0.6);
-  background: rgba($color: #000, $alpha: 0.2);
+  background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627962847726.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=ea%2FjDGHdOZk7kveNiz61uFsNvmmZSIa5k5s%2F4DCY9XD46vTPe2Tu0JuZsyux6rrYxSOWyDQlNAB9mEzJs%2Fn7M47pZwGvDh%2FRKqTTddYIYiWX%2BAUVkdHapGc%2B7FwhfKlYTc4BdbnqBRgr3PTFcUVFulLK9lAOb0a%2F042HrWGyCAjjE5l7nMsR0CRTrVo92z8ns%2FM3zxaYwcEHAUGycUmJJQ4r%2BNzuprjgIvNYgBQU169z3J959IctIzRzqY8bS2%2FyGSN2dqLkWlScdgXAE0WuT81DPD8hTAFQ33uaeYNOdEuNQyhfg%2FxZvctof3mqqcR3F3s%2Fhbofg6AvcpspdSmiew%3D%3D');
   position: relative;
   perspective: 1000px;
+  transition: all 3s;
   &:hover {
     box-shadow: 0px 0px 30px #969160;
+    transform: rotateY(360deg);
   }
   &:hover .product-inner img {
     max-width: 100%;
   }
   .product-inner {
+    background: rgba($color: #000, $alpha: 0.6);
     border: 1px dashed #fff;
     display: flex;
     padding: 2rem 1rem;
