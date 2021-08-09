@@ -1,9 +1,12 @@
 <script>
 import BasePagination from '@/components/BasePagination.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
+
 import axios from 'axios';
+
 import useVueSweetAlert2 from '@/methods/useSwal';
 import { currency, formatDate } from '@/methods/filter';
+
 import { onMounted, reactive, ref } from 'vue';
 
 export default {
@@ -21,6 +24,8 @@ export default {
         icon: 'success',
         title,
         text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
       });
     }
     function swalError(title, text) {
@@ -28,8 +33,11 @@ export default {
         icon: 'error',
         title,
         text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
       });
     }
+
     function orderDetail() {
       const tempOrder = reactive({ obj: {} });
       const isLoading = ref(false);
@@ -45,15 +53,11 @@ export default {
               pagination.obj = res.data.pagination;
               isLoading.value = false;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              swalError('Oops...', res.data.message);
             }
           })
-          .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+          .catch(() => {
+            swalError('Oops...', '取得訂單資料錯誤');
           });
       };
       const delOrder = (id) => {
@@ -68,10 +72,8 @@ export default {
               swalError('Oops...', res.data.message);
             }
           })
-          .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+          .catch(() => {
+            swalError('Oops...', '刪除訂單錯誤');
           });
       };
       const editOrder = () => {
@@ -90,10 +92,8 @@ export default {
               swalError('Oops...', res.data.message);
             }
           })
-          .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+          .catch(() => {
+            swalError('Oops...', '修改訂單錯誤');
           });
       };
 

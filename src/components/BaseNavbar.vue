@@ -221,7 +221,7 @@ nav {
       display: block;
       width: 0;
       height: 40%;
-      background-color: rgba($color: #98142b, $alpha: 0.6);
+      background-color: rgba($color: #98142b, $alpha: 0.8);
       transform: translateY(-20%);
       z-index: -1;
       transition: all 0.3s;

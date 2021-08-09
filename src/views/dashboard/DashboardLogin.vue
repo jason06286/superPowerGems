@@ -1,7 +1,10 @@
 <script>
 import BaseNavbar from '@/components/BaseNavbar.vue';
+
 import axios from 'axios';
+
 import useVueSweetAlert2 from '@/methods/useSwal';
+
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -47,6 +50,8 @@ export default {
         icon: 'error',
         title,
         text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
       });
     }
     function signIn() {
@@ -62,10 +67,8 @@ export default {
             swalError('Oops...', res.data.message);
           }
         })
-        .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
+        .catch(() => {
+          swalError('Oops...', '登入錯誤');
         });
     }
 

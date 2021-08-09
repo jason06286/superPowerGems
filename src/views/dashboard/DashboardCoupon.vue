@@ -4,9 +4,12 @@ import BasePagination from '@/components/BasePagination.vue';
 import BaseCouponModal from '@/components/BaseCouponModal.vue';
 import BaseDeleteCouponModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
+
 import axios from 'axios';
+
 import { formatDate } from '@/methods/filter';
 import useVueSweetAlert2 from '@/methods/useSwal';
+
 import { onMounted, reactive, ref } from 'vue';
 
 export default {
@@ -26,6 +29,8 @@ export default {
         icon: 'success',
         title,
         text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
       });
     };
     const swalError = (title, text) => {
@@ -33,6 +38,8 @@ export default {
         icon: 'error',
         title,
         text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
       });
     };
 
@@ -51,15 +58,11 @@ export default {
               pagination.obj = res.data.pagination;
               isLoading.value = false;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              swalError('Oops...', '取得優惠券資料錯誤');
             }
           })
-          .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+          .catch(() => {
+            swalError('Oops...', '取得優惠券資料錯誤');
           });
       };
       const delCoupon = (id) => {
@@ -71,14 +74,12 @@ export default {
               getCoupons();
               swalSuccess('刪除優惠券', '刪除優惠券成功!');
             } else {
-              swalError('Oops...', res.data.message);
+              swalError('Oops...', '刪除優惠券失敗!');
             }
             couponDeleteModal.value.hideDelModal();
           })
-          .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+          .catch(() => {
+            swalError('Oops...', '刪除優惠券錯誤');
           });
       };
 
@@ -133,8 +134,8 @@ export default {
             }
             couponModal.value.hideCouponModal();
           })
-          .catch((err) => {
-            console.error(err);
+          .catch(() => {
+            swalError('Oops...', '新增修改錯誤');
           });
       };
 

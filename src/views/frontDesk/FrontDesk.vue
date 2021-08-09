@@ -17,9 +17,7 @@ export default {
 <template>
   <ToastMessages />
   <BaseNavbar />
-  <div class="bg-dark">
-    <Router-View />
-  </div>
+  <Router-View />
   <BaseFooter />
   <BaseCartModal />
 </template>

@@ -1,6 +1,8 @@
 <script>
 import Toast from '@/components/Toast.vue';
+
 import emitter from '@/methods/emitter';
+
 import { onMounted, reactive } from 'vue';
 
 export default {

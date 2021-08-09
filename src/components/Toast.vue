@@ -1,5 +1,6 @@
 <script>
 import Toast from 'bootstrap/js/dist/toast';
+
 import { onMounted, ref } from 'vue';
 
 export default {

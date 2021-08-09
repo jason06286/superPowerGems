@@ -1,7 +1,7 @@
 import emitter from './emitter';
 
 export default function (res, title = '更新') {
-  if (res.data.success) {
+  if (res.data?.success) {
     emitter.emit('push-messages', {
       style: 'success',
       title: `${title}成功`,

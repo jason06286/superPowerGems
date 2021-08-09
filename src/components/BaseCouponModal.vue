@@ -1,6 +1,8 @@
 <script>
 import Modal from 'bootstrap/js/dist/modal';
+
 import { formatDate } from '@/methods/filter';
+
 import {
   onMounted, reactive, ref, watch,
 } from 'vue';

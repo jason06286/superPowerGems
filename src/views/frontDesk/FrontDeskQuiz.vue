@@ -1,5 +1,4 @@
 <script>
-import Cutscenes from '@/components/Cutscenes.vue';
 import axios from 'axios';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
@@ -7,9 +6,6 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
-  components: {
-    Cutscenes,
-  },
   setup() {
     const router = useRouter();
     const filterProducts = reactive({ obj: {} });
@@ -167,7 +163,6 @@ export default {
 </script>
 
 <template>
-  <Cutscenes />
   <div
     class="container py-5 text-white position-relative"
     style="min-height: calc(100vh - 56px)"

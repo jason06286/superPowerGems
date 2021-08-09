@@ -1,8 +1,10 @@
 <script>
 import axios from 'axios';
+
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
+
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -24,15 +26,11 @@ export default {
             if (res.data.success) {
               carts.arr = res.data.data;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              pushMessageState(res, '取得購物車');
             }
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '取得購物車');
           });
       };
       const delProduct = (item) => {
@@ -45,17 +43,11 @@ export default {
               emitter.emit('update-cart');
               getCarts();
               isLoading.value = '';
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             pushMessageState(res, '刪除商品');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '刪除商品');
           });
       };
       const editCart = (qty, id) => {
@@ -73,17 +65,11 @@ export default {
               isChangeQty.value = false;
               emitter.emit('update-cart');
               getCarts();
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             pushMessageState(res, '修改商品');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '修改商品');
           });
       };
       const useCoupon = () => {
@@ -94,17 +80,11 @@ export default {
             if (res.data.success) {
               emitter.emit('update-cart');
               getCarts();
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             pushMessageState(res, '套用優惠券');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '套用優惠券');
           });
       };
 
@@ -161,15 +141,11 @@ export default {
               router.push(`/frontDesk/pay/${res.data.orderId}`);
               emitter.emit('update-cart');
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              pushMessageState(res, '送出表單');
             }
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '送出表單');
           });
       };
 
@@ -199,28 +175,60 @@ export default {
   <div class="bg-dark container-lg" style="min-height: calc(100vh - 212px)">
     <div class="py-5 p-lg-5">
       <div class="cart-content" v-if="carts.arr?.carts?.length === 0">
+        <div class="empty-cart"></div>
         <p class="mb-0 fs-4">購物車內無東西</p>
-        <router-link to="/frontDesk/products" class="d-block text-darkred fs-4"
+        <router-link to="/frontDesk/products" class="d-block text-lightred fs-4"
           >請選購商品</router-link
         >
+      </div>
+      <div class="row" v-if="carts.arr?.carts?.length !== 0">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="mb-3 d-flex justify-content-end">
+            <div class="step bg-darkred">
+              <p class="mb-0">1</p>
+              <p class="mb-0">填寫資訊</p>
+            </div>
+            <div class="step">
+              <p class="mb-0">2</p>
+              <p class="mb-0">確認訂單</p>
+            </div>
+            <div class="step">
+              <p class="mb-0">3</p>
+              <p class="mb-0">完成購物</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
       </div>
       <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-6 col-12" v-if="carts.arr?.carts?.length !== 0">
-          <h4 class="pb-2 mb-3 border-2 border-bottom border-title text-title">
+          <h4
+            class="pb-2 mb-3 border-2 border-bottom border-darkred text-title"
+          >
             購物車內容
           </h4>
-          <table class="table text-center table-responsive-lg text-content">
+          <table class="table text-center text-content">
             <thead>
               <tr>
-                <th scope="col">商品名稱</th>
+                <th scope="col" width="80"></th>
+                <th scope="col" width="200">商品名稱</th>
                 <th scope="col" width="120">數量</th>
-                <th scope="col" class="text-end">小計</th>
-                <th scope="col"></th>
+                <th scope="col" class="text-end" width="120">小計</th>
+                <th scope="col" width="30"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in carts.arr.carts" :key="item.id">
+                <td class="align-middle">
+                  <img
+                    :src="item.product.imageUrl"
+                    :alt="item.product.description"
+                    class="img-fluid"
+                    style="heigt: 3rem"
+                  />
+                </td>
                 <td class="align-middle">
                   {{ item.product.title }}
                 </td>
@@ -254,7 +262,7 @@ export default {
                 <td class="align-middle text-end">
                   $ {{ currency(item.total) }}
                 </td>
-                <td class="text-end">
+                <td class="align-middle text-end">
                   <button
                     class="btn btn-outline-danger btn-sm"
                     type="button"
@@ -284,14 +292,14 @@ export default {
                 v-show="carts.arr.total > carts.arr.final_total"
                 class="text-darkred"
               >
-                <td colspan="3" class="text-end">折扣優惠</td>
+                <td colspan="4" class="text-end">折扣優惠</td>
                 <td class="line-through text-end">
                   $ {{ currency(carts.arr.total - carts.arr.final_total) }}
                 </td>
               </tr>
               <tr>
-                <td colspan="3" class="text-end">總金額</td>
-                <td class="text-end">
+                <td colspan="4" class="text-end">總金額</td>
+                <td class="text-end" width="120">
                   $ {{ currency(carts.arr.final_total) }}
                 </td>
               </tr>
@@ -320,7 +328,7 @@ export default {
         <div class="col-md-4 col-12">
           <div v-if="carts.arr?.carts?.length != 0">
             <h4
-              class="pb-2 mb-3 border-2 border-bottom border-title text-title"
+              class="pb-2 mb-3 border-2 border-bottom border-darkred text-title"
             >
               收件人資訊
             </h4>
@@ -423,7 +431,7 @@ export default {
                   >繼續購物</router-link
                 >
                 <button
-                  class="btn btn-darkred"
+                  class="btn btn-lightred"
                   :class="{ 'not-allowed': Object.keys(user.user).length < 4 }"
                   type="submit"
                 >
@@ -461,12 +469,22 @@ input[type='number']::-webkit-inner-spin-button {
   flex-direction: column;
   width: 100%;
   padding: 2rem;
-  border-radius: 1rem;
-  border: 2px solid rgba($color: #fff, $alpha: 0.6);
   margin-bottom: 1rem;
-  height: 300px;
+  height: 100%;
   @media (min-width: 576px) {
     height: 500px;
+  }
+  .empty-cart {
+    background-image: url('../../assets/img/cart3.svg');
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 1rem;
+    @media (min-width: 576px) {
+      height: 500px;
+    }
   }
 }
 table {
@@ -482,5 +500,15 @@ table {
   &:hover {
     color: #98142b;
   }
+}
+.input-group {
+  flex-wrap: nowrap;
+}
+.step {
+  background: rgba($color: #000, $alpha: 0.5);
+  color: rgba($color: #fff, $alpha: 0.8);
+  padding: 0.5rem 1rem;
+  text-align: center;
+  pointer-events: none;
 }
 </style>

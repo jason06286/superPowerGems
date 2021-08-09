@@ -1,10 +1,13 @@
 <script>
 import BasePagination from '@/components/BasePagination.vue';
-import BaseFrontendLoading from '@/components/BaseFrontendLoading.vue';
+import BaseFrontendLoading from '@/components/BaseLoading.vue';
+
 import axios from 'axios';
+
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
+
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -32,15 +35,11 @@ export default {
             if (res.data.success) {
               Allproducts.arr = res.data.products;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              pushMessageState(res, '取得所有商品資料');
             }
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '取得所有商品資料');
           });
       };
       const getProducts = (page = 1) => {
@@ -54,15 +53,11 @@ export default {
               pagination.obj = res.data.pagination;
               showLoadinng.value = false;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              pushMessageState(res, '取得商品資料');
             }
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '取得商品資料');
           });
       };
       const addCart = (item) => {
@@ -79,17 +74,11 @@ export default {
             if (res.data.success) {
               emitter.emit('update-cart');
               isLoading.value = '';
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             pushMessageState(res, '購物車新增');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '購物車新增');
           });
       };
       const forwardingProduct = (id) => {
@@ -135,8 +124,10 @@ export default {
       filterProducts,
       isLoading,
       showLoadinng,
-      currency,
       showAllProducts,
+
+      currency,
+
       ...productDetail(),
       ...filterDetail(),
     };
@@ -153,7 +144,7 @@ export default {
         玩小遊戲領取
         <router-link
           to="/frontDesk/coupon"
-          class="text-darkred d-inline-block animate-bounce"
+          class="text-lightred d-inline-block animate-bounce"
           >優惠券</router-link
         >
       </p>
@@ -214,14 +205,14 @@ export default {
                     </div>
                     <div class="product-footer">
                       <div class="d-flex">
-                        <p class="mb-0 line-through text-darkred me-3">
+                        <p class="mb-0 line-through text-lightred me-3">
                           $ {{ currency(item.origin_price) }} 元
                         </p>
                         <p class="mb-0">$ {{ currency(item.price) }} 元</p>
                       </div>
                       <a
                         href="javascript:;"
-                        class="text-darkred fs-3"
+                        class="text-lightred fs-3"
                         @click.stop="addCart(item)"
                       >
                         <div
@@ -273,7 +264,7 @@ export default {
                       </div>
                       <a
                         href="javascript:;"
-                        class="text-darkred fs-3"
+                        class="text-lightred fs-3"
                         @click.stop="addCart(item)"
                       >
                         <div
@@ -406,7 +397,7 @@ export default {
     position: relative;
     img {
       display: block;
-      height: 200px;
+      min-height: 160px;
       max-width: 80%;
       margin: 0 auto;
       object-fit: contain;
@@ -441,7 +432,7 @@ export default {
       }
     }
     .product-content {
-      height: 200px;
+      min-height: 100px;
     }
     .product-footer {
       display: flex;

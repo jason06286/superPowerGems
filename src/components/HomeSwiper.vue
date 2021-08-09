@@ -4,13 +4,16 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
 import axios from 'axios';
+
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
+
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 SwiperCore.use([Pagination, Autoplay]);
+
 export default {
   components: {
     Swiper,
@@ -60,13 +63,11 @@ export default {
           if (res.data.success) {
             emitter.emit('update-cart');
             isLoading.value = '';
-          } else {
-            console.error(res.data.message);
           }
           pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
-          console.error(err);
+          pushMessageState(err, '購物車新增');
         });
     }
     function forwardingProduct(id) {
@@ -119,7 +120,7 @@ export default {
               </div>
               <a
                 href="javascript:;"
-                class="text-darkred fs-3"
+                class="text-lightred fs-3"
                 @click.stop="addCart(item)"
               >
                 <div
@@ -232,7 +233,7 @@ export default {
     position: relative;
     img {
       display: block;
-      height: 200px;
+      min-height: 160px;
       max-width: 80%;
       margin: 0 auto;
       object-fit: contain;
@@ -267,7 +268,7 @@ export default {
       }
     }
     .product-content {
-      height: 200px;
+      min-height: 100px;
     }
     .product-footer {
       display: flex;

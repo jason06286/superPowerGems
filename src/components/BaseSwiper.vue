@@ -1,14 +1,14 @@
 <script>
-// kit
 import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
-// vue
+
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
 SwiperCore.use([Pagination, Autoplay]);
+
 export default {
   components: {
     Swiper,

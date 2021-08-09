@@ -1,9 +1,11 @@
 <script>
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import { onMounted, onUnmounted, ref } from 'vue';
 
 gsap.registerPlugin(ScrollTrigger);
+
 export default {
   setup() {
     const universeStart = ref(null);
@@ -11,6 +13,7 @@ export default {
     const plane = ref(null);
     const ufo = ref(null);
     const triggers = ScrollTrigger.getAll();
+
     function gsapSet() {
       ScrollTrigger.matchMedia({
         '(min-width: 768px)': () => {
@@ -57,12 +60,14 @@ export default {
       ScrollTrigger.refresh();
       gsapSet();
     });
+
     onUnmounted(() => {
       triggers.forEach((trigger) => {
         trigger.kill();
       });
       ScrollTrigger.clearMatchMedia();
     });
+
     return {
       universeStart,
       universe,

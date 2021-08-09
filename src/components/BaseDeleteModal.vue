@@ -1,5 +1,6 @@
 <script>
 import Modal from 'bootstrap/js/dist/modal';
+
 import { onMounted, ref } from 'vue';
 
 export default {

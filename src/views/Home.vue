@@ -5,9 +5,12 @@ import BaseScrollTop from '@/components/BaseScrollTop.vue';
 import HomeHeader from '@/components/HomeHeader.vue';
 import ToastMessages from '@/components/ToastMessages.vue';
 import HomeSwiper from '@/components/HomeSwiper.vue';
+
 import axios from 'axios';
+
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
+
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -55,15 +58,11 @@ export default {
           if (res.data.success) {
             products.arr = res.data.products;
           } else {
-            console.error = () => {
-              throw new Error(res.data.message);
-            };
+            pushMessageState(res, '取得所有商品資料');
           }
         })
         .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
+          pushMessageState(err, '取得所有商品資料');
         });
     }
     function addCart(item) {
@@ -80,17 +79,11 @@ export default {
           if (res.data.success) {
             emitter.emit('update-cart');
             isLoading.value = '';
-          } else {
-            console.error = () => {
-              throw new Error(res.data.message);
-            };
           }
           pushMessageState(res, '購物車新增');
         })
         .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
+          pushMessageState(err, '購物車新增');
         });
     }
     function forwardingProduct(id) {
@@ -108,11 +101,12 @@ export default {
       products,
       swiperBreakpoints,
       isLoading,
+      subscribeEmail,
+      subscribeSuccss,
+
       addCart,
       forwardingProduct,
-      subscribeEmail,
       onSubmit,
-      subscribeSuccss,
     };
   },
 };
@@ -181,7 +175,7 @@ export default {
             >
               <img
                 class="user-image"
-                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370873181.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=aAJOaBj8gvPzrxn6uEf4B8qCZ%2BljKXzObYzhqeb5wnRa8G1zDer8yx%2BYNT0AfxAV1Piusm4ou5TP3a3BB9nm6fIoxdE7pnFXh0llfN%2FpOPcfxcrC1TSXupdnoyCEFlmVvGbd50boCHYiqA8WFb9LDL%2FUSM2LhoNPTK9K1gWcaX1Ib5ncuEMZb3UxylesRpRpFZrOsKBHqOQMQizsJ27dexibwmdq1AFwWq8tb32K8VrjlVEeaX5GmKQ5sIQBzFJvMpsUW3Xk2YHfARnC7Gur219Mi3fiYJYTcjOntgSaWw%2FP3f%2F%2FPwL2ZAlY3SgVQqYZVV73zWo6yKVSFvtvmYSuqQ%3D%3D"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628501331104.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=FMf1PWLy84Zq80nClXUgOXSprtKXhh3j0SVkxsem0JlFhXUEYHgIgdn3%2BoAMBO4n5h7BYi1MWd44ByV%2BUxjESG8UJ4bZschkL6G0aW7dQ9Gke0ixF9cvwAS4QHi6meD7cBVniYXXLB%2FMenPPPxv6%2FVwp2cm9udinG4DHcpGHbS6JskQJrmDcH7Xt0ndqfsSlPfrvyecMi5cvsMnQZTgOsAopmwS9QazgSOT93%2BzpYoHcc%2FykxOGiF30%2BXtO2p2dhPov0wTrFlfTZ4%2FXZP24URNl9tZfmVwTi0MK%2FCVqvkT1xseo6ljOAnRPloXApfGOzWAsE9zcjwPgWnt4xiVqw2g%3D%3D"
                 alt="people"
                 data-aos="vis-anim"
                 data-aos-delay="400"
@@ -190,9 +184,13 @@ export default {
                 實況主 <br />
                 <span class="fs-5">黃小姐</span>
               </h4>
-              <p class="px-2" data-aos="zoom-in" data-aos-delay="400">
-                在還沒發現能量石之前，半夜都會有外星人來我家敲門。 <br />
-                多虧了能量石，使我獲取超能力，可以一覺到天亮，<br />
+              <p
+                class="px-2 user-content"
+                data-aos="zoom-in"
+                data-aos-delay="400"
+              >
+                在還沒發現能量石之前，半夜都會有外星人來我家敲門。
+                多虧了能量石，使我獲取超能力，可以一覺到天亮，
                 也讓我從平凡的上班族有了新特色，開啟實況主之路。
               </p>
             </div>
@@ -203,16 +201,20 @@ export default {
             >
               <img
                 class="user-image"
-                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370844857.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=hU%2BsmkfPkRdXDEIsPkIIK4mn3TYjVc2LhLBJeXDsXFRCmWoKJaThkDJq%2Fcpic6EFUqTXSq%2FQKF6PCtHCLyiopI7r8XpFqcjWNmXHMGDkBxHAq4ml3Eq%2FzuzOWpvhFe4QiMs4ArZAxYvcwa92W09vQwnQdPYm2I4sTkzAgarhCM%2Bsx1O3mINeP0DFxS7f%2BO9SJwmHF9UiBvnnext3OVdAoPsZrV%2FL8SvALdSXjJTVzy28fqGlyRtUNEKB0ZZ9Yacaka7mOzxbK9Zm7ctqEmyYmJkLhRwiDRMclHSobc0iqmrtuM%2BRtUYeE1F0Yda4q%2BGabBY8wCASqyg9Q58ht0tF6A%3D%3D"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628500403813.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=bOIogmSzq64uKAcPNfXqFnHL2OUITuD5yyoQ1G28FZGklSlBDwIK2i4oGub4FRWgU9msE1EsJGhKxlR3DGWoq9rgGXRVQTt9iHKu%2B3QmCG1xrPEkk3CA3pFwMHqD5k7PmvAzLOTy3xCN10qeWsqPrgtwUGLMlesmHw59dVGY923JvjHSG3SnUuBc6dc3IYPJVKDmD1037x2eNcK%2F4HsOX0iZsCbgUSN5CwAkrZBCMn3NeDv4wK80b9E8Ure62nSDXRAU6owLEcku4gdr514LvSTYfWUqlp7cdh9rtXit84EtUTgjdg0g6OIPVrpagCrjrOFAYopugWBqA7GtnssYwQ%3D%3D"
                 alt="people"
                 data-aos="vis-anim"
                 data-aos-delay="600"
               />
               <h4 class="text-center" data-aos="zoom-in" data-aos-delay="600">
                 上班族 <br />
-                <span class="fs-5">陳先生</span>
+                <span class="fs-5">達先生</span>
               </h4>
-              <p class="px-2" data-aos="zoom-in" data-aos-delay="600">
+              <p
+                class="px-2 user-content"
+                data-aos="zoom-in"
+                data-aos-delay="600"
+              >
                 以前在上班的路上都要蜷縮著身子，深怕撞到外星人，
                 有了能量石獲得超能力，上班的路上，終於能抬頭昂首的大步向前走。
               </p>
@@ -224,7 +226,7 @@ export default {
             >
               <img
                 class="user-image"
-                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1627370888998.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=iKWp3FQu9R5Cm8nM3b%2FGQ6lcgfuG%2FmEgfriNDr3inTbKCr6oS09APilL772oOLu0pBf%2BXaBhF2LxJfUQ3a9gYV742udVIGWyb46skopMWYsRd9hb%2BT2oxS20G%2FjsllQQcBSUBkPHytwXc%2BRRhOHlf2o7%2FHXkMpXlHsyLTox150J9TVMiPztUhPVoOR3y0Vn44ui5uQ9e6gNS9ZXh%2BRAlMwnBiBkfCwBs%2Bz7GG94EudZSALx4CdFDewIgM6JKVQm%2FzUhECsJ12vdaGKXmAuxFt59GZsI0sFAUyVIBPMggQy3M47E%2FI%2BsNeJYo1OQmdBg5RFkjp%2Bu%2F5LTZgi%2F1q3pDCg%3D%3D"
+                src="https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628500945287.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=JWZAvLd2u2bivuKEboruG93IF6qAg0XxnAPyXQsIT0Rqqj37iLtgsWwhwoZ2pUR4Q2ajAnDt6uEwtuXd6kJ%2FXxUYXhmQnmqi%2BUIbaNJgHwpUMG4ukntlJ4e%2BC2HpDSOESTAkFzG62btiQoHloa3ZQ4%2BAZIpStGN3dytB7QIEPtwlOHVjTh7%2BcCPtVnyO5i4d59tMVrpRX2speFHFieB%2BYdn6JLP%2Bv8%2Fc5XIME4SsHGlt4%2F0Oj4V%2BTL%2B%2F3gE7KLCnbFcA57PiRDT6IC7o0ILbD6wWLz8ftHREOIbY%2F02xxWYCRF2piw2XJIn5PPDidwiqbnTx9pfSoc%2F3tlac0%2BTaKQ%3D%3D"
                 alt="people"
                 data-aos="vis-anim"
                 data-aos-delay="800"
@@ -233,10 +235,13 @@ export default {
                 大學生<br />
                 <span class="fs-5">朱小姐</span>
               </h4>
-              <p class="px-2" data-aos="zoom-in" data-aos-delay="800">
-                以前坐在教室上課，要眼觀四方，
-                時不時警戒著外星人來襲，有了能量石獲得超能力，
-                使我有安全感能安心得上課。
+              <p
+                class="px-2 user-content"
+                data-aos="zoom-in"
+                data-aos-delay="800"
+              >
+                以前坐在教室上課，要眼觀四方，時不時警戒著外星人來襲，
+                有了能量石獲得超能力，使我有安全感能安心得上課。
               </p>
             </div>
           </div>
@@ -325,7 +330,7 @@ export default {
       <HomeSwiper :products="products.arr" />
       <div class="d-flex justify-content-center">
         <router-link
-          class="my-3 btn btn-lg btn-darkred text-title fs-5"
+          class="my-3 btn btn-lg btn-lightred text-title fs-5 btn-allProduct"
           to="/frontDesk/products"
         >
           查看所有商品
@@ -434,6 +439,15 @@ export default {
   object-fit: cover;
   margin-bottom: 1rem;
 }
+.user-content {
+  width: 100%;
+  @media (min-width: 576px) {
+    width: 400px;
+  }
+  @media (min-width: 992px) {
+    width: 100%;
+  }
+}
 .bg-subscribe {
   background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628011051062.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=GllSPBslNBVy4cujG2gmLyYO84gRGKZfJ4LQE%2FJVNqw0%2B2%2B%2FGzC6Tc1ieHnEmkrgDOT1f84aKNKcJzc%2FmiZ4sDSwl%2FXmK7pbkJ3iO9%2BEXjaKesTkNQBJ%2FA8zH1GVoHHQ%2FVMl11lBZ%2BBk3yzzblyIOnq7akv7v2xnrGyMJII1%2BvT80LlJqLMyM6rQ0PzcawjaaQfbygrXS1Ge5ri6%2Bzu4Z9lJIRKRB3uqYiVT283w8Hz3Bkx93Mfa043GKUvDdFZTDie0Nzaad1D24Uf8FzekS7g%2BWKqbnWXEeM3FWApiRuahKWGIcraf5mO7PCGw%2BHBTrbe%2BnCxhJhAf5G7ELRQILw%3D%3D');
   background-size: cover;
@@ -481,12 +495,10 @@ export default {
 }
 .setup {
   .cover {
+    background-color: #ffdc82;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1000 1000'%3E%3Cg fill='%23dfbf73'%3E%3Cpolygon points='1000 -50 0 -50 500 450'/%3E%3Cpolygon points='550 500 1050 1000 1050 0'/%3E%3Cpolygon points='-50 0 -50 1000 450 500'/%3E%3Cpolygon points='0 1050 1000 1050 500 550'/%3E%3C/g%3E%3Cg fill='%23c0a264'%3E%3Cpolygon points='1000 -133.3 0 -133.3 500 366.7'/%3E%3Cpolygon points='633.3 500 1133.3 1000 1133.3 0'/%3E%3Cpolygon points='-133.3 0 -133.3 1000 366.7 500'/%3E%3Cpolygon points='0 1133.3 1000 1133.3 500 633.3'/%3E%3C/g%3E%3Cg fill='%23a08554'%3E%3Cpolygon points='1000 -216.7 0 -216.7 500 283.3'/%3E%3Cpolygon points='716.7 500 1216.7 1000 1216.7 0'/%3E%3Cpolygon points='-216.7 0 -216.7 1000 283.3 500'/%3E%3Cpolygon points='0 1216.7 1000 1216.7 500 716.7'/%3E%3C/g%3E%3Cg fill='%23806845'%3E%3Cpolygon points='1000 -300 0 -300 500 200'/%3E%3Cpolygon points='800 500 1300 1000 1300 0'/%3E%3Cpolygon points='-300 0 -300 1000 200 500'/%3E%3Cpolygon points='0 1300 1000 1300 500 800'/%3E%3C/g%3E%3Cg fill-opacity='0.5'%3E%3Cpolygon fill='%23ffcf8b' points='0 707.1 0 292.9 292.9 0 707.1 0 1000 292.9 1000 707.1 707.1 1000 292.9 1000'/%3E%3Cg fill='%23dfb57a'%3E%3Cpolygon points='464.6 -242.5 -242.5 464.6 464.6 464.6'/%3E%3Cpolygon points='535.4 464.6 1242.5 464.6 535.4 -242.5'/%3E%3Cpolygon points='-242.5 535.4 464.6 1242.5 464.6 535.4'/%3E%3Cpolygon points='535.4 1242.5 1242.5 535.4 535.4 535.4'/%3E%3C/g%3E%3Cg fill='%23c09c68'%3E%3Cpolygon points='405.7 -301.4 -301.4 405.7 405.7 405.7'/%3E%3Cpolygon points='594.3 405.7 1301.4 405.7 594.3 -301.4'/%3E%3Cpolygon points='-301.4 594.3 405.7 1301.4 405.7 594.3'/%3E%3Cpolygon points='594.3 1301.4 1301.4 594.3 594.3 594.3'/%3E%3C/g%3E%3Cg fill='%23a08257'%3E%3Cpolygon points='346.8 -360.3 -360.3 346.8 346.8 346.8'/%3E%3Cpolygon points='653.2 346.8 1360.3 346.8 653.2 -360.3'/%3E%3Cpolygon points='-360.3 653.2 346.8 1360.3 346.8 653.2'/%3E%3Cpolygon points='653.2 1360.3 1360.3 653.2 653.2 653.2'/%3E%3C/g%3E%3Cg fill='%23806845'%3E%3Cpolygon points='287.9 -419.2 -419.2 287.9 287.9 287.9'/%3E%3Cpolygon points='712.1 287.9 1419.2 287.9 712.1 -419.2'/%3E%3Cpolygon points='-419.2 712.1 287.9 1419.2 287.9 712.1'/%3E%3Cpolygon points='712.1 1419.2 1419.2 712.1 712.1 712.1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
     background-size: cover;
-    background-image: linear-gradient(
-      90.5deg,
-      rgba(255, 207, 139, 0.5) 1.1%,
-      rgba(255, 207, 139, 1) 81.3%
-    );
     transform: rotateY(0deg);
   }
   &:hover .cover {
@@ -523,5 +535,20 @@ export default {
   position: fixed;
   bottom: 2%;
   right: 2%;
+}
+.btn-allProduct {
+  position: relative;
+  display: block;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #682605;
+    z-index: -1;
+    transform: translate(5%, 20%);
+  }
 }
 </style>

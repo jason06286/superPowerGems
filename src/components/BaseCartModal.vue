@@ -1,10 +1,13 @@
 <script>
 import BaseScrollTop from '@/components/BaseScrollTop.vue';
+
 import Modal from 'bootstrap/js/dist/modal';
 import axios from 'axios';
+
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
+
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -53,15 +56,11 @@ export default {
             if (res.data.success) {
               carts.arr = res.data.data;
             } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
+              pushMessageState(res, '取得購物車');
             }
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '取得購物車');
           });
       };
       const delProduct = (item) => {
@@ -72,18 +71,12 @@ export default {
           .then((res) => {
             if (res.data.success) {
               getCarts();
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             isLoading.value = '';
             pushMessageState(res, '刪除商品');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '刪除商品');
           });
       };
       const useCoupon = () => {
@@ -93,17 +86,11 @@ export default {
           .then((res) => {
             if (res.data.success) {
               getCarts();
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
             pushMessageState(res, '套用優惠券');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '套用優惠券');
           });
       };
 
@@ -136,7 +123,7 @@ export default {
   <div class="cart-btn-position">
     <BaseScrollTop />
     <button type="button" class="cart-btn" @click="showModal">
-     <i class="bi bi-cart-plus-fill"></i>
+      <i class="bi bi-cart-plus-fill"></i>
       <span v-show="carts.arr?.carts?.length">{{
         carts.arr?.carts?.length
       }}</span>
@@ -159,7 +146,7 @@ export default {
             <p class="mb-0 fs-5">購物車內無東西</p>
             <router-link
               to="/frontDesk/products"
-              class="d-block text-darkred fs-4"
+              class="d-block text-lightred fs-4"
               @click="hideModal"
               >請選購商品</router-link
             >
@@ -167,20 +154,29 @@ export default {
           <table class="table text-center table-responsive-lg" v-else>
             <thead>
               <tr class="text-title">
-                <th scope="col">商品名稱</th>
-                <th scope="col">數量</th>
-                <th scope="col" class="text-end">小計</th>
-                <th scope="col"></th>
+                <th scope="col" width="80"></th>
+                <th scope="col" width="200">商品名稱</th>
+                <th scope="col" width="120">數量</th>
+                <th scope="col" class="text-end" width="120">小計</th>
+                <th scope="col" width="30"></th>
               </tr>
             </thead>
             <tbody class="text-content">
               <tr v-for="item in carts.arr.carts" :key="item.id">
+                <td class="align-middle">
+                  <img
+                    :src="item.product.imageUrl"
+                    :alt="item.product.description"
+                    class="img-fluid"
+                    style="heigt: 3rem"
+                  />
+                </td>
                 <td class="align-middle">{{ item.product.title }}</td>
                 <td class="align-middle">{{ item.qty }}</td>
                 <td class="align-middle text-end">
                   $ {{ currency(item.total) }}
                 </td>
-                <td class="text-end">
+                <td class="align-middle text-end">
                   <button
                     class="btn btn-outline-danger btn-sm"
                     type="button"
@@ -210,14 +206,14 @@ export default {
                 v-show="carts.arr.total > carts.arr.final_total"
                 class="text-darkred"
               >
-                <td colspan="3" class="text-end">折扣優惠</td>
+                <td colspan="4" class="text-end">折扣優惠</td>
                 <td class="line-through text-end">
                   $ {{ currency(carts.arr.total - carts.arr.final_total) }}
                 </td>
               </tr>
-              <tr>
-                <td colspan="3" class="text-end">總金額</td>
-                <td class="text-end">
+              <tr class="text-content">
+                <td colspan="4" class="text-end">總金額</td>
+                <td class="text-end" width="120">
                   $ {{ currency(carts.arr.final_total) }}
                 </td>
               </tr>
@@ -253,7 +249,7 @@ export default {
           </button>
           <button
             type="button"
-            class="btn btn-darkred"
+            class="btn btn-lightred"
             :class="{ disabled: carts.arr?.carts?.length === 0 }"
             @click="payment"
           >
@@ -308,5 +304,8 @@ export default {
   &:hover {
     color: #98142b;
   }
+}
+.input-group {
+  flex-wrap: nowrap;
 }
 </style>

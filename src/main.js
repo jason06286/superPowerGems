@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+
 import 'bootstrap';
 import VueSweetalert2 from 'vue-sweetalert2';
 import Loading from 'vue3-loading-overlay';
@@ -10,6 +11,7 @@ import {
 import { required, email, min } from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
+
 import App from './App.vue';
 import router from './router';
 
@@ -29,10 +31,13 @@ router.afterEach(() => {
 });
 
 const app = createApp(App);
+
 app.use(VueSweetalert2);
 app.use(router);
+
 app.component('Loading', Loading);
 app.component('Form', Form);
 app.component('Field', Field);
 app.component('ErrorMessage', ErrorMessage);
+
 app.mount('#app');

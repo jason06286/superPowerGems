@@ -1,5 +1,8 @@
 <script>
 import axios from 'axios';
+
+import useVueSweetAlert2 from '@/methods/useSwal';
+
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -8,6 +11,18 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const isLogin = ref(false);
+
+    const $swal = useVueSweetAlert2();
+
+    function swalError(title, text) {
+      $swal.fire({
+        icon: 'error',
+        title,
+        text,
+        background: '#262833',
+        confirmButtonColor: '#98142b',
+      });
+    }
 
     function signOut() {
       const url = `${process.env.VUE_APP_API}logout`;
@@ -18,18 +33,13 @@ export default {
             document.cookie = 'hexToken=; expires=; path=/superPowerGems/dist';
             router.push('/login');
           } else {
-            console.error = () => {
-              throw new Error(res.data.message);
-            };
+            swalError('Oops...', '登出失敗');
           }
         })
-        .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
+        .catch(() => {
+          swalError('Oops...', '登出失敗');
         });
     }
-
     function checkStatus() {
       const token = document.cookie.replace(
         /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
@@ -47,17 +57,13 @@ export default {
             isLogin.value = true;
           }
         })
-        .catch((err) => {
-          console.error = () => {
-            throw new Error(err);
-          };
+        .catch(() => {
+          swalError('Oops...', '登入失敗');
         });
     }
-
     onMounted(() => {
       checkStatus();
     });
-
     return {
       signOut,
       route,
@@ -139,11 +145,9 @@ export default {
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Tourney:ital,wght@1,500&display=swap');
-
 body{
   background: #212529;
 }
-
 .font-Tourney {
   font-family: 'Tourney', cursive;
 }

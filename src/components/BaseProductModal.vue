@@ -1,6 +1,9 @@
 <script>
 import axios from 'axios';
 import Modal from 'bootstrap/js/dist/modal';
+
+import pushMessageState from '@/methods/pushMessageState';
+
 import {
   onMounted, reactive, ref, watch,
 } from 'vue';
@@ -66,22 +69,17 @@ export default {
         const uploaderFile = fileInput.value.files[0];
         const formData = new FormData();
         formData.append('file-to-upload', uploaderFile);
-        const url = `   ${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
+        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
         axios
           .post(url, formData)
           .then((res) => {
             if (res.data.success) {
               tempProduct.obj.imageUrl = res.data.imageUrl;
-            } else {
-              console.error = () => {
-                throw new Error(res.data.message);
-              };
             }
+            pushMessageState(res, '上傳照片');
           })
           .catch((err) => {
-            console.error = () => {
-              throw new Error(err);
-            };
+            pushMessageState(err, '上傳照片');
           });
       };
 
