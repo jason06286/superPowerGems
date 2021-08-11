@@ -65,41 +65,64 @@ export default {
 
 <template>
   <div class="bg-dark" style="height: 68px"></div>
-  <div class="container" style="min-height: calc(100vh - 212px)">
+  <div class="paySuccess" v-if="order.arr.is_paid">
+    <p class="fw-bold text-title fs-4">已完成付款，感謝您的訂購!!</p>
+    <p class="text-title">訂單編號: {{ order.arr.id }}</p>
+    <div class="d-flex">
+      <router-link to="/" class="btn btn-outline-title btn-lg me-3"
+        >前往首頁</router-link
+      >
+      <router-link to="/frontDesk/products" class="btn btn-lightred btn-lg"
+        >前往商店</router-link
+      >
+    </div>
+  </div>
+  <div
+    class="container"
+    style="min-height: calc(100vh - 212px)"
+    v-if="!order.arr.is_paid"
+  >
     <div class="py-5">
       <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8 col-12">
-          <div class="mb-3 d-flex justify-content-end">
+        <div class="col-md-2"></div>
+        <div class="mb-4 col-md-2 col-12">
+          <div
+            class=" d-flex align-items-center justify-content-center justify-content-lg-start h-100"
+          >
+            <h4
+              class="pb-2 mb-0 border-2 border-bottom border-darkred text-title"
+            >
+              確認付款
+            </h4>
+          </div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div
+            class="mb-4 d-flex justify-content-center justify-content-md-end"
+          >
             <div class="step">
               <p class="mb-0">1</p>
-              <p class="mb-0">填寫資訊</p>
+              <p class="mb-0">購物車</p>
             </div>
-            <div class="step" :class="{ 'bg-darkred': !isConfirm }">
+            <div class="step">
               <p class="mb-0">2</p>
               <p class="mb-0">確認訂單</p>
             </div>
-            <div class="step" :class="{ 'bg-darkred': isConfirm }">
+            <div class="step" :class="{ 'bg-darkred': !isConfirm }">
               <p class="mb-0">3</p>
-              <p class="mb-0">完成購物</p>
+              <p class="mb-0">確認付款</p>
             </div>
           </div>
-          <div class="paySuccess" v-if="order.arr.is_paid">
-            <p class="fw-bold text-lightred fs-4">已完成付款，感謝您的訂購!!</p>
-            <div class="d-flex">
-              <router-link to="/" class="btn btn-outline-title me-3"
-                >前往首頁</router-link
-              >
-              <router-link to="/frontDesk/products" class="btn btn-lightred"
-                >前往商店</router-link
-              >
-            </div>
-          </div>
-          <h4 class="pb-2 mb-3 border-2 border-bottom border-darkred">
-            訂單明細
-          </h4>
-          <table class="table text-center table-responsive-lg text-content">
-            <thead>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="p-3 bg-black col-md-8 col-12 p-lg-5">
+          <table
+            class="table mb-0 text-center  table-responsive-lg text-content border-bottom-0"
+          >
+            <thead class="border-top">
               <tr>
                 <th scope="col" width="60"></th>
                 <th scope="col" width="120">商品名稱</th>
@@ -129,51 +152,49 @@ export default {
               </tr>
             </tbody>
             <tfoot>
-              <tr>
-                <td colspan="3" class="text-end">總金額</td>
-                <td class="text-end">$ {{ currency(order.arr.total) }}</td>
+              <tr class="text-darkred text-end">
+                <td class="border-bottom-0"></td>
+                <td class="pt-3 border-bottom-0 fs-5" colspan="3">
+                  總金額: $ {{ currency(order.arr.total) }}
+                </td>
               </tr>
             </tfoot>
           </table>
         </div>
-        <div class="col-lg-2"></div>
+        <div class="col-md-2"></div>
       </div>
       <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8 col-12">
-          <h4 class="pb-2 mb-3 border-2 border-bottom border-darkred">
-            訂單資訊
-          </h4>
+        <div class="col-md-2"></div>
+        <div class="p-3 bg-black col-md-8 col-12 p-lg-5">
           <table class="table text-content" v-if="order.arr.user">
-            <tbody>
+            <tbody class="border-top">
               <tr>
-                <th scope="row" class="font-weight-normal">Email</th>
+                <th scope="col" class="font-weight-normal" width="200">
+                  Email
+                </th>
                 <td>{{ order.arr.user.email }}</td>
               </tr>
               <tr>
-                <th scope="row" class="font-weight-normal">收件人名稱</th>
+                <th scope="col" class="font-weight-normal" width="200">
+                  收件人名稱
+                </th>
                 <td>{{ order.arr.user.name }}</td>
               </tr>
               <tr>
-                <th scope="row" class="font-weight-normal">收件人電話</th>
+                <th scope="col" class="font-weight-normal" width="200">
+                  收件人電話
+                </th>
                 <td>{{ order.arr.user.tel }}</td>
               </tr>
               <tr>
-                <th scope="row" class="font-weight-normal">收件人地址</th>
+                <th scope="col" class="font-weight-normal" width="200">
+                  收件人地址
+                </th>
                 <td>{{ order.arr.user.address }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="font-weight-normal">訂單編號</th>
-                <td>{{ order.arr.id }}</td>
-              </tr>
-              <tr>
-                <th scope="row" class="font-weight-normal">付款狀態</th>
-                <td class="text-success" v-if="order.arr.is_paid">已付款</td>
-                <td class="text-danger" v-else>未付款</td>
               </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-end" v-if="!order.arr.is_paid">
+          <div class="d-flex justify-content-end">
             <router-link
               type="button"
               class="btn btn-outline-title me-3"
@@ -197,7 +218,7 @@ export default {
             </button>
           </div>
         </div>
-        <div class="col-lg-2"></div>
+        <div class="col-md-2"></div>
       </div>
     </div>
   </div>
@@ -211,11 +232,7 @@ export default {
   display: inline-block;
 }
 .paySuccess {
-  background: url('https://storage.googleapis.com/vue-course-api.appspot.com/supergems/1628487788446.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=VZljZPEtDOu5CTO3rA2ClOCvUb3WlrwYLqBI06TCZzThNZsoEAu1n43jKUlycs4Qr5URhPn%2FIP2w7A79NhYBTkV4fvOQkVK94aa7rnGatWrSctb1UL2XCe4RjXcvwxEB7VI%2FExQwR9lHvWDEC4E4vtKZmltOrV2PDtK1iVsLpka7yFI%2Fq41Pk7qVoz%2FN7iTiKrWDRkkhN0UfCyKcDfRUUqXfMzM5Uoi5hwH61l5bSlm%2BOr2Z4nIlrtbotdccsHRgwiH31XZMTzcwcgb4L7XGR7WsT1B7A0STW%2Bi9AfihzRFrDhhiQifoPrlCeAxyEbAp2MMOHy9pL1xxgMNIA5xsUg%3D%3D');
-  background-size: cover;
-  background-position: center bottom;
-  height: 300px;
-  margin-bottom: 1rem;
+  min-height: calc(100vh - 212px);
   position: relative;
   border-radius: 1rem;
   overflow: hidden;
@@ -223,6 +240,10 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: #000000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23111111' points='800 100 0 200 0 800 1600 800 1600 200'/%3E%3Cpolygon fill='%23222222' points='800 200 0 400 0 800 1600 800 1600 400'/%3E%3Cpolygon fill='%23333333' points='800 300 0 600 0 800 1600 800 1600 600'/%3E%3Cpolygon fill='%23454545' points='1600 800 800 400 0 800'/%3E%3Cpolygon fill='%23565656' points='1280 800 800 500 320 800'/%3E%3Cpolygon fill='%23676767' points='533.3 800 1066.7 800 800 600'/%3E%3Cpolygon fill='%23787878' points='684.1 800 914.3 800 800 700'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
 }
 .step {
   background: rgba($color: #000, $alpha: 0.5);

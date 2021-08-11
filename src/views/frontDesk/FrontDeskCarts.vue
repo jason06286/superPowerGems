@@ -1,4 +1,6 @@
 <script>
+import BaseSwiper from '@/components/BaseSwiper.vue';
+
 import axios from 'axios';
 
 import { currency } from '@/methods/filter';
@@ -9,11 +11,37 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
+  components: {
+    BaseSwiper,
+  },
   setup() {
     const router = useRouter();
     const carts = reactive({ arr: [] });
     const isLoading = ref('');
     const isChangeQty = ref(false);
+    const isGoPay = ref(false);
+
+    const products = reactive({ arr: [] });
+
+    function getAllProducts() {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+      axios
+        .get(url)
+        .then((res) => {
+          if (res.data.success) {
+            products.arr = res.data.products;
+          } else {
+            pushMessageState(res, '取得所有商品資料');
+          }
+        })
+        .catch((err) => {
+          pushMessageState(err, '取得所有商品資料');
+        });
+    }
+
+    onMounted(() => {
+      getAllProducts();
+    });
 
     function cartDetail() {
       const coupon = ref('');
@@ -93,11 +121,13 @@ export default {
       });
 
       return {
+        products,
         coupon,
         getCarts,
         delProduct,
         editCart,
         useCoupon,
+        isGoPay,
       };
     }
     function qtyDetail() {
@@ -171,8 +201,8 @@ export default {
 </script>
 
 <template>
-  <div class="bg-dark" style="height: 68px"></div>
-  <div class="bg-dark container-lg" style="min-height: calc(100vh - 212px)">
+  <div style="height: 68px"></div>
+  <div class="container-lg" style="min-height: calc(100vh - 212px)">
     <div class="py-5 p-lg-5">
       <div class="cart-content" v-if="carts.arr?.carts?.length === 0">
         <div class="empty-cart"></div>
@@ -181,34 +211,56 @@ export default {
           >請選購商品</router-link
         >
       </div>
+      <BaseSwiper
+        :products="products.arr"
+        v-if="carts.arr?.carts?.length === 0"
+      >
+        你可能會喜歡
+      </BaseSwiper>
       <div class="row" v-if="carts.arr?.carts?.length !== 0">
         <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <div class="mb-3 d-flex justify-content-end">
-            <div class="step bg-darkred">
+        <div class="mb-4 col-md-2 col-12">
+          <div
+            class=" d-flex align-items-center justify-content-center justify-content-lg-start h-100"
+          >
+            <h4
+              class="pb-2 mb-0 border-2 border-bottom border-darkred text-title"
+              v-if="!isGoPay"
+            >
+              購物車
+            </h4>
+            <h4
+              class="pb-2 mb-0 border-2 border-bottom border-darkred text-title"
+              v-else
+            >
+              確認訂單
+            </h4>
+          </div>
+        </div>
+        <div class="mb-4 col-md-8">
+          <div class="d-flex justify-content-center justify-content-md-end">
+            <div class="step" :class="{ 'bg-darkred': !isGoPay }">
               <p class="mb-0">1</p>
-              <p class="mb-0">填寫資訊</p>
+              <p class="mb-0">購物車</p>
             </div>
-            <div class="step">
+            <div class="step" :class="{ 'bg-darkred': isGoPay }">
               <p class="mb-0">2</p>
               <p class="mb-0">確認訂單</p>
             </div>
             <div class="step">
               <p class="mb-0">3</p>
-              <p class="mb-0">完成購物</p>
+              <p class="mb-0">確認付款</p>
             </div>
           </div>
         </div>
         <div class="col-md-1"></div>
       </div>
-      <div class="row">
+      <div class="row" v-if="!isGoPay">
         <div class="col-md-1"></div>
-        <div class="col-md-6 col-12" v-if="carts.arr?.carts?.length !== 0">
-          <h4
-            class="pb-2 mb-3 border-2 border-bottom border-darkred text-title"
-          >
-            購物車內容
-          </h4>
+        <div
+          class="p-3 bg-black p-lg-5 col-md-10 col-12"
+          v-if="carts.arr?.carts?.length !== 0"
+        >
           <table class="table text-center text-content">
             <thead>
               <tr>
@@ -236,11 +288,11 @@ export default {
                   <div class="input-group input-group-sm">
                     <button
                       class="btn btn-outline-content"
-                      :class="{ disabled: isChangeQty }"
+                      :class="{ disabled: item.qty <= 1 || isChangeQty }"
                       type="button"
-                      @click="addQty(item)"
+                      @click="minusQty(item)"
                     >
-                      +
+                      -
                     </button>
                     <input
                       type="number"
@@ -251,11 +303,11 @@ export default {
                     />
                     <button
                       class="btn btn-outline-content"
-                      :class="{ disabled: item.qty <= 1 || isChangeQty }"
+                      :class="{ disabled: isChangeQty }"
                       type="button"
-                      @click="minusQty(item)"
+                      @click="addQty(item)"
                     >
-                      -
+                      +
                     </button>
                   </div>
                 </td>
@@ -305,34 +357,54 @@ export default {
               </tr>
             </tfoot>
           </table>
-          <div class="mb-3 input-group" v-if="carts.arr?.carts?.length != 0">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="請輸入優惠券代碼"
-              aria-label="請輸入優惠券代碼"
-              aria-describedby="button-addon2"
-              v-model="coupon"
-            />
-            <button
-              class="btn btn-outline-title"
-              type="button"
-              id="button-addon2"
-              :class="{ disabled: coupon === '' }"
-              @click="useCoupon"
+          <div class="d-flex justify-content-end">
+            <div
+              class="input-group coupon"
+              v-if="carts.arr?.carts?.length != 0"
             >
-              套用優惠券
+              <input
+                type="text"
+                class="form-control"
+                placeholder="請輸入優惠券代碼"
+                aria-label="請輸入優惠券代碼"
+                aria-describedby="button-addon2"
+                v-model="coupon"
+              />
+              <button
+                class="btn btn-outline-title"
+                type="button"
+                id="button-addon2"
+                :class="{ disabled: coupon === '' }"
+                @click="useCoupon"
+              >
+                套用優惠券
+              </button>
+            </div>
+          </div>
+          <div class="mt-5 d-flex justify-content-between">
+            <router-link
+              type="button"
+              class="btn btn-outline-content me-3"
+              to="/frontDesk/products"
+              >繼續購物</router-link
+            >
+            <button
+              class="btn btn-lightred"
+              type="submit"
+              @click.prevent="isGoPay = true"
+            >
+              前往結帳
             </button>
           </div>
         </div>
-        <div class="col-md-4 col-12">
-          <div v-if="carts.arr?.carts?.length != 0">
-            <h4
-              class="pb-2 mb-3 border-2 border-bottom border-darkred text-title"
-            >
-              收件人資訊
-            </h4>
-            <Form v-slot="{ errors }" @submit="onSubmit">
+
+        <div class="col-md-1"></div>
+      </div>
+      <div class="row" v-else>
+        <div class="col-md-1"></div>
+        <div class="p-3 bg-black col-md-10 col-12 p-lg-5">
+          <Form class="row" v-slot="{ errors }" @submit="onSubmit">
+            <div class="col-md-6 col-12">
               <div class="mb-3 form-group">
                 <label for="name" class="mb-2">
                   <span class="text-darkred">*</span>
@@ -423,13 +495,23 @@ export default {
                   v-model="message"
                 ></textarea>
               </div>
-              <div class="d-flex justify-content-end">
-                <router-link
-                  type="button"
-                  class="btn btn-outline-content me-3"
-                  to="/frontDesk/products"
-                  >繼續購物</router-link
-                >
+            </div>
+            <div class="p-3 col-md-6 col-12 p-lg-5">
+              <h4 class="pb-3 mb-3 border-bottom">總金額</h4>
+              <div class="mb-3 d-flex justify-content-between">
+                <p class="mb-0">小計</p>
+                <p class="mb-0">$ {{ currency(carts.arr.total) }}</p>
+              </div>
+              <div class="mb-3 d-flex justify-content-between">
+                <p class="mb-0">折扣優惠</p>
+                <p class="mb-0 line-through">
+                  $ {{ currency(carts.arr.total - carts.arr.final_total) }}
+                </p>
+              </div>
+              <h4 class="mb-5 text-end">
+                $ {{ currency(carts.arr.final_total) }}
+              </h4>
+              <div class="d-grid">
                 <button
                   class="btn btn-lightred"
                   :class="{ 'not-allowed': Object.keys(user.user).length < 4 }"
@@ -444,9 +526,10 @@ export default {
                   送出訂單
                 </button>
               </div>
-            </Form>
-          </div>
+            </div>
+          </Form>
         </div>
+
         <div class="col-md-1"></div>
       </div>
     </div>
@@ -510,5 +593,11 @@ table {
   padding: 0.5rem 1rem;
   text-align: center;
   pointer-events: none;
+}
+.coupon {
+  width: 100%;
+  @media (min-width: 768px) {
+    width: 50%;
+  }
 }
 </style>

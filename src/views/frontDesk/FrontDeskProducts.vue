@@ -433,6 +433,15 @@ export default {
     }
     .product-content {
       min-height: 100px;
+      p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+      }
     }
     .product-footer {
       display: flex;

@@ -146,9 +146,9 @@ export default {
                 達文西、柏拉圖、霍金、特斯拉、伽利略等共同研發製作。
               </p>
               <p>
-                由各國頂尖科學家集結研發，透過能量轉換原則， <br />
-                使能量透過能量石轉移到人體， 以利人人擁有能量抵禦外敵。 <br />
-                能量石分成三大類，精礦、精鋼與精石，<br />
+                由各國頂尖科學家集結研發，透過能量轉換原則，
+                使能量透過能量石轉移到人體， 以利人人擁有能量抵禦外敵。
+                能量石分成三大類，精礦、精鋼與精石，
                 各自蘊含其能力，又以精石最為稀有。
               </p>
             </div>
@@ -410,6 +410,12 @@ export default {
   flex-direction: column;
   height: 100%;
   position: relative;
+  p {
+    width: 100%;
+    @media (min-width: 1400px) {
+      width: 416px;
+    }
+  }
 }
 .segmentation {
   position: relative;
@@ -442,10 +448,13 @@ export default {
 .user-content {
   width: 100%;
   @media (min-width: 576px) {
-    width: 400px;
+    width: 350px;
   }
   @media (min-width: 992px) {
     width: 100%;
+  }
+  @media (min-width: 1400px) {
+    width: 350px;
   }
 }
 .bg-subscribe {

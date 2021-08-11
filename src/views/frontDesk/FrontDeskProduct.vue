@@ -137,47 +137,45 @@ export default {
       </ul>
       <div class="content">
         <img :src="product.arr.imageUrl" :alt="product.arr.description" />
-        <h3 class="text-title">{{ product.arr.title }}</h3>
-        <p>{{ product.arr.description }}</p>
-        <div class="mb-2 d-flex align-items-center w-100 justify-content-end">
-          <p class="mb-0 line-through text-darkred me-2">
-            原價 $ {{ currency(product.arr.origin_price) }} 元
-          </p>
-          <p class="mb-0 fs-5">特價 $ {{ currency(product.arr.price) }} 元</p>
-        </div>
-        <div class="d-flex align-items-end w-100 justify-content-end">
+        <div class="text-center content-inner">
+          <h3 class="text-title">{{ product.arr.title }}</h3>
+          <p class="mb-5">{{ product.arr.description }}</p>
+          <div class="mb-2 d-flex align-items-center w-100">
+            <p class="mb-0 fs-5 me-3 text-title">
+              特價 $ {{ currency(product.arr.price) }} 元
+            </p>
+            <p class="mb-0 line-through">
+              原價 $ {{ currency(product.arr.origin_price) }} 元
+            </p>
+          </div>
           <select class="form-select form-select-sm" v-model="productNum">
             <option selected value="0">請選擇數量</option>
             <option v-for="item in 10" :key="item" :value="item">
               {{ item }}{{ product.arr.unit }}
             </option>
           </select>
-          <p class="flex-shrink-0 mb-0 ms-3 text-end">
-            小計 $ {{ currency(total) }} 元
-          </p>
-        </div>
-        <div
-          class="mt-3 d-flex justify-content-between w-100 align-items-center"
-        >
-          <router-link to="/frontDesk/products" class="btn btn-outline-title"
-            >繼續選購</router-link
-          >
-          <a
-            href="#"
-            class="btn btn-lightred"
-            :class="{ disabled: productNum <= 0 }"
-            @click.prevent="addCart"
-          >
-            <div
-              class="spinner-border spinner-border-sm"
-              role="status"
-              v-if="isCartLoading"
-            >
-              <span class="visually-hidden">Loading...</span>
+          <div class="mt-3 d-flex align-items-center w-100">
+            <p class="flex-shrink-0 mb-0 me-3 text-end">
+              小計 $ {{ currency(total) }} 元
+            </p>
+            <div class="d-grid w-100">
+              <button
+                type="button"
+                class="btn btn-lightred"
+                @click.prevent="addCart"
+              >
+                <div
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  v-if="isCartLoading"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <i class="me-1 bi bi-cart-plus" v-else></i>
+                加入購物車
+              </button>
             </div>
-            <i class="me-1 bi bi-cart-plus" v-else></i>
-            加入購物車
-          </a>
+          </div>
         </div>
       </div>
       <div class="container product-swiper">
@@ -303,7 +301,7 @@ section {
     padding: 1rem;
   }
   @media (min-width: 768px) {
-    width: 500px;
+    width: 400px;
     padding: 0;
   }
   img {
