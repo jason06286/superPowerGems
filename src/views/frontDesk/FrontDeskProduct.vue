@@ -38,8 +38,6 @@ export default {
           if (res.data.success) {
             product.arr = res.data.product;
             isLoading.value = false;
-          } else {
-            pushMessageState(res, '取得商品資料');
           }
         })
         .catch((err) => {
