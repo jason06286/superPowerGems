@@ -88,6 +88,7 @@ export default {
       () => route.params.id,
       () => {
         getProduct();
+        productNum.value = 1;
       },
     );
 

@@ -221,7 +221,12 @@ export default {
         <div class="col-md-1"></div>
         <div class="mb-4 col-md-2 col-12">
           <div
-            class=" d-flex align-items-center justify-content-center justify-content-lg-start h-100"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-lg-start
+              h-100
+            "
           >
             <h4
               class="pb-2 mb-0 border-2 border-bottom border-darkred text-title"
@@ -397,7 +402,6 @@ export default {
             </button>
           </div>
         </div>
-
         <div class="col-md-1"></div>
       </div>
       <div class="row" v-else>
