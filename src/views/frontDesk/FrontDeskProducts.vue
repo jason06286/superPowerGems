@@ -374,7 +374,7 @@ export default {
   .magic-circle {
     position: absolute;
     @media (min-width: 1279px) {
-      bottom: -52%;
+      bottom: -54%;
     }
     @media (min-width: 1300px) {
       bottom: -42%;
