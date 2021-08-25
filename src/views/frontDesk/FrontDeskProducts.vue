@@ -242,7 +242,7 @@ export default {
           <div class="col-lg-9 col-12" v-if="!showAllProducts">
             <div class="row">
               <div
-                class="mb-4-5 col-12 col-md-6 col-lg-4"
+                class="mb-4-5 col-12 col-md-6 col-xxl-4"
                 v-for="item in filterProducts.obj"
                 :key="item.id"
               >
