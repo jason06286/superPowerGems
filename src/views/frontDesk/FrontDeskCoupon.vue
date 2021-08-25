@@ -161,6 +161,9 @@ export default {
   @media (min-width: 1023px) {
     height: 451.5px;
   }
+  @media (min-width: 1279px) {
+    height: 534.51px;
+  }
   @media (min-width: 1439px) {
     height: 629.63px;
   }
@@ -182,6 +185,9 @@ export default {
   }
   @media (min-width: 1023px) {
     height: 451.5px;
+  }
+  @media (min-width: 1279px) {
+    height: 534.51px;
   }
   @media (min-width: 1439px) {
     height: 629.63px;

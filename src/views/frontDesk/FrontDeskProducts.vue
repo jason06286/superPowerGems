@@ -190,7 +190,7 @@ export default {
           <div class="col-lg-9 col-12" v-if="showAllProducts">
             <div class="row">
               <div
-                class="mb-4-5 col-12 col-md-6 col-lg-4"
+                class="mb-4-5 col-12 col-md-6 col-xxl-4"
                 v-for="item in products.arr"
                 :key="item.id"
               >
@@ -373,6 +373,12 @@ export default {
   }
   .magic-circle {
     position: absolute;
+    @media (min-width: 1279px) {
+      bottom: -52%;
+    }
+    @media (min-width: 1300px) {
+      bottom: -42%;
+    }
     bottom: -42%;
     left: 0;
     display: none;

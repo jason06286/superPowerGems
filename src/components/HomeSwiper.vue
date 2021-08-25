@@ -41,7 +41,7 @@ export default {
           slidesPerView: 3,
           spaceBetween: 20,
         },
-        1190: {
+        1281: {
           slidesPerView: 4,
           spaceBetween: 20,
         },
@@ -209,6 +209,12 @@ export default {
   }
   .magic-circle {
     position: absolute;
+    @media (min-width: 1279px) {
+      bottom: -48%;
+    }
+    @media (min-width: 1300px) {
+      bottom: -42%;
+    }
     bottom: -42%;
     left: 0;
     display: none;
