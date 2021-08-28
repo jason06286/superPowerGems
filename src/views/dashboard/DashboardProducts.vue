@@ -5,8 +5,12 @@ import BaseProductModal from '@/components/BaseProductModal.vue';
 import BaseDeleteModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 
-import axios from 'axios';
-
+import {
+  apiGetProducts,
+  apiDelProduct,
+  apiCreateProduct,
+  apiEditProduct,
+} from '@/api/api';
 import useVueSweetAlert2 from '@/methods/useSwal';
 import { currency } from '@/methods/filter';
 
@@ -49,41 +53,35 @@ export default {
     function productDetail() {
       const isLoading = ref(false);
 
-      const getProducts = (page = 1) => {
+      async function getProducts(page = 1) {
         isLoading.value = true;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              products.arr = res.data.products;
-              pagination.obj = res.data.pagination;
-              isLoading.value = false;
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-          })
-          .catch(() => {
-            swalError('Oops...', '取得商品資料錯誤');
-          });
-      };
-      const delProduct = (id) => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${id}`;
-        axios
-          .delete(url)
-          .then((res) => {
-            if (res.data.success) {
-              getProducts();
-              swalSuccess('刪除', '刪除商品成功!');
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-          })
-          .catch(() => {
-            swalError('Oops...', '刪除商品錯誤');
-          });
+        try {
+          const res = await apiGetProducts(page);
+          if (res.data.success) {
+            products.arr = res.data.products;
+            pagination.obj = res.data.pagination;
+            isLoading.value = false;
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '取得商品資料錯誤');
+        }
+      }
+      async function delProduct(id) {
+        try {
+          const res = await apiDelProduct(id);
+          if (res.data.success) {
+            getProducts();
+            swalSuccess('刪除', '刪除商品成功!');
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '刪除商品錯誤');
+        }
         productDeleteModal.value.hideDelModal();
-      };
+      }
 
       onMounted(() => {
         getProducts();
@@ -110,31 +108,29 @@ export default {
         tempProduct.obj = JSON.parse(JSON.stringify(item));
         productDeleteModal.value.showDelModal();
       };
-      const productStatus = (item) => {
+      async function productStatus(item) {
         tempProduct.obj = item;
-        let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-        let method = 'post';
-        if (!newProduct.value) {
-          url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
-          method = 'put';
+        let res;
+        try {
+          if (!newProduct.value) {
+            res = await apiEditProduct(item.id, { data: tempProduct.obj });
+          } else {
+            res = await apiCreateProduct({ data: tempProduct.obj });
+          }
+          if (res.data.success) {
+            getProducts();
+            swalSuccess(
+              newProduct.value ? '新增' : '修改',
+              newProduct.value ? '新增商品成功!' : '修改商品成功!',
+            );
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '新增修改錯誤');
         }
-        axios[method](url, { data: tempProduct.obj })
-          .then((res) => {
-            if (res.data.success) {
-              getProducts();
-              swalSuccess(
-                newProduct.value ? '新增' : '修改',
-                newProduct.value ? '新增商品成功!' : '修改商品成功!',
-              );
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-            productModal.value.hideProductModal();
-          })
-          .catch(() => {
-            swalError('Oops...', '新增修改錯誤');
-          });
-      };
+        productModal.value.hideProductModal();
+      }
 
       return {
         productModal,

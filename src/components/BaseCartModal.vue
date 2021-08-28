@@ -2,8 +2,12 @@
 import BaseScrollTop from '@/components/BaseScrollTop.vue';
 
 import Modal from 'bootstrap/js/dist/modal';
-import axios from 'axios';
 
+import {
+  apiUserGetCarts,
+  apiUserDelProduct,
+  apiUserUseCoupon,
+} from '@/api/api';
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
@@ -48,51 +52,45 @@ export default {
       const coupon = ref('');
       const isLoading = ref('');
 
-      const getCarts = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              carts.arr = res.data.data;
-            } else {
-              pushMessageState(res, '取得購物車');
-            }
-          })
-          .catch((err) => {
-            pushMessageState(err, '取得購物車');
-          });
-      };
-      const delProduct = (item) => {
+      async function getCarts() {
+        try {
+          const res = await apiUserGetCarts();
+          if (res.data.success) {
+            carts.arr = res.data.data;
+          } else {
+            pushMessageState(res, '取得購物車');
+          }
+        } catch (error) {
+          pushMessageState(error, '取得購物車');
+        }
+      }
+      async function delProduct(item) {
         isLoading.value = item.id;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-        axios
-          .delete(url)
-          .then((res) => {
-            if (res.data.success) {
-              getCarts();
-            }
+        try {
+          const res = await apiUserDelProduct(item.id);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            getCarts();
             isLoading.value = '';
-            pushMessageState(res, '刪除商品');
-          })
-          .catch((err) => {
-            pushMessageState(err, '刪除商品');
-          });
-      };
-      const useCoupon = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-        axios
-          .post(url, { data: { code: coupon.value } })
-          .then((res) => {
-            if (res.data.success) {
-              getCarts();
-            }
-            pushMessageState(res, '套用優惠券');
-          })
-          .catch((err) => {
-            pushMessageState(err, '套用優惠券');
-          });
-      };
+          }
+          pushMessageState(res, '刪除商品');
+        } catch (error) {
+          pushMessageState(error, '刪除商品');
+        }
+      }
+      async function useCoupon() {
+        const data = { data: { code: coupon.value } };
+        try {
+          const res = await apiUserUseCoupon(data);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            getCarts();
+          }
+          pushMessageState(res, '套用優惠券');
+        } catch (error) {
+          pushMessageState(error, '套用優惠券');
+        }
+      }
 
       onMounted(() => {
         getCarts();

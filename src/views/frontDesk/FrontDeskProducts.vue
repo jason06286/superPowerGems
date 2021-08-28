@@ -2,8 +2,7 @@
 import BasePagination from '@/components/BasePagination.vue';
 import BaseFrontendLoading from '@/components/BaseLoading.vue';
 
-import axios from 'axios';
-
+import { apiUserAllProducts, apiUserProducts, apiUserAddCart } from '@/api/api';
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
@@ -27,60 +26,47 @@ export default {
     const showLoadinng = ref(false);
 
     function productDetail() {
-      const getAllProducts = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              Allproducts.arr = res.data.products;
-            } else {
-              pushMessageState(res, '取得所有商品資料');
-            }
-          })
-          .catch((err) => {
-            pushMessageState(err, '取得所有商品資料');
-          });
-      };
-      const getProducts = (page = 1) => {
+      async function getAllProducts() {
+        try {
+          const res = await apiUserAllProducts();
+          if (res.data.success) {
+            Allproducts.arr = res.data.products;
+          } else {
+            pushMessageState(res, '取得所有商品資料');
+          }
+        } catch (error) {
+          pushMessageState(error, '取得所有商品資料');
+        }
+      }
+      async function getProducts(page = 1) {
         showLoadinng.value = true;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              products.arr = res.data.products;
-              pagination.obj = res.data.pagination;
-              showLoadinng.value = false;
-            } else {
-              pushMessageState(res, '取得商品資料');
-            }
-          })
-          .catch((err) => {
-            pushMessageState(err, '取得商品資料');
-          });
-      };
-      const addCart = (item) => {
+        try {
+          const res = await apiUserProducts(page);
+          if (res.data.success) {
+            products.arr = res.data.products;
+            pagination.obj = res.data.pagination;
+            showLoadinng.value = false;
+          } else {
+            pushMessageState(res, '取得商品資料');
+          }
+        } catch (error) {
+          pushMessageState(error, '取得商品資料');
+        }
+      }
+      async function addCart(item) {
         isLoading.value = item.id;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-        axios
-          .post(url, {
-            data: {
-              product_id: item.id,
-              qty: 1,
-            },
-          })
-          .then((res) => {
-            if (res.data.success) {
-              emitter.emit('update-cart');
-              isLoading.value = '';
-            }
-            pushMessageState(res, '購物車新增');
-          })
-          .catch((err) => {
-            pushMessageState(err, '購物車新增');
-          });
-      };
+        try {
+          const data = { data: { product_id: item.id, qty: 1 } };
+          const res = await apiUserAddCart(data);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            isLoading.value = '';
+          }
+          pushMessageState(res, '購物車新增');
+        } catch (error) {
+          pushMessageState(error, '購物車新增');
+        }
+      }
       const forwardingProduct = (id) => {
         router.push(`/frontDesk/product/${id}`);
       };
@@ -158,28 +144,60 @@ export default {
           <div class="mb-5 col-lg-3 col-12">
             <div class="row">
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '全部' }"
                 @click="showAll"
               >
                 全部
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精礦' }"
                 @click="filterProduct('精礦')"
               >
                 精礦
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精鋼' }"
                 @click="filterProduct('精鋼')"
               >
                 精鋼
               </div>
               <div
-                class="py-2 text-center border mb-lg-3 col-lg-12 col-6 fw-bold list"
+                class="
+                  py-2
+                  text-center
+                  border
+                  mb-lg-3
+                  col-lg-12 col-6
+                  fw-bold
+                  list
+                "
                 :class="{ active: tempCategory === '精石' }"
                 @click="filterProduct('精石')"
               >

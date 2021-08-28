@@ -2,8 +2,7 @@
 import BaseFrontendLoading from '@/components/BaseLoading.vue';
 import BaseSwiper from '@/components/BaseSwiper.vue';
 
-import axios from 'axios';
-
+import { apiUserProduct, apiUserAllProducts, apiUserAddCart } from '@/api/api';
 import { currency } from '@/methods/filter';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
@@ -29,56 +28,45 @@ export default {
     const showQuestion = ref(false);
     const showMethod = ref(false);
 
-    function getProduct() {
+    async function getProduct() {
       isLoading.value = true;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${route.params.id}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            product.arr = res.data.product;
-            isLoading.value = false;
-          }
-        })
-        .catch((err) => {
-          pushMessageState(err, '取得商品資料');
-        });
+      try {
+        const res = await apiUserProduct(route.params.id);
+        if (res.data.success) {
+          product.arr = res.data.product;
+          isLoading.value = false;
+        }
+      } catch (error) {
+        pushMessageState(error, '取得商品資料');
+      }
     }
-    function addCart() {
+    async function addCart() {
       isCartLoading.value = true;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .post(url, {
-          data: {
-            product_id: product.arr.id,
-            qty: productNum.value,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart');
-            isCartLoading.value = false;
-          }
-          pushMessageState(res, '購物車新增');
-        })
-        .catch((err) => {
-          pushMessageState(err, '購物車新增');
-        });
+      try {
+        const data = {
+          data: { product_id: product.arr.id, qty: productNum.value },
+        };
+        const res = await apiUserAddCart(data);
+        if (res.data.success) {
+          emitter.emit('update-cart');
+          isCartLoading.value = false;
+        }
+        pushMessageState(res, '購物車新增');
+      } catch (error) {
+        pushMessageState(error, '購物車新增');
+      }
     }
-    function getAllProducts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-          } else {
-            pushMessageState(res, '取得所有商品資料');
-          }
-        })
-        .catch((err) => {
-          pushMessageState(err, '取得所有商品資料');
-        });
+    async function getAllProducts() {
+      try {
+        const res = await apiUserAllProducts();
+        if (res.data.success) {
+          products.arr = res.data.products;
+        } else {
+          pushMessageState(res, '取得所有商品資料');
+        }
+      } catch (error) {
+        pushMessageState(error, '取得所有商品資料');
+      }
     }
     const suggestProduct = computed(() => products.arr.filter((item) => {
       const { id } = route.params;

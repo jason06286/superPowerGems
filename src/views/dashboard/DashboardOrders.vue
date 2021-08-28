@@ -2,8 +2,7 @@
 import BasePagination from '@/components/BasePagination.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 
-import axios from 'axios';
-
+import { apiGetOrders, apiDelOrder, apiEditOrder } from '@/api/api';
 import useVueSweetAlert2 from '@/methods/useSwal';
 import { currency, formatDate } from '@/methods/filter';
 
@@ -42,60 +41,51 @@ export default {
       const tempOrder = reactive({ obj: {} });
       const isLoading = ref(false);
 
-      const getOrders = (page = 1) => {
+      async function getOrders(page = 1) {
         isLoading.value = true;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              orders.arr = res.data.orders;
-              pagination.obj = res.data.pagination;
-              isLoading.value = false;
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-          })
-          .catch(() => {
-            swalError('Oops...', '取得訂單資料錯誤');
-          });
-      };
-      const delOrder = (id) => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${id}`;
-        axios
-          .delete(url)
-          .then((res) => {
-            if (res.data.success) {
-              getOrders();
-              swalSuccess('刪除訂單', '刪除訂單成功!');
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-          })
-          .catch(() => {
-            swalError('Oops...', '刪除訂單錯誤');
-          });
-      };
-      const editOrder = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${tempOrder.obj.id}`;
-        axios
-          .put(url, {
+        try {
+          const res = await apiGetOrders(page);
+          if (res.data.success) {
+            orders.arr = res.data.orders;
+            pagination.obj = res.data.pagination;
+            isLoading.value = false;
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '取得訂單資料錯誤');
+        }
+      }
+      async function delOrder(id) {
+        try {
+          const res = await apiDelOrder(id);
+          if (res.data.success) {
+            getOrders();
+            swalSuccess('刪除訂單', '刪除訂單成功!');
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '刪除訂單錯誤');
+        }
+      }
+      async function editOrder() {
+        try {
+          const res = await apiEditOrder(tempOrder.obj.id, {
             data: {
               ...tempOrder.obj,
             },
-          })
-          .then((res) => {
-            if (res.data.success) {
-              getOrders();
-              swalSuccess('修改訂單', '修改訂單成功!');
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-          })
-          .catch(() => {
-            swalError('Oops...', '修改訂單錯誤');
           });
-      };
+          if (res.data.success) {
+            getOrders();
+            swalSuccess('修改訂單', '修改訂單成功!');
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+        } catch (error) {
+          swalError('Oops...', '修改訂單錯誤');
+        }
+      }
 
       onMounted(() => {
         getOrders();

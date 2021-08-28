@@ -1,7 +1,7 @@
 <script>
 import BaseNavbar from '@/components/BaseNavbar.vue';
 
-import axios from 'axios';
+import { apiSignIn } from '@/api/api';
 
 import useVueSweetAlert2 from '@/methods/useSwal';
 
@@ -54,22 +54,19 @@ export default {
         confirmButtonColor: '#98142b',
       });
     }
-    function signIn() {
-      const url = `${process.env.VUE_APP_API}admin/signin`;
-      axios
-        .post(url, user)
-        .then((res) => {
-          if (res.data.success) {
-            const { token, expired } = res.data;
-            document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
-            router.push('/dashboard/products');
-          } else {
-            swalError('Oops...', res.data.message);
-          }
-        })
-        .catch(() => {
-          swalError('Oops...', '登入錯誤');
-        });
+    async function signIn() {
+      try {
+        const res = await apiSignIn(user);
+        if (res.data.success) {
+          const { token, expired } = res.data;
+          document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
+          router.push('/dashboard/products');
+        } else {
+          swalError('Oops...', res.data.message);
+        }
+      } catch (error) {
+        swalError('Oops...', '登入錯誤');
+      }
     }
 
     return {
@@ -84,7 +81,14 @@ export default {
 <template>
   <BaseNavbar />
   <div
-    class="grid overflow-hidden  position-relative d-flex justify-content-center align-items-center"
+    class="
+      grid
+      overflow-hidden
+      position-relative
+      d-flex
+      justify-content-center
+      align-items-center
+    "
   >
     <div class="position-absolute grid-container" ref="gridBackground">
       <div class="col-span-2 grid-item animate-pulse"></div>

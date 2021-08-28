@@ -1,9 +1,15 @@
 <script>
 import BaseSwiper from '@/components/BaseSwiper.vue';
 
-import axios from 'axios';
-
 import { currency } from '@/methods/filter';
+import {
+  apiUserAllProducts,
+  apiUserGetCarts,
+  apiUserDelProduct,
+  apiUserEditCart,
+  apiUserUseCoupon,
+  apiUserSubmitOrder,
+} from '@/api/api';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
 
@@ -23,20 +29,17 @@ export default {
 
     const products = reactive({ arr: [] });
 
-    function getAllProducts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-          } else {
-            pushMessageState(res, '取得所有商品資料');
-          }
-        })
-        .catch((err) => {
-          pushMessageState(err, '取得所有商品資料');
-        });
+    async function getAllProducts() {
+      try {
+        const res = await apiUserAllProducts();
+        if (res.data.success) {
+          products.arr = res.data.products;
+        } else {
+          pushMessageState(res, '取得所有商品資料');
+        }
+      } catch (error) {
+        pushMessageState(error, '取得所有商品資料');
+      }
     }
 
     onMounted(() => {
@@ -46,75 +49,66 @@ export default {
     function cartDetail() {
       const coupon = ref('');
 
-      const getCarts = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              carts.arr = res.data.data;
-            } else {
-              pushMessageState(res, '取得購物車');
-            }
-          })
-          .catch((err) => {
-            pushMessageState(err, '取得購物車');
-          });
-      };
-      const delProduct = (item) => {
+      async function getCarts() {
+        try {
+          const res = await apiUserGetCarts();
+          if (res.data.success) {
+            carts.arr = res.data.data;
+          } else {
+            pushMessageState(res, '取得購物車');
+          }
+        } catch (error) {
+          pushMessageState(error, '取得購物車');
+        }
+      }
+
+      async function delProduct(item) {
         isLoading.value = item.id;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-        axios
-          .delete(url)
-          .then((res) => {
-            if (res.data.success) {
-              emitter.emit('update-cart');
-              getCarts();
-              isLoading.value = '';
-            }
-            pushMessageState(res, '刪除商品');
-          })
-          .catch((err) => {
-            pushMessageState(err, '刪除商品');
-          });
-      };
-      const editCart = (qty, id) => {
+        try {
+          const res = await apiUserDelProduct(item.id);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            getCarts();
+            isLoading.value = '';
+          }
+          pushMessageState(res, '刪除商品');
+        } catch (error) {
+          pushMessageState(error, '刪除商品');
+        }
+      }
+      async function editCart(qty, id) {
         isChangeQty.value = true;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`;
-        axios
-          .put(url, {
-            data: {
-              product_id: id,
-              qty,
-            },
-          })
-          .then((res) => {
-            if (res.data.success) {
-              isChangeQty.value = false;
-              emitter.emit('update-cart');
-              getCarts();
-            }
-            pushMessageState(res, '修改商品');
-          })
-          .catch((err) => {
-            pushMessageState(err, '修改商品');
-          });
-      };
-      const useCoupon = () => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-        axios
-          .post(url, { data: { code: coupon.value } })
-          .then((res) => {
-            if (res.data.success) {
-              emitter.emit('update-cart');
-              getCarts();
-            }
-            pushMessageState(res, '套用優惠券');
-          })
-          .catch((err) => {
-            pushMessageState(err, '套用優惠券');
-          });
-      };
+        const data = {
+          data: {
+            product_id: id,
+            qty,
+          },
+        };
+        try {
+          const res = await apiUserEditCart(id, data);
+          if (res.data.success) {
+            isChangeQty.value = false;
+            emitter.emit('update-cart');
+            getCarts();
+          }
+          pushMessageState(res, '修改商品');
+        } catch (error) {
+          pushMessageState(error, '修改商品');
+        }
+      }
+      async function useCoupon() {
+        const data = { data: { code: coupon.value } };
+        try {
+          const res = await apiUserUseCoupon(data);
+          if (res.data.success) {
+            emitter.emit('update-cart');
+            getCarts();
+          }
+          pushMessageState(res, '套用優惠券');
+        } catch (error) {
+          pushMessageState(error, '套用優惠券');
+        }
+      }
 
       onMounted(() => {
         getCarts();
@@ -155,29 +149,26 @@ export default {
         const phoneNumber = /^(09)[0-9]{8}$/;
         return phoneNumber.test(value) ? true : '需要正確的電話號碼';
       };
-      const onSubmit = () => {
+      async function onSubmit() {
         isLoading.value = 'submit';
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
-        axios
-          .post(url, {
-            data: {
-              user: user.user,
-              message: message.value,
-            },
-          })
-          .then((res) => {
-            isLoading.value = '';
-            if (res.data.success) {
-              router.push(`/frontDesk/pay/${res.data.orderId}`);
-              emitter.emit('update-cart');
-            } else {
-              pushMessageState(res, '送出表單');
-            }
-          })
-          .catch((err) => {
-            pushMessageState(err, '送出表單');
-          });
-      };
+        const data = {
+          data: {
+            user: user.user,
+            message: message.value,
+          },
+        };
+        try {
+          const res = await apiUserSubmitOrder(data);
+          isLoading.value = '';
+          if (res.data.success) {
+            router.push(`/frontDesk/pay/${res.data.orderId}`);
+            emitter.emit('update-cart');
+          }
+          pushMessageState(res, '送出訂單');
+        } catch (error) {
+          pushMessageState(error, '送出訂單');
+        }
+      }
 
       return {
         user,

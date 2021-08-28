@@ -20,10 +20,6 @@ const routes = [
       component: () => import('@/views/frontDesk/FrontDeskProduct.vue'),
     },
     {
-      path: 'quiz',
-      component: () => import('@/views/frontDesk/FrontDeskQuiz.vue'),
-    },
-    {
       path: 'coupon',
       component: () => import('@/views/frontDesk/FrontDeskCoupon.vue'),
     },

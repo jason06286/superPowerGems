@@ -1,6 +1,5 @@
 <script>
-import axios from 'axios';
-
+import { apiCheckStatus, apiSignOut } from '@/api/api';
 import useVueSweetAlert2 from '@/methods/useSwal';
 
 import { onMounted, ref } from 'vue';
@@ -24,42 +23,31 @@ export default {
       });
     }
 
-    function signOut() {
-      const url = `${process.env.VUE_APP_API}logout`;
-      axios
-        .post(url)
-        .then((res) => {
-          if (res.data.success) {
-            document.cookie = 'hexToken=; expires=; path=/superPowerGems/dist';
-            router.push('/login');
-          } else {
-            swalError('Oops...', '登出失敗');
-          }
-        })
-        .catch(() => {
+    async function signOut() {
+      try {
+        const res = await apiSignOut();
+        if (res.data.success) {
+          document.cookie = 'hexToken=; expires=; path=/superPowerGems/dist';
+          router.push('/login');
+        } else {
           swalError('Oops...', '登出失敗');
-        });
+        }
+      } catch (error) {
+        swalError('Oops...', '登出失敗');
+      }
     }
-    function checkStatus() {
-      const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/,
-        '$1',
-      );
-      const url = `${process.env.VUE_APP_API}api/user/check`;
-      axios.defaults.headers.common.Authorization = token;
-      axios
-        .post(url)
-        .then((res) => {
-          if (!res.data.success) {
-            isLogin.value = false;
-            router.push('/login');
-          } else {
-            isLogin.value = true;
-          }
-        })
-        .catch(() => {
-          swalError('Oops...', '登入失敗');
-        });
+    async function checkStatus() {
+      try {
+        const res = await apiCheckStatus();
+        if (!res.data.success) {
+          isLogin.value = false;
+          router.push('/login');
+        } else {
+          isLogin.value = true;
+        }
+      } catch (error) {
+        swalError('Oops...', '登入失敗');
+      }
     }
     onMounted(() => {
       checkStatus();

@@ -5,8 +5,12 @@ import BaseCouponModal from '@/components/BaseCouponModal.vue';
 import BaseDeleteCouponModal from '@/components/BaseDeleteModal.vue';
 import BaseLoading from '@/components/BaseLoading.vue';
 
-import axios from 'axios';
-
+import {
+  apiGetCoupons,
+  apiDelCoupon,
+  apiCreateCoupon,
+  apiEditCoupon,
+} from '@/api/api';
 import { formatDate } from '@/methods/filter';
 import useVueSweetAlert2 from '@/methods/useSwal';
 
@@ -47,41 +51,35 @@ export default {
       const pagination = reactive({ obj: {} });
       const isLoading = ref(false);
 
-      const getCoupons = (page = 1) => {
+      async function getCoupons(page = 1) {
         isLoading.value = true;
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
-        axios
-          .get(url)
-          .then((res) => {
-            if (res.data.success) {
-              coupons.arr = res.data.coupons;
-              pagination.obj = res.data.pagination;
-              isLoading.value = false;
-            } else {
-              swalError('Oops...', '取得優惠券資料錯誤');
-            }
-          })
-          .catch(() => {
+        try {
+          const res = await apiGetCoupons(page);
+          if (res.data.success) {
+            coupons.arr = res.data.coupons;
+            pagination.obj = res.data.pagination;
+            isLoading.value = false;
+          } else {
             swalError('Oops...', '取得優惠券資料錯誤');
-          });
-      };
-      const delCoupon = (id) => {
-        const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${id}`;
-        axios
-          .delete(url)
-          .then((res) => {
-            if (res.data.success) {
-              getCoupons();
-              swalSuccess('刪除優惠券', '刪除優惠券成功!');
-            } else {
-              swalError('Oops...', '刪除優惠券失敗!');
-            }
-            couponDeleteModal.value.hideDelModal();
-          })
-          .catch(() => {
-            swalError('Oops...', '刪除優惠券錯誤');
-          });
-      };
+          }
+        } catch (error) {
+          swalError('Oops...', '取得優惠券資料錯誤');
+        }
+      }
+      async function delCoupon(id) {
+        try {
+          const res = await apiDelCoupon(id);
+          if (res.data.success) {
+            getCoupons();
+            swalSuccess('刪除優惠券', '刪除優惠券成功!');
+          } else {
+            swalError('Oops...', '刪除優惠券失敗!');
+          }
+          couponDeleteModal.value.hideDelModal();
+        } catch (error) {
+          swalError('Oops...', '刪除優惠券錯誤');
+        }
+      }
 
       onMounted(() => {
         getCoupons();
@@ -109,35 +107,33 @@ export default {
         newCoupon.value = isNew;
         couponModal.value.showCouponModal();
       };
-      const couponStatus = (item) => {
+      async function couponStatus(item) {
         tempCoupon.obj = {
           ...item,
           due_date: new Date(item.due_date).getTime() / 1000,
           is_enabled: item.is_enabled ?? 0,
         };
-        let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
-        let method = 'post';
-        if (!newCoupon.value) {
-          url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
-          method = 'put';
+        let res;
+        try {
+          if (!newCoupon.value) {
+            res = await apiEditCoupon(item.id, { data: tempCoupon.obj });
+          } else {
+            res = await apiCreateCoupon({ data: tempCoupon.obj });
+          }
+          if (res.data.success) {
+            getCoupons();
+            swalSuccess(
+              newCoupon.value ? '新增' : '修改',
+              newCoupon.value ? '新增優惠券成功!' : '修改優惠券成功!',
+            );
+          } else {
+            swalError('Oops...', res.data.message);
+          }
+          couponModal.value.hideCouponModal();
+        } catch (error) {
+          swalError('Oops...', '新增修改錯誤');
         }
-        axios[method](url, { data: tempCoupon.obj })
-          .then((res) => {
-            if (res.data.success) {
-              getCoupons();
-              swalSuccess(
-                newCoupon.value ? '新增' : '修改',
-                newCoupon.value ? '新增優惠券成功!' : '修改優惠券成功!',
-              );
-            } else {
-              swalError('Oops...', res.data.message);
-            }
-            couponModal.value.hideCouponModal();
-          })
-          .catch(() => {
-            swalError('Oops...', '新增修改錯誤');
-          });
-      };
+      }
 
       return {
         couponModal,

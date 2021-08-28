@@ -3,9 +3,9 @@ import SwiperCore, { Pagination, Autoplay } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/swiper.scss';
 import 'swiper/components/pagination/pagination.min.css';
-import axios from 'axios';
 
 import { currency } from '@/methods/filter';
+import { apiUserAddCart } from '@/api/api';
 import emitter from '@/methods/emitter';
 import pushMessageState from '@/methods/pushMessageState';
 
@@ -49,26 +49,19 @@ export default {
     });
     const isLoading = ref('');
 
-    function addCart(item) {
+    async function addCart(item) {
       isLoading.value = item.id;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .post(url, {
-          data: {
-            product_id: item.id,
-            qty: 1,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart');
-            isLoading.value = '';
-          }
-          pushMessageState(res, '購物車新增');
-        })
-        .catch((err) => {
-          pushMessageState(err, '購物車新增');
-        });
+      try {
+        const data = { data: { product_id: item.id, qty: 1 } };
+        const res = await apiUserAddCart(data);
+        if (res.data.success) {
+          emitter.emit('update-cart');
+          isLoading.value = '';
+        }
+        pushMessageState(res, '購物車新增');
+      } catch (error) {
+        pushMessageState(error, '購物車新增');
+      }
     }
     function forwardingProduct(id) {
       router.push(`/frontDesk/product/${id}`);

@@ -6,9 +6,7 @@ import HomeHeader from '@/components/HomeHeader.vue';
 import ToastMessages from '@/components/ToastMessages.vue';
 import HomeSwiper from '@/components/HomeSwiper.vue';
 
-import axios from 'axios';
-
-import emitter from '@/methods/emitter';
+import { apiUserAllProducts } from '@/api/api';
 import pushMessageState from '@/methods/pushMessageState';
 
 import { onMounted, reactive, ref } from 'vue';
@@ -26,65 +24,21 @@ export default {
   setup() {
     const router = useRouter();
     const products = reactive({ arr: [] });
-    const swiperBreakpoints = reactive({
-      breakpoints: {
-        575: {
-          slidesPerView: 1,
-          spaceBetween: 0,
-        },
-        767: {
-          slidesPerView: 2,
-          spaceBetween: 20,
-        },
-        991: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-        1190: {
-          slidesPerView: 4,
-          spaceBetween: 40,
-        },
-      },
-    });
     const isLoading = ref('');
     const subscribeEmail = ref('');
     const subscribeSuccss = ref(false);
 
-    function getAllProducts() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            products.arr = res.data.products;
-          } else {
-            pushMessageState(res, '取得所有商品資料');
-          }
-        })
-        .catch((err) => {
-          pushMessageState(err, '取得所有商品資料');
-        });
-    }
-    function addCart(item) {
-      isLoading.value = item.id;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      axios
-        .post(url, {
-          data: {
-            product_id: item.id,
-            qty: 1,
-          },
-        })
-        .then((res) => {
-          if (res.data.success) {
-            emitter.emit('update-cart');
-            isLoading.value = '';
-          }
-          pushMessageState(res, '購物車新增');
-        })
-        .catch((err) => {
-          pushMessageState(err, '購物車新增');
-        });
+    async function getAllProducts() {
+      try {
+        const res = await apiUserAllProducts();
+        if (res.data.success) {
+          products.arr = res.data.products;
+        } else {
+          pushMessageState(res, '取得所有商品資料');
+        }
+      } catch (error) {
+        pushMessageState(error, '取得所有商品資料');
+      }
     }
     function forwardingProduct(id) {
       router.push(`/frontDesk/product/${id}`);
@@ -99,12 +53,10 @@ export default {
 
     return {
       products,
-      swiperBreakpoints,
       isLoading,
       subscribeEmail,
       subscribeSuccss,
 
-      addCart,
       forwardingProduct,
       onSubmit,
     };
@@ -171,7 +123,12 @@ export default {
         <div class="mb-5 row">
           <div class="col-lg-4 col-12">
             <div
-              class=" d-flex justify-content-center align-items-center flex-column"
+              class="
+                d-flex
+                justify-content-center
+                align-items-center
+                flex-column
+              "
             >
               <img
                 class="user-image"
@@ -197,7 +154,12 @@ export default {
           </div>
           <div class="col-lg-4 col-12">
             <div
-              class=" d-flex justify-content-center align-items-center flex-column"
+              class="
+                d-flex
+                justify-content-center
+                align-items-center
+                flex-column
+              "
             >
               <img
                 class="user-image"
@@ -222,7 +184,12 @@ export default {
           </div>
           <div class="col-lg-4 col-12">
             <div
-              class=" d-flex justify-content-center align-items-center flex-column"
+              class="
+                d-flex
+                justify-content-center
+                align-items-center
+                flex-column
+              "
             >
               <img
                 class="user-image"

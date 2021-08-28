@@ -1,6 +1,5 @@
 <script>
-import axios from 'axios';
-
+import { apiUserGetOrder, apiUserPayOrder } from '@/api/api';
 import { currency } from '@/methods/filter';
 import pushMessageState from '@/methods/pushMessageState';
 
@@ -14,38 +13,31 @@ export default {
     const isLoading = ref('');
     const isConfirm = ref(false);
 
-    function getOrder() {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${route.params.id}`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (res.data.success) {
-            order.arr = res.data.order;
-          } else {
-            pushMessageState(res, '取得訂單');
-          }
-        })
-        .catch((err) => {
-          pushMessageState(err, '取得訂單');
-        });
+    async function getOrder() {
+      const res = await apiUserGetOrder(route.params.id);
+      try {
+        if (res.data.success) {
+          order.arr = res.data.order;
+        } else {
+          pushMessageState(res, '取得訂單');
+        }
+      } catch (error) {
+        pushMessageState(error, '取得訂單');
+      }
     }
-    function confirmPay() {
+    async function confirmPay() {
       isLoading.value = 'pay';
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${route.params.id}`;
-      axios
-        .post(url)
-        .then((res) => {
-          if (res.data.success) {
-            getOrder();
-            isConfirm.value = true;
-          } else {
-            pushMessageState(res, '付款');
-          }
-          isLoading.value = '';
-        })
-        .catch((err) => {
-          pushMessageState(err, '付款');
-        });
+      try {
+        const res = await apiUserPayOrder(route.params.id);
+        if (res.data.success) {
+          getOrder();
+          isConfirm.value = true;
+        }
+        pushMessageState(res, '付款');
+        isLoading.value = '';
+      } catch (error) {
+        pushMessageState(error, '付款');
+      }
     }
 
     onMounted(() => {
@@ -87,7 +79,12 @@ export default {
         <div class="col-md-2"></div>
         <div class="mb-4 col-md-2 col-12">
           <div
-            class=" d-flex align-items-center justify-content-center justify-content-lg-start h-100"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-lg-start
+              h-100
+            "
           >
             <h4
               class="pb-2 mb-0 border-2 border-bottom border-darkred text-title"
@@ -120,7 +117,14 @@ export default {
         <div class="col-md-2"></div>
         <div class="p-3 bg-black col-md-8 col-12 p-lg-5">
           <table
-            class="table mb-0 text-center  table-responsive-lg text-content border-bottom-0"
+            class="
+              table
+              mb-0
+              text-center
+              table-responsive-lg
+              text-content
+              border-bottom-0
+            "
           >
             <thead class="border-top">
               <tr>
